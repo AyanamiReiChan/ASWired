@@ -1,0 +1,30 @@
+name: Website checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: node --test tests/*.test.mjs
+      - run: npm run build
+      - run: node node_modules/vite/bin/vite.js build --config vite.probe.config.ts
+      - uses: actions/upload-artifact@v4
+        if: matrix.node == 24
+        with:
+          name: aswired-website-and-probe
+          path: |
+            build
+            worker/public

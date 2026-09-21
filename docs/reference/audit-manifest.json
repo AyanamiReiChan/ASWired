@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "product": "参考项目",
+    "audit_date": "2026-09-15",
+    "repository": "/docs/reference/reference-records.md#record-726",
+    "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+    "commit_date": "2026-09-14T23:28:36+08:00",
+    "latest_stable": "v0.5.4",
+    "latest_stable_published_at": "2026-09-08T11:03:18Z",
+    "latest_prerelease": "v0.5.5-beta.6",
+    "latest_prerelease_published_at": "2026-09-14T15:43:30Z",
+    "scope": "public documentation, release notes and public distribution files; no runtime execution",
+    "feature_count": 146,
+    "official_doc_pages": 59,
+    "release_records": 38,
+    "docs_asset_url": "/docs/reference/reference-records.md#record-727",
+    "docs_asset_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54",
+    "reference_document": "/docs/REFERENCES.md"
+  },
+  "public_files": [
+    "README.md",
+    "docker-compose.yml",
+    "install-nginx.sh",
+    "install-prerelease.sh",
+    "install.sh",
+    "proxy_groups/README.md",
+    "proxy_groups/proxy-groups-lite.json",
+    "proxy_groups/proxy_groups.json",
+    "quick-install.sh",
+    "rule_templates/embed.go",
+    "rule_templates/fake_ip__v3.yaml",
+    "rule_templates/redirhost__v3.yaml",
+    "rule_templates/surge_cn__surge.conf",
+    "uninstall-nginx.sh"
+  ],
+  "source_hashes": {
+    "reference_document": "/docs/reference/reference-records.md#record-728"
+  }
+}

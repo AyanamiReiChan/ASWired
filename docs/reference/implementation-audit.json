@@ -1,0 +1,3622 @@
+{
+  "metadata": {
+    "schema_version": "1.0",
+    "audited_at": "2026-09-16",
+    "product": "ASWired",
+    "source_mapping": "docs/reference/aswired-alignment.json",
+    "total_mapping_rows": 168,
+    "audit_scope": "三个仓库交付代码的逐项实现核对；状态只覆盖列明证据，保留未完成行为，不是完整上游或生产兼容认证。 当前服务器仅通过ASWired Agent接入；面板适配是已移除的附加实现，不计入这168项目标。既有验证记录保留原始版本与日期。",
+    "authorization": "用户已授权原创 Agent、Vision 与联邦同等行为；无私有协议授权阻塞。ASWired 不设置 PRO 付费墙。",
+    "status_semantics": {
+      "tested": "列明的实现范围有有意义的自动化/实际集成验证；不代表整条上游验收矩阵或生产平台全部通过。",
+      "implemented": "代码存在并可执行；列出的平台、客户端或完整流程验证仍待完成。",
+      "partial": "存在明确尚缺行为；已有子集可已测试。",
+      "excluded": "经用户范围或上游删除明确不实施。"
+    },
+    "executed_validation": [
+      "Agent go test ./... 已通过（本机 Windows）。",
+      "主控 go test ./... 已通过（本机 SQLite；可选 PostgreSQL/真实 Agent 测试由环境启用）。",
+      "主控与真实 Agent 的 WS/Pull/HTTP 生命周期测试此前已单独通过。",
+      "双主控 + 真实 Agent 不透明联邦安装/操作/隔离/离线撤销测试已单独通过。",
+      "官方 mihomo v1.19.31 固定 SHA256 二进制已执行真实代理吞吐/延迟/出口 IP fixture 与故障不直连测试。",
+      "Agent Windows/Linux amd64 构建及 Home/maintain Darwin arm64 交叉构建已通过；Linux 服务脚本通过 bash -n。",
+      "HY2/传统 Shadowsocks：真实 mihomo 两凭据、热增删不重启、撤销不能到达目标、实际计数与 256KiB/s 上界断言通过；Agent go test ./... 携带官方 mihomo 环境整体通过。",
+      "最终 Agent go test ./... -count=1 带真实 mihomo 环境整体通过：speedtest 包含所有原生/辅助客户端集成、用户撤销/共享限速/独立计数，75.845s。",
+      "主控自动编译→真实 Agent→证书部署→AnyTLS/Snell 订阅客户端→真实 Xray 计数集成通过；Home 配对与同 WS 凭据轮换测试通过。",
+      "网站26项自动化测试、Svelte检查0错误0警告、主站及独立探针生产构建通过。",
+      "隔离浏览器验收设置/IP数据库/REALITY目标池/Home/公开探针关闭状态，未记录浏览器error或warn。",
+      "主控权限回归通过：API令牌不得换浏览器JWT、禁用节点不得领取任务、测速端不得写入其他端点结果、Direct未认证握手不得接收机密。",
+      "2026-09-16：修复mihomo监听先于转发就绪的初始化竞态，使用认证同步配置加载屏障；主控→真实Agent→生成AnyTLS/Snell订阅→真实客户端→Xray计数复测46.46s通过。",
+      "2026-09-16 GitHub CI：网站 474e932 的组件/类型检查、26项测试、主站及独立探针构建通过。",
+      "2026-09-16 GitHub CI：主控 3c5b84e 的 Windows/Linux 测试与 vet、Linux race、安装脚本语法和 Docker 镜像构建通过；PostgreSQL 16 的隔离集成测试通过。",
+      "2026-09-16 GitHub CI：Agent 5ccd76d 的 Windows、Linux、macOS 检查均通过；数据根目录别名修复保留内部符号链接及 Windows 目录联接的逃逸拦截。"
+    ],
+    "validation_limits": [
+      "尚未执行 Linux kernel WireGuard、systemd/OpenRC、Docker host、REALITY/Vision splice 实机测试；镜像构建通过不代表容器部署验收。",
+      "PostgreSQL 16 已通过基础隔离集成测试，成员删除/最后管理员保护及成员配额的完整 PostgreSQL 并发矩阵仍待验证。",
+      "前端测试路径作为证据，完整浏览器/各客户端矩阵需由集成人员确认。"
+    ],
+    "status_counts": {
+      "excluded": 1,
+      "implemented": 37,
+      "partial": 77,
+      "tested": 53
+    },
+    "evidence_roots": {
+      "frontend/": "https://github.com/AyanamiReiChan/ASWired/tree/main/frontend/",
+      "server/": "https://github.com/AyanamiReiChan/ASWired-Server/tree/main/",
+      "agent/": "https://github.com/AyanamiReiChan/ASWired-Agent/tree/main/"
+    },
+    "ci_evidence": [
+      {
+        "repository": "ASWired",
+        "revision": "474e932e16fd36c2f213f70ea6cbcba5b932ec6f",
+        "result": "success",
+        "url": "https://github.com/AyanamiReiChan/ASWired/actions/runs/35047414686"
+      },
+      {
+        "repository": "ASWired-Server",
+        "revision": "3c5b84ece90c1544ba611f4bd99fac829a7011a1",
+        "result": "success",
+        "url": "https://github.com/AyanamiReiChan/ASWired-Server/actions/runs/35047423611"
+      },
+      {
+        "repository": "ASWired-Agent",
+        "revision": "5ccd76dd06733cd12bc31a2663a3322899a9e657",
+        "result": "success",
+        "url": "https://github.com/AyanamiReiChan/ASWired-Agent/actions/runs/35048361610"
+      }
+    ],
+    "reference_document": "/docs/REFERENCES.md",
+    "current_product_scope": {
+      "version": "2026-09-16-agent-only",
+      "document": "/docs/CURRENT-SCOPE.md",
+      "server_management": "native-agent-only",
+      "required_creation_fields": [
+        "name",
+        "address"
+      ],
+      "excluded_additional_implementations": [
+        "panel-api-adapter"
+      ],
+      "historical_reference_policy": "历史设计与来源保留追溯；当前服务器接入范围以CURRENT-SCOPE.md为准。",
+      "mapping_count_note": "168项目标不含独立面板适配条目；移除附加实现不改变目标数量或既有核对状态。"
+    }
+  },
+  "items": [
+    {
+      "id": "identity.roles",
+      "title": "管理员与普通用户",
+      "domain": "身份与权限",
+      "status": "tested",
+      "implementation_summary": "JWT 管理员/成员两角色、API 所属权与作用域在主控集中校验。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/app.go",
+          "server/internal/httpapi/api_tokens.go",
+          "server/internal/httpapi/records.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "identity.create",
+      "title": "账户创建与资料",
+      "domain": "身份与权限",
+      "status": "implemented",
+      "implementation_summary": "账户创建、唯一身份、资料/密码与个人偏好通过实际 API 保存。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/records.go",
+          "server/internal/httpapi/identity.go",
+          "frontend/src/lib/components/IdentitySecurity.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "完整个人设置浏览器回归及初始密码交付体验尚需验收。"
+      ]
+    },
+    {
+      "id": "identity.lifecycle",
+      "title": "账户启停与删除",
+      "domain": "身份与权限",
+      "status": "tested",
+      "implementation_summary": "成员删除通过事务清理用户及其OwnerID资源和订阅关联；账本/审计/任务保留，最后一位管理员受并发保护。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/accounting.go",
+          "server/internal/store/store.go",
+          "server/internal/store/delete_member.go",
+          "server/internal/store/member_record.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/store/store_test.go",
+          "server/internal/store/owned_resources_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "成员删除和最后管理员保护的完整 PostgreSQL 并发验收尚未执行；基础集成测试中的并发初始化管理员已通过。"
+      ]
+    },
+    {
+      "id": "identity.personal",
+      "title": "个人设置",
+      "domain": "身份与权限",
+      "status": "implemented",
+      "implementation_summary": "账户创建、唯一身份、资料/密码与个人偏好通过实际 API 保存。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/records.go",
+          "server/internal/httpapi/identity.go",
+          "frontend/src/lib/components/IdentitySecurity.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "完整个人设置浏览器回归及初始密码交付体验尚需验收。"
+      ]
+    },
+    {
+      "id": "identity.totp",
+      "title": "TOTP 两步验证",
+      "domain": "身份与权限",
+      "status": "tested",
+      "implementation_summary": "RFC TOTP、密码确认、恢复码和计数器一次消费后签发 JWT。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/identity.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/identity_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "identity.passkey",
+      "title": "Passkey 登录",
+      "domain": "身份与权限",
+      "status": "implemented",
+      "implementation_summary": "WebAuthn 注册/登录及 Related Origin 配置、PKCE 登录回接已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/identity.go",
+          "server/internal/httpapi/federation.go",
+          "frontend/src/lib/passkey.ts"
+        ],
+        "tests": [
+          "server/internal/httpapi/identity_test.go",
+          "server/internal/httpapi/federation_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "模拟认证器自动化通过；真实硬件/跨域 ROR 和移动设备待验收。"
+      ]
+    },
+    {
+      "id": "identity.tokens",
+      "title": "API Token 管理",
+      "domain": "身份与权限",
+      "status": "tested",
+      "implementation_summary": "API Token 仅首次返回原文，散列保存，继承账户权限并支持撤销。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/api_tokens.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go",
+          "server/internal/httpapi/access_extensions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "identity.subscription_credentials",
+      "title": "订阅凭据与短码轮换",
+      "domain": "身份与权限",
+      "status": "tested",
+      "implementation_summary": "文件与合并短码、令牌轮换、实例独立凭据已接入生成和鉴权。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/membership.go",
+          "server/internal/httpapi/actions.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/httpapi/membership_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "identity.qr_client_login",
+      "title": "手机及官方客户端登录",
+      "domain": "身份与权限",
+      "status": "partial",
+      "implementation_summary": "原创 QR 登录以已登录手机批准、浏览器绑定和一次领取换取 JWT。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/identity_qr.go",
+          "frontend/src/lib/components/QRLogin.svelte",
+          "frontend/src/lib/components/QRApproval.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/identity_qr_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "尚无各公开第三方客户端深链唤起流程的兼容实现/客户端验收。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "identity.menu_quota",
+      "title": "用户菜单与资源配额",
+      "domain": "身份与权限",
+      "status": "partial",
+      "implementation_summary": "自导节点/外部来源数量限制与导入整批提交已事务化，超限不会留下半批数据。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/member_resources.go",
+          "server/internal/httpapi/records.go",
+          "frontend/src/lib/resource-permissions.ts",
+          "server/internal/store/owned_resources.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/resources_integration_test.go",
+          "server/internal/store/owned_resources_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "成员私有路由数量、每日操作限额及完整菜单策略仍未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "identity.owner_role",
+      "title": "车主角色边界",
+      "domain": "身份与权限",
+      "status": "tested",
+      "implementation_summary": "JWT 管理员/成员两角色、API 所属权与作用域在主控集中校验。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/app.go",
+          "server/internal/httpapi/api_tokens.go",
+          "server/internal/httpapi/records.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "package.templates",
+      "title": "套餐模板 CRUD",
+      "domain": "套餐与拼车",
+      "status": "tested",
+      "implementation_summary": "套餐模板、独立实例凭据、周期/重置/覆盖值与节点/客户端范围参与实际订阅及策略解析。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/membership.go",
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/compiler.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/membership_test.go",
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/store/store_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "package.instance",
+      "title": "独立多套餐实例",
+      "domain": "套餐与拼车",
+      "status": "tested",
+      "implementation_summary": "套餐模板、独立实例凭据、周期/重置/覆盖值与节点/客户端范围参与实际订阅及策略解析。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/membership.go",
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/compiler.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/membership_test.go",
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/store/store_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "package.assignment",
+      "title": "绑定、解绑、续期",
+      "domain": "套餐与拼车",
+      "status": "tested",
+      "implementation_summary": "套餐模板、独立实例凭据、周期/重置/覆盖值与节点/客户端范围参与实际订阅及策略解析。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/membership.go",
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/compiler.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/membership_test.go",
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/store/store_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "package.renewal_view",
+      "title": "续费工作视图",
+      "domain": "套餐与拼车",
+      "status": "implemented",
+      "implementation_summary": "套餐筛选、批量续期与流量重置具有实际事务 API 和管理入口。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/membership.go",
+          "frontend/src/lib/pages/Carpools.svelte",
+          "frontend/src/lib/pages/Plans.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/membership_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "批量操作浏览器流程和固定版本视图细节待验收。"
+      ]
+    },
+    {
+      "id": "package.quota",
+      "title": "总额度、单节点额度与覆写",
+      "domain": "套餐与拼车",
+      "status": "tested",
+      "implementation_summary": "套餐模板、独立实例凭据、周期/重置/覆盖值与节点/客户端范围参与实际订阅及策略解析。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/membership.go",
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/compiler.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/membership_test.go",
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/store/store_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "package.node_scope",
+      "title": "套餐节点范围与呈现",
+      "domain": "套餐与拼车",
+      "status": "tested",
+      "implementation_summary": "套餐模板、独立实例凭据、周期/重置/覆盖值与节点/客户端范围参与实际订阅及策略解析。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/membership.go",
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/compiler.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/membership_test.go",
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/store/store_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "package.client_templates",
+      "title": "按客户端绑定模板",
+      "domain": "套餐与拼车",
+      "status": "tested",
+      "implementation_summary": "套餐模板、独立实例凭据、周期/重置/覆盖值与节点/客户端范围参与实际订阅及策略解析。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/membership.go",
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/compiler.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/membership_test.go",
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/store/store_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "package.billing",
+      "title": "用户计费倍率",
+      "domain": "套餐与拼车",
+      "status": "tested",
+      "implementation_summary": "物理 Xray 计数增量、世代/时间去重、冻结倍率、重置边界和缺口写入持久账目。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/subscriptions.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "package.expiry_enforce",
+      "title": "到期与超额执行",
+      "domain": "套餐与拼车",
+      "status": "tested",
+      "implementation_summary": "到期移除凭据，disabled 策略关闭旧会话；超额停用/降速及恢复，无法限速的后端停止接入。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/limit_rules.go",
+          "agent/internal/runtime/policy.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/httpapi/limit_rules_test.go",
+          "agent/internal/runtime/policy_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "package.member_self_renew",
+      "title": "成员自助续费",
+      "domain": "套餐与拼车",
+      "status": "partial",
+      "implementation_summary": "成员续费申请、管理员人工确认和原子续期已实现；不虚构支付成功。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/membership.go",
+          "server/internal/httpapi/telegram.go",
+          "frontend/src/lib/components/MemberServices.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/membership_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "MiniApp 完整续费/已续费确认交互、对应消息按钮尚未完整串联。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "package.carpool_flow",
+      "title": "基础拼车开通流程",
+      "domain": "套餐与拼车",
+      "status": "partial",
+      "implementation_summary": "服务器/入站/套餐/绑定和个人订阅各环节存在实际 API。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/compiler.go",
+          "server/internal/httpapi/membership.go",
+          "frontend/src/lib/pages/Carpools.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go",
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "尚非一体化开通向导；步骤间统一回滚及完整向导端到端验收缺失。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "package.public_market",
+      "title": "发布到官方拼车页",
+      "domain": "套餐与拼车",
+      "status": "excluded",
+      "implementation_summary": "上游已移除公开拼车市场；按用户范围保留历史记录，不提供发布入口。",
+      "evidence": {
+        "files": [
+          "docs/reference/aswired-alignment.json"
+        ],
+        "tests": []
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "package.redeem",
+      "title": "邀请码与兑换码",
+      "domain": "套餐与拼车",
+      "status": "tested",
+      "implementation_summary": "兑换码原子消费、套餐权益发放、管理员创建/吊销及Telegram命令已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/membership.go",
+          "server/internal/httpapi/telegram_extended.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/membership_test.go",
+          "server/internal/store/batch_test.go",
+          "server/internal/httpapi/telegram_extended_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "真实 Telegram 客户端及正式套餐上线流程仍待验收。"
+      ]
+    },
+    {
+      "id": "package.merged",
+      "title": "全部套餐合并订阅",
+      "domain": "套餐与拼车",
+      "status": "tested",
+      "implementation_summary": "全部有效实例合并订阅，独立凭据和各实例 IP 限制保持。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/membership.go",
+          "server/internal/httpapi/subscriptions.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/membership_test.go",
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "server.inventory",
+      "title": "多服务器清单",
+      "domain": "服务器与Agent",
+      "status": "implemented",
+      "implementation_summary": "节点实际心跳/版本/主机采集、分组记录及只读 Komari 1.2.5-fix2 接入已落地。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/agent.go",
+          "server/internal/httpapi/integrations.go",
+          "server/internal/httpapi/records.go",
+          "agent/internal/runtime/runtime.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go",
+          "agent/internal/runtime/runtime_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "多节点长时间断连/重连规模测试待做。"
+      ]
+    },
+    {
+      "id": "server.enrollment",
+      "title": "Agent 注册与安装",
+      "domain": "服务器与Agent",
+      "status": "implemented",
+      "implementation_summary": "独立 Server/Agent Token、主控公钥配置下发，Linux 本地安装脚本与 host 网络 Docker 构建存在。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/agent.go",
+          "server/internal/httpapi/actions.go",
+          "agent/deploy/manage.sh",
+          "agent/Dockerfile"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "Linux systemd/OpenRC/无 init 和 Docker host 实机安装待验收。"
+      ]
+    },
+    {
+      "id": "server.connection",
+      "title": "三种连接与回退",
+      "domain": "服务器与Agent",
+      "status": "tested",
+      "implementation_summary": "原创 X25519/HKDF/AES-GCM 强制加密通道，WS/Pull/direct HTTP 和自动回退；固定主控身份与 replay 防护。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/agent.go",
+          "agent/internal/control/client.go",
+          "agent/internal/wire/wire.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go",
+          "agent/internal/control/client_test.go",
+          "agent/internal/control/transports_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "server.address",
+      "title": "IPv4/IPv6、域名、DDNS",
+      "domain": "服务器与Agent",
+      "status": "partial",
+      "implementation_summary": "节点地址管理及 Cloudflare DDNS 实际更新/幂等。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/certificate.go",
+          "server/internal/httpapi/actions.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/certificate_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "多地址入口锁定、自动 DNS 与订阅地址全量对账和故障回退链未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "server.ports",
+      "title": "端口管理",
+      "domain": "服务器与Agent",
+      "status": "partial",
+      "implementation_summary": "Agent 监听参数、TCP/UDP 端口占用检查、转发显式端口配置实际执行。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/network_operations.go",
+          "agent/internal/runtime/operations.go",
+          "agent/internal/runtime/forward.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/runtime_test.go",
+          "agent/internal/runtime/network_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "按服务器动态入站端口范围的并发安全自动分配/替换尚未实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "server.credentials",
+      "title": "服务器凭据生命周期",
+      "domain": "服务器与Agent",
+      "status": "partial",
+      "implementation_summary": "Server/Agent 身份独立生成；Agent/Home 控制客户端已实现 identity.rotate 原子保留原配置字段、同 WS 后续新 token 与持久 HTTP 旧 token 最多十五分钟宽限；Home 主控端配对/轮换事务已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/home_identity.go",
+          "agent/internal/control/identity.go",
+          "agent/internal/control/client.go",
+          "agent/internal/config/enrollment.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/home_identity_test.go",
+          "agent/internal/control/identity_test.go",
+          "agent/internal/config/enrollment_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "节点 server.credentials.rotate 的完整在线派发/主控旧 token 宽限流程仍需与已实现 Agent 轮换能力串联；Home 主控端已有该流程。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "server.operations",
+      "title": "Agent 更新与卸载",
+      "domain": "服务器与Agent",
+      "status": "partial",
+      "implementation_summary": "节点核心实际状态/操作任务和本地 SHA256+固定版本升级/回退脚本已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/actions.go",
+          "agent/deploy/manage.sh",
+          "agent/internal/artifact/artifact.go"
+        ],
+        "tests": [
+          "agent/internal/artifact/artifact_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "主控批量/滚动 Agent 升级、下载发布渠道、流式安装进度与远程卸载尚未完整实现。"
+      ],
+      "validation_pending": [
+        "Linux 升级/回退脚本仅语法与 artifact 自动测试，未执行宿主服务操作。"
+      ]
+    },
+    {
+      "id": "server.mode",
+      "title": "外置/内嵌 Xray 模式",
+      "domain": "服务器与Agent",
+      "status": "tested",
+      "implementation_summary": "真正同进程 Xray embedded 与独立 external gRPC 管理边界；核心启动失败诚实回报并保留管理连接。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/core.go",
+          "agent/cmd/aswired-agent/main.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/runtime_test.go",
+          "agent/internal/runtime/migration_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "external Linux 服务适配实际系统验收待做。"
+      ]
+    },
+    {
+      "id": "server.accounting",
+      "title": "服务器容量与周期",
+      "domain": "服务器与Agent",
+      "status": "partial",
+      "implementation_summary": "网卡、Komari、Xray 原始账目和倍率用户账单分源；generation 变化不伪造增量。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/integrations.go",
+          "server/internal/httpapi/probe.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/httpapi/app_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "服务器四方向/周期校准界面及路由子节点独立归因未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "server.assets",
+      "title": "服务器商务与探针资料",
+      "domain": "服务器与Agent",
+      "status": "implemented",
+      "implementation_summary": "自有探针支持系统指标历史、真实显式经纬度3D地球与资产到期时间轴；公开字段受独立开关保护，缺失数据不推算。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/records.go",
+          "server/internal/httpapi/probe.go",
+          "frontend/src/lib/components/ProbeAssets.svelte",
+          "frontend/src/lib/probe-assets.ts"
+        ],
+        "tests": [
+          "server/internal/httpapi/access_extensions_test.go",
+          "frontend/tests/probe-assets.test.mjs",
+          "frontend/tests/probe-history.test.mjs"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "含实际服务器地理数据的多设备地球交互及完整长周期历史仍待验收。"
+      ]
+    },
+    {
+      "id": "server.config_history",
+      "title": "配置历史与回滚",
+      "domain": "服务器与Agent",
+      "status": "implemented",
+      "implementation_summary": "核心完整配置验证、Hash/来源历史、查看和恢复；失败恢复原配置/核心。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/actions.go",
+          "agent/internal/runtime/core.go",
+          "agent/internal/runtime/files.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/runtime_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "历史版本差异 UI 与默认配置自动修复覆盖待验收。"
+      ]
+    },
+    {
+      "id": "server.sync",
+      "title": "节点与地址一致性",
+      "domain": "服务器与Agent",
+      "status": "partial",
+      "implementation_summary": "配置编译/下发、手动扫描及已知来源节点同步存在。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/compiler.go",
+          "agent/internal/runtime/operations.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "自动扫描认领、全量配置漂移与地址对账、入口故障降级并推送未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "server.self_site",
+      "title": "REALITY 本机站点复用",
+      "domain": "服务器与Agent",
+      "status": "partial",
+      "implementation_summary": "REALITY 字段和手动 Nginx 配置/证书部署可操作。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "server/internal/httpapi/operations.go",
+          "agent/internal/runtime/operations.go",
+          "frontend/src/lib/components/RealityFields.svelte"
+        ],
+        "tests": [
+          "agent/internal/runtime/runtime_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "本机站点与 Xray/Nginx 端口联合规划、一体回落/Tunnel 向导未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "xray.services",
+      "title": "Xray/Nginx 服务控制",
+      "domain": "Xray配置",
+      "status": "partial",
+      "implementation_summary": "Xray 实际启停重启/扫描，Nginx 校验重载，Agent 安装升级脚本存在。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/core.go",
+          "agent/internal/runtime/operations.go",
+          "agent/deploy/manage.sh"
+        ],
+        "tests": [
+          "agent/internal/runtime/runtime_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "Xray/Nginx 安装/卸载适配器及流式阶段反馈未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "xray.global_config",
+      "title": "完整 JSON 配置管理",
+      "domain": "Xray配置",
+      "status": "implemented",
+      "implementation_summary": "完整 JSON 在核心真实解析后应用、启动，失败回滚；日志/DNS/策略/Stats/API 经 Xray 原生 schema。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "agent/internal/runtime/core.go",
+          "frontend/src/lib/modules.ts"
+        ],
+        "tests": [
+          "agent/internal/runtime/runtime_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "高级 JSON 编辑完整 UI 操作待验收。"
+      ]
+    },
+    {
+      "id": "xray.inbounds",
+      "title": "入站 CRUD 与节点联动",
+      "domain": "Xray配置",
+      "status": "partial",
+      "implementation_summary": "受支持协议入站 CRUD、完整配置编译与多用户同步已实际工作。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "server/internal/httpapi/actions.go",
+          "agent/internal/runtime/users.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "agent/internal/runtime/runtime_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "所有公开协议和节点双向变化自动对账仍未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "xray.wizard",
+      "title": "简易与专家向导",
+      "domain": "Xray配置",
+      "status": "partial",
+      "implementation_summary": "入站表单含 REALITY/传输/嗅探专用字段并有配置编译校验。",
+      "evidence": {
+        "files": [
+          "frontend/src/lib/modules.ts",
+          "frontend/src/lib/components/RealityFields.svelte",
+          "server/internal/httpapi/compiler.go"
+        ],
+        "tests": [
+          "frontend/tests/reality-keys.test.ts"
+        ]
+      },
+      "missing_behavior": [
+        "自动端口、落地/中转组合、简易/专家两个完整向导尚未实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "xray.protocols",
+      "title": "受管协议与传输",
+      "domain": "Xray配置",
+      "status": "partial",
+      "implementation_summary": "VLESS/VMess/Trojan、传统 AEAD SS、SOCKS/HTTP 与 Hysteria2 原生编译/运行。可选独立固定版本 mihomo 承载 AnyTLS/Snell v3/v4，经隐藏本地 VLESS 桥纳入真实 Xray 用户账目/限速；管理 adapter 不链接 GPL 实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "server/internal/httpapi/auxiliary.go",
+          "server/internal/httpapi/subscriptions.go",
+          "agent/internal/runtime/users.go",
+          "agent/internal/auxiliary/mihomo.go",
+          "agent/internal/mihomoapi/ready.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/vless_test.go",
+          "agent/internal/speedtest/protocols_test.go",
+          "agent/internal/speedtest/auxiliary_test.go",
+          "server/internal/httpapi/auxiliary_agent_test.go",
+          "agent/internal/mihomoapi/ready_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "SS2022 多用户明确不支持；辅助核心仅 TCP，UDP 不支持；Snell v5/v6 未验证且拒绝启用；全部公开运行时×协议×传输×客户端矩阵尚未完成。"
+      ],
+      "validation_pending": [
+        "Windows 官方 mihomo v1.19.31 客户端/服务端实际通过；Surge 等其他真实客户端、Linux/macOS 辅助核心及完整跨平台协议矩阵待验证。"
+      ]
+    },
+    {
+      "id": "xray.reality",
+      "title": "REALITY 域名与保护",
+      "domain": "Xray配置",
+      "status": "tested",
+      "implementation_summary": "REALITY密钥编辑与派生已接入；仅管理员可从主控或在线Agent扫描，验证TLS1.3/h2/X25519及证书，导入合格结果并审核启用。手动提交入口及接口已删除，结果记录实际扫描来源。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "frontend/src/lib/reality-keys.ts",
+          "frontend/src/lib/components/RealityFields.svelte",
+          "server/internal/httpapi/reality_pool.go",
+          "frontend/src/lib/pages/RealityTargetPool.svelte"
+        ],
+        "tests": [
+          "frontend/tests/reality-keys.test.ts",
+          "server/internal/httpapi/reality_pool_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "公网目标在不同地区网络下的长期可用性不由本机fixture保证。"
+      ]
+    },
+    {
+      "id": "xray.protocol_options",
+      "title": "协议特殊参数",
+      "domain": "Xray配置",
+      "status": "partial",
+      "implementation_summary": "原生协议 flow/TLS/REALITY、HY2 auth/h3、传统 SS method/password 已编译；AnyTLS 证书/padding 和 Snell3/4 单 PSK 参数由强类型独立进程适配器校验。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "server/internal/httpapi/auxiliary.go",
+          "agent/internal/auxiliary/mihomo.go",
+          "agent/internal/runtime/users.go"
+        ],
+        "tests": [
+          "agent/internal/speedtest/protocols_test.go",
+          "agent/internal/speedtest/auxiliary_test.go",
+          "server/internal/httpapi/auxiliary_agent_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "SS2022 与其他未覆盖的新协议字段/代际迁移尚未齐；Snell5/6 及辅助UDP未验且不可启用。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "xray.outbounds",
+      "title": "出站 CRUD 与排序",
+      "domain": "Xray配置",
+      "status": "implemented",
+      "implementation_summary": "直连/阻断/代理/WireGuard 出站记录与编译、节点协议转换存在。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "server/internal/httpapi/subscriptions.go",
+          "frontend/src/lib/modules.ts"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "全部出站协议的真实路由串接尚需客户端矩阵验证。"
+      ]
+    },
+    {
+      "id": "xray.warp",
+      "title": "WARP 出站",
+      "domain": "Xray配置",
+      "status": "partial",
+      "implementation_summary": "显式提供密钥/地址/对端配置后可生成隔离路由表的 WireGuard/WARP 接口，状态、回滚和移除已实现。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/wireguard.go",
+          "server/internal/httpapi/network_operations.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/network_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "未实现 WARP 账号自动注册、WARP+ 账户升级/刷新；创建接口后不自动改宿主默认路由，需显式业务路由。"
+      ],
+      "validation_pending": [
+        "Linux kernel WireGuard 实机未测试。"
+      ]
+    },
+    {
+      "id": "xray.routing",
+      "title": "路由规则管理",
+      "domain": "Xray配置",
+      "status": "partial",
+      "implementation_summary": "Xray 原生路由 JSON/规则编译支持全局与按入站标签路由，保护管理 API 基础路由。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "frontend/src/lib/pages/PolicyEditor.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "用户/套餐子路由完整生命周期、可解释匹配结果、catch-all 遮蔽检查及全部审阅预设未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "xray.routing_presets",
+      "title": "预设路由与命中提示",
+      "domain": "Xray配置",
+      "status": "partial",
+      "implementation_summary": "Xray 原生路由 JSON/规则编译支持全局与按入站标签路由，保护管理 API 基础路由。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "frontend/src/lib/pages/PolicyEditor.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "用户/套餐子路由完整生命周期、可解释匹配结果、catch-all 遮蔽检查及全部审阅预设未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "xray.balancers",
+      "title": "出站负载均衡",
+      "domain": "Xray配置",
+      "status": "partial",
+      "implementation_summary": "原生 Xray 配置可承载 balancers，但没有独立完整调度产品流程。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "agent/internal/runtime/core.go"
+        ],
+        "tests": []
+      },
+      "missing_behavior": [
+        "四种算法配置向导、观测器自动编译、健康数据采集与选择行为验收缺失。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "node.import",
+      "title": "外部节点导入",
+      "domain": "节点管理",
+      "status": "partial",
+      "implementation_summary": "URI/YAML/Base64/订阅 URL 等解析和来源同步已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/actions.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/httpapi/resources_integration_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "SOCKS5/Surge 所有输入变体、统一预览及完整导入黄金样本未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "node.crud",
+      "title": "节点列表与日常操作",
+      "domain": "节点管理",
+      "status": "partial",
+      "implementation_summary": "实际节点 CRUD/状态/排序/标签/地区及 URI 导出保存在主控。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/records.go",
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/subscriptions.go",
+          "frontend/src/lib/modules.ts"
+        ],
+        "tests": [
+          "server/internal/httpapi/resources_integration_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "批量去重、显示地址转换/恢复与批量协议属性流程未完整实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "node.metadata",
+      "title": "节点显示与地址工具",
+      "domain": "节点管理",
+      "status": "partial",
+      "implementation_summary": "实际节点 CRUD/状态/排序/标签/地区及 URI 导出保存在主控。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/records.go",
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/subscriptions.go",
+          "frontend/src/lib/modules.ts"
+        ],
+        "tests": [
+          "server/internal/httpapi/resources_integration_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "批量去重、显示地址转换/恢复与批量协议属性流程未完整实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "node.temp_sub",
+      "title": "临时订阅",
+      "domain": "节点管理",
+      "status": "tested",
+      "implementation_summary": "临时订阅只暴露一个有权访问的节点，有限TTL/访问次数、父订阅状态与token版本复核，成功渲染后原子消耗次数。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/temporary_subscriptions.go",
+          "frontend/src/lib/components/TemporarySubscriptions.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/httpapi/temporary_subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "客户端拉取重试会消耗已成功生成响应的次数；网络丢失无法回滚。"
+      ]
+    },
+    {
+      "id": "node.uri_view",
+      "title": "用户 URI 总览",
+      "domain": "节点管理",
+      "status": "implemented",
+      "implementation_summary": "个人实例凭据参与 URI 生成和格式导出，非共享全局凭据。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/subscriptions.go",
+          "frontend/src/lib/components/MemberServices.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "按服务器分组与复制全部的浏览器验收待做。"
+      ]
+    },
+    {
+      "id": "node.self_import",
+      "title": "成员自有节点管理",
+      "domain": "节点管理",
+      "status": "tested",
+      "implementation_summary": "成员自有外部节点/来源由服务端校验 Owner；禁止越权取改。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/member_resources.go",
+          "server/internal/httpapi/source_fetch.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/resources_integration_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "node.latency",
+      "title": "TCP 延迟与域名探测",
+      "domain": "节点管理",
+      "status": "implemented",
+      "implementation_summary": "受控 TCP 真连接采样与 Agent 网络质量结果有来源标记。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/network_operations.go",
+          "agent/internal/runtime/quality.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/network_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "批量域名并发调度规模/超时行为待验收。"
+      ]
+    },
+    {
+      "id": "node.speedtest",
+      "title": "真实测速工作台",
+      "domain": "节点管理",
+      "status": "tested",
+      "implementation_summary": "固定 SHA256/版本 mihomo 在独立循环代理执行真实多次延迟、下载字节、时间窗和可选同路由出口 IP；单来源串行。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/home.go",
+          "agent/internal/speedtest/speedtest.go",
+          "agent/internal/speedtest/fetch.go"
+        ],
+        "tests": [
+          "agent/internal/speedtest/speedtest_test.go",
+          "agent/internal/speedtest/fetch_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "node.home_endpoint",
+      "title": "家用测速端",
+      "domain": "节点管理",
+      "status": "partial",
+      "implementation_summary": "独立 Home 身份/反向加密通道，跨 Windows/macOS/Linux 可构建，Linux 本地安装/更新/回退脚本与版本校验存在。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/home.go",
+          "agent/cmd/aswired-speedtest/main.go",
+          "agent/deploy/manage.sh",
+          "agent/internal/mihomoapi/ready.go"
+        ],
+        "tests": [
+          "agent/internal/speedtest/speedtest_test.go",
+          "agent/internal/artifact/artifact_test.go",
+          "agent/internal/mihomoapi/ready_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "Windows/macOS 原生安装与自启动、主控远程更新、正式发布资产未完成。"
+      ],
+      "validation_pending": [
+        "Linux init 实机与 macOS 可执行运行验证待做。"
+      ]
+    },
+    {
+      "id": "node.external_probe",
+      "title": "外部节点探测与重同步",
+      "domain": "节点管理",
+      "status": "partial",
+      "implementation_summary": "有独立 Home mihomo 实测速与 TCP 节点探测任务。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/home.go",
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/scheduler.go"
+        ],
+        "tests": [
+          "agent/internal/speedtest/speedtest_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "定时代理探测全来源选择、主控 mihomo 来源和失效来源自动重同步联动未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "subscription.sources",
+      "title": "外部订阅源管理",
+      "domain": "订阅源与转换",
+      "status": "tested",
+      "implementation_summary": "用户所属源、抓取身份、安全 URL、删除/禁用影响及实际同步持久化。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/source_fetch.go",
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/member_resources.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/resources_integration_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "subscription.sync",
+      "title": "定时、按需与缓存刷新",
+      "domain": "订阅源与转换",
+      "status": "partial",
+      "implementation_summary": "直连抓取支持按URL/请求头隔离的ETag与Last-Modified缓存及304验证，失败自动指数退避；Home来源仍保留原始抓取行为。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/scheduler.go",
+          "server/internal/httpapi/source_fetch.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/resources_integration_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "跨进程抓取互斥及Home来源条件缓存仍未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "subscription.matching",
+      "title": "同步匹配与保留策略",
+      "domain": "订阅源与转换",
+      "status": "tested",
+      "implementation_summary": "支持名称+地址、名称、地址和身份匹配；合并/仅更新/仅新增策略；整批节点与来源原子保存，保留本地别名标签等属性并标记消失节点。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/actions.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/resources_integration_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "全部客户端输入变体和恶意重复名称黄金样本仍需扩充。"
+      ]
+    },
+    {
+      "id": "subscription.external_traffic",
+      "title": "外部流量聚合",
+      "domain": "订阅源与转换",
+      "status": "partial",
+      "implementation_summary": "subscription-userinfo 实际解析并记录来源额度/到期。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/source_fetch.go",
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/subscriptions.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/resources_integration_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "完整方向/标签汇总和各客户端名称提示规则尚需补齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "subscription.fetch_proxy",
+      "title": "家用端中转抓取源",
+      "domain": "订阅源与转换",
+      "status": "tested",
+      "implementation_summary": "配对 Home 限定 source.fetch、8MiB/30s、固定回传头白名单、跨域丢弃凭据；显式 fallback 才主控直抓。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/source_fetch.go",
+          "server/internal/httpapi/home.go",
+          "agent/internal/speedtest/fetch.go"
+        ],
+        "tests": [
+          "agent/internal/speedtest/fetch_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "subscription.generate",
+      "title": "订阅生成工作台",
+      "domain": "订阅源与转换",
+      "status": "implemented",
+      "implementation_summary": "节点范围、模板、排序、短码/域名、流量与到期头经真实订阅 API 生成。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/membership.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "各公开客户端的可视化导入和信息节点行为待矩阵验收。"
+      ]
+    },
+    {
+      "id": "subscription.formats",
+      "title": "多客户端输出",
+      "domain": "订阅源与转换",
+      "status": "partial",
+      "implementation_summary": "独立客户端输出/UA 选择与协议过滤已有自动化格式断言。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/subscriptions.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "全部指定版本客户端加载验证与版本化黄金文件未齐；URI 可导出不等于服务端协议支持。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "subscription.compatibility",
+      "title": "自动客户端与兼容处理",
+      "domain": "订阅源与转换",
+      "status": "partial",
+      "implementation_summary": "独立客户端输出/UA 选择与协议过滤已有自动化格式断言。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/subscriptions.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "全部指定版本客户端加载验证与版本化黄金文件未齐；URI 可导出不等于服务端协议支持。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "subscription.files",
+      "title": "订阅文件维护",
+      "domain": "订阅源与转换",
+      "status": "implemented",
+      "implementation_summary": "节点范围、模板、排序、短码/域名、流量与到期头经真实订阅 API 生成。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/membership.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "各公开客户端的可视化导入和信息节点行为待矩阵验收。"
+      ]
+    },
+    {
+      "id": "subscription.links",
+      "title": "分发链接与独立域名",
+      "domain": "订阅源与转换",
+      "status": "implemented",
+      "implementation_summary": "节点范围、模板、排序、短码/域名、流量与到期头经真实订阅 API 生成。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/membership.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "各公开客户端的可视化导入和信息节点行为待矩阵验收。"
+      ]
+    },
+    {
+      "id": "subscription.info",
+      "title": "订阅元信息展示",
+      "domain": "订阅源与转换",
+      "status": "implemented",
+      "implementation_summary": "节点范围、模板、排序、短码/域名、流量与到期头经真实订阅 API 生成。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/membership.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "各公开客户端的可视化导入和信息节点行为待矩阵验收。"
+      ]
+    },
+    {
+      "id": "subscription.providers",
+      "title": "代理集合",
+      "domain": "订阅源与转换",
+      "status": "implemented",
+      "implementation_summary": "Proxy Provider 与本地节点动态组展开、变量与环检测已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/subscriptions.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "所有客户端 Provider 缓存/刷新实际行为待验证。"
+      ]
+    },
+    {
+      "id": "subscription.change_push",
+      "title": "订阅变化即时通知",
+      "domain": "订阅源与转换",
+      "status": "partial",
+      "implementation_summary": "subscription_changed 持久事件和通知可发出。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/notification_events.go",
+          "server/internal/httpapi/actions.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/entry_guard_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "专用客户端更新推送通道与入口故障自动降级触发重新抓取尚未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "subscription.access",
+      "title": "订阅访问策略",
+      "domain": "订阅源与转换",
+      "status": "tested",
+      "implementation_summary": "用户/实例有效性、独立 token、合并实例 IP 限制与访问范围在生成前校验。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/membership.go",
+          "server/internal/httpapi/entry_guard.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/httpapi/membership_test.go",
+          "server/internal/httpapi/entry_guard_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "template.versions",
+      "title": "模板版本兼容",
+      "domain": "模板与规则",
+      "status": "partial",
+      "implementation_summary": "v1/v3 YAML 规范化和部分 v2 INI 转换、警告/历史 API 已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "v2 外部规则集/全部语法转换及保留原件的全版本无损迁移未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "template.library",
+      "title": "模板库 CRUD 与共享",
+      "domain": "模板与规则",
+      "status": "implemented",
+      "implementation_summary": "系统/个人模板、客户端类型、所有权和实例绑定/默认模板实际生效。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/records.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "可见性各角色 UI 待浏览器验收。"
+      ]
+    },
+    {
+      "id": "template.import",
+      "title": "六类模板来源",
+      "domain": "模板与规则",
+      "status": "partial",
+      "implementation_summary": "粘贴/JSON/YAML 编辑、导入/预览及部分组编辑可保存。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go",
+          "frontend/src/lib/pages/PolicyEditor.svelte",
+          "frontend/src/lib/pages/Subscriptions.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "上传/URL/订阅提取统一预览和可视化 YAML 无损双向编辑未完整实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "template.editor",
+      "title": "可视化与代码编辑",
+      "domain": "模板与规则",
+      "status": "partial",
+      "implementation_summary": "粘贴/JSON/YAML 编辑、导入/预览及部分组编辑可保存。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go",
+          "frontend/src/lib/pages/PolicyEditor.svelte",
+          "frontend/src/lib/pages/Subscriptions.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "上传/URL/订阅提取统一预览和可视化 YAML 无损双向编辑未完整实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "template.selectors",
+      "title": "动态匹配节点",
+      "domain": "模板与规则",
+      "status": "implemented",
+      "implementation_summary": "动态选择器、变量、地域过滤、组/链展开与引用环拒绝，客户端参数由模板保留。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "全部客户端专有组类型及空组被引用策略实际导入待验收。"
+      ]
+    },
+    {
+      "id": "template.regions",
+      "title": "区域组与空组处理",
+      "domain": "模板与规则",
+      "status": "implemented",
+      "implementation_summary": "动态选择器、变量、地域过滤、组/链展开与引用环拒绝，客户端参数由模板保留。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "全部客户端专有组类型及空组被引用策略实际导入待验收。"
+      ]
+    },
+    {
+      "id": "template.policy_groups",
+      "title": "代理组选路",
+      "domain": "模板与规则",
+      "status": "implemented",
+      "implementation_summary": "动态选择器、变量、地域过滤、组/链展开与引用环拒绝，客户端参数由模板保留。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "全部客户端专有组类型及空组被引用策略实际导入待验收。"
+      ]
+    },
+    {
+      "id": "template.regeneration",
+      "title": "订阅自动再生成",
+      "domain": "模板与规则",
+      "status": "partial",
+      "implementation_summary": "请求时使用现行节点/模板生成，变更可发通知并有模板历史。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/notification_events.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "依赖图触发持久再生成、版本去重及最后有效产物缓存未完整实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "rules.overrides",
+      "title": "DNS/规则/规则集覆写",
+      "domain": "模板与规则",
+      "status": "partial",
+      "implementation_summary": "Clash/Mihomo 规则的前置/追加/替换及作用域链已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "Surge/Loon 等所有客户端覆写语义和完整 DNS/规则集范围未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "rules.scripts",
+      "title": "JavaScript 覆写脚本",
+      "domain": "模板与规则",
+      "status": "tested",
+      "implementation_summary": "goja JavaScript 在订阅链处理配置，超时可中止，错误明确返回。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/subscriptions.go",
+          "server/internal/httpapi/templates.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "rules.group_catalog",
+      "title": "远程代理组配置",
+      "domain": "模板与规则",
+      "status": "partial",
+      "implementation_summary": "规则资源 CRUD、模板默认项和导入规范化可用。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/records.go",
+          "frontend/src/lib/pages/PolicyEditor.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "远程分级组目录缓存、独立规则集托管分发与默认文件只补缺失/自定义状态完整策略未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "rules.hosted",
+      "title": "规则集托管",
+      "domain": "模板与规则",
+      "status": "partial",
+      "implementation_summary": "规则资源 CRUD、模板默认项和导入规范化可用。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/records.go",
+          "frontend/src/lib/pages/PolicyEditor.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "远程分级组目录缓存、独立规则集托管分发与默认文件只补缺失/自定义状态完整策略未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "rules.bundled",
+      "title": "内置模板文件",
+      "domain": "模板与规则",
+      "status": "partial",
+      "implementation_summary": "规则资源 CRUD、模板默认项和导入规范化可用。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/records.go",
+          "frontend/src/lib/pages/PolicyEditor.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "远程分级组目录缓存、独立规则集托管分发与默认文件只补缺失/自定义状态完整策略未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "relay.node_outbound",
+      "title": "整节点链式出站",
+      "domain": "中转与转发",
+      "status": "partial",
+      "implementation_summary": "出站/路由 JSON 与客户端 dialer-proxy/组生成底座存在。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/member_resources.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "父入站/套餐/成员私有路由子节点完整创建、独立凭据与权益/每日次数、拓扑依赖生命周期尚未实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "relay.package_children",
+      "title": "套餐路由子节点",
+      "domain": "中转与转发",
+      "status": "partial",
+      "implementation_summary": "出站/路由 JSON 与客户端 dialer-proxy/组生成底座存在。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/member_resources.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "父入站/套餐/成员私有路由子节点完整创建、独立凭据与权益/每日次数、拓扑依赖生命周期尚未实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "relay.private_children",
+      "title": "成员私有路由子节点",
+      "domain": "中转与转发",
+      "status": "partial",
+      "implementation_summary": "出站/路由 JSON 与客户端 dialer-proxy/组生成底座存在。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/member_resources.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "父入站/套餐/成员私有路由子节点完整创建、独立凭据与权益/每日次数、拓扑依赖生命周期尚未实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "relay.client_group",
+      "title": "客户端中转组",
+      "domain": "中转与转发",
+      "status": "partial",
+      "implementation_summary": "出站/路由 JSON 与客户端 dialer-proxy/组生成底座存在。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/compiler.go",
+          "server/internal/httpapi/templates.go",
+          "server/internal/httpapi/member_resources.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "父入站/套餐/成员私有路由子节点完整创建、独立凭据与权益/每日次数、拓扑依赖生命周期尚未实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "relay.tunnels",
+      "title": "Xray Tunnel 与端口转发",
+      "domain": "中转与转发",
+      "status": "tested",
+      "implementation_summary": "原生 TCP/UDP 监听、真实双向转发、监听失败回滚、配置落盘/重启恢复与状态计数。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/network_operations.go",
+          "agent/internal/runtime/forward.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/network_test.go",
+          "server/internal/httpapi/resources_integration_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "relay.reused_port",
+      "title": "复用入站的目标转发",
+      "domain": "中转与转发",
+      "status": "partial",
+      "implementation_summary": "同一规则监听不变可原地更新目标并保留计数世代；关联由主控规则保存。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/forward.go",
+          "server/internal/httpapi/network_operations.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/network_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "多个 Tunnel 基于目标规则共享单监听与原落地自动映射的产品行为未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "relay.native_chains",
+      "title": "Agent 转发组与链",
+      "domain": "中转与转发",
+      "status": "partial",
+      "implementation_summary": "2至8跳链先全量验证，再按出口向入口逐跳下发；只有下游真实任务成功后启用上一跳，失败停止后续步骤并可查询链状态。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/network_operations.go",
+          "agent/internal/runtime/forward.go",
+          "server/internal/httpapi/forward_chain.go",
+          "frontend/src/lib/components/NetworkOperations.svelte"
+        ],
+        "tests": [
+          "agent/internal/runtime/network_test.go",
+          "server/internal/httpapi/forward_chain_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "单入口链、自动故障降级、DNS对账及跨节点原子回滚仍未齐；旧修订已运行监听须按实际状态处理。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "relay.member_forward",
+      "title": "成员“我的转发”",
+      "domain": "中转与转发",
+      "status": "partial",
+      "implementation_summary": "管理员可配置实际 TCP/UDP 转发并检查端口。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/network_operations.go",
+          "server/internal/httpapi/member_resources.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/resources_integration_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "成员入口链授权、套餐配额、换端口并发限制与独立自助流程未实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "relay.ledger",
+      "title": "转发计量与连接",
+      "domain": "中转与转发",
+      "status": "partial",
+      "implementation_summary": "转发规则按 generation/采样时间去重形成独立字节账，不混入 Xray 用户计费。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/network_operations.go",
+          "agent/internal/runtime/forward.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/resources_integration_test.go",
+          "agent/internal/runtime/network_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "套餐、链路全程、来源 IP 历史与连接账目维度未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "relay.wireguard",
+      "title": "WireGuard 中转隧道",
+      "domain": "中转与转发",
+      "status": "partial",
+      "implementation_summary": "强类型 WireGuard 键/地址/保活配置、实际命令/回滚/所有权核验与状态存在。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/wireguard.go",
+          "server/internal/httpapi/network_operations.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/network_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "与原生中转链自动选路/探活联动尚未齐。"
+      ],
+      "validation_pending": [
+        "Linux kernel 实机运行待验证；测试使用注入执行器，不修改宿主网络。"
+      ]
+    },
+    {
+      "id": "federation.share",
+      "title": "跨主控分享与接入",
+      "domain": "共享与联邦",
+      "status": "partial",
+      "implementation_summary": "双主控到真实 Agent 的不透明加密管理已通过；Owner 唯一直控，消费者仅可管理被分享入站的自身前缀用户/查看自身统计。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/federation_agent.go",
+          "agent/internal/runtime/federation.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/federation_agent_test.go",
+          "agent/internal/runtime/federation_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "消费者自身入站创建/删除和节点全生命周期未齐；完整 Xray 配置显式授权模式及命名空间资源配额未实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "federation.acl",
+      "title": "联邦权限边界",
+      "domain": "共享与联邦",
+      "status": "partial",
+      "implementation_summary": "双主控到真实 Agent 的不透明加密管理已通过；Owner 唯一直控，消费者仅可管理被分享入站的自身前缀用户/查看自身统计。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/federation_agent.go",
+          "agent/internal/runtime/federation.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/federation_agent_test.go",
+          "agent/internal/runtime/federation_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "消费者自身入站创建/删除和节点全生命周期未齐；完整 Xray 配置显式授权模式及命名空间资源配额未实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "federation.tokens",
+      "title": "分享令牌管理",
+      "domain": "共享与联邦",
+      "status": "implemented",
+      "implementation_summary": "分享令牌散列校验、多个独立分享、允许动作/节点列表与撤销；私有凭据不进入公开探针。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/federation.go",
+          "server/internal/httpapi/federation_agent.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/federation_test.go",
+          "server/internal/httpapi/federation_agent_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "分享令牌首次展示/列表 UX 与批量管理待验收。"
+      ]
+    },
+    {
+      "id": "federation.security",
+      "title": "联邦加密与白名单",
+      "domain": "共享与联邦",
+      "status": "tested",
+      "implementation_summary": "消费者/Agent 端终止 X25519+AES-GCM；Owner 验令牌/签 ACL 并只路由密文；绑定身份、别名、动作和 namespace。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/federation_agent.go",
+          "agent/internal/runtime/federation.go",
+          "agent/internal/wire/federation.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/federation_agent_test.go",
+          "agent/internal/runtime/federation_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "公网 HTTPS 证书部署与大规模并发/长时续租验证待做；不宣称私有上游线协议兼容。"
+      ]
+    },
+    {
+      "id": "cert.providers",
+      "title": "DNS 供应商管理",
+      "domain": "证书与网站",
+      "status": "implemented",
+      "implementation_summary": "ACME DNS验证已配置Cloudflare、AliDNS、Tencent DNSPod及Namesilo独立凭据适配，不通过全局环境变量共享密钥。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/certificate.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/certificate_test.go",
+          "server/internal/httpapi/certificate_exchange_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "四家真实DNS账户与公网ACME签发未执行；fixture仅验证参数、持久化与请求处理。"
+      ]
+    },
+    {
+      "id": "cert.issue",
+      "title": "证书申请与续期",
+      "domain": "证书与网站",
+      "status": "implemented",
+      "implementation_summary": "lego 实际 ACME HTTP-01/Cloudflare DNS-01 申请、续期和持久状态；本地 ACME CA 集成签发/续期已通过。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/certificate.go",
+          "server/internal/httpapi/scheduler.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/certificate_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "生产 ACME/通配符 Cloudflare 权限与失败退避实机验证待做。"
+      ]
+    },
+    {
+      "id": "cert.manual",
+      "title": "证书导入与导出",
+      "domain": "证书与网站",
+      "status": "tested",
+      "implementation_summary": "PEM 链/私钥匹配、有效期、版本和引用校验后部署到受管路径。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/certificate.go",
+          "agent/internal/runtime/operations.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/certificate_test.go",
+          "agent/internal/runtime/runtime_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "cert.deploy",
+      "title": "证书部署与更新",
+      "domain": "证书与网站",
+      "status": "partial",
+      "implementation_summary": "证书版本推送 Agent 并回报真实绝对路径，可用于 Xray/Nginx 配置引用。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/certificate.go",
+          "server/internal/httpapi/operations.go",
+          "agent/internal/runtime/operations.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/runtime_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "面板 HTTPS 监听热替换与全部引用原子重载需补齐验证。"
+      ],
+      "validation_pending": [
+        "Linux Nginx/Xray 续期后真实服务重载未验证。"
+      ]
+    },
+    {
+      "id": "cert.webhook",
+      "title": "Certimate Webhook",
+      "domain": "证书与网站",
+      "status": "implemented",
+      "implementation_summary": "带令牌证书上传支持 PEM/Base64，校验并进入证书版本部署链。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/certificate.go",
+          "server/internal/httpapi/operations.go"
+        ],
+        "tests": []
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "真实 Certimate 版本请求格式和同域引用刷新端到端待验收。"
+      ]
+    },
+    {
+      "id": "site.nginx",
+      "title": "Nginx 站点管理",
+      "domain": "证书与网站",
+      "status": "partial",
+      "implementation_summary": "明确管理路径的完整 Nginx 配置、证书引用、语法验证后重载，错误恢复原文件。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/operations.go",
+          "server/internal/httpapi/operations.go"
+        ],
+        "tests": []
+      },
+      "missing_behavior": [
+        "已有站点自动扫描/认领与静态/反代可视化完整流程未齐。"
+      ],
+      "validation_pending": [
+        "Linux Nginx 实机需验证。"
+      ]
+    },
+    {
+      "id": "site.runtime",
+      "title": "多种服务管理环境",
+      "domain": "证书与网站",
+      "status": "partial",
+      "implementation_summary": "Agent Linux systemd/OpenRC/直接进程安装脚本，外置 Xray systemd/OpenRC 管理；Docker host 构建入口存在。",
+      "evidence": {
+        "files": [
+          "agent/deploy/manage.sh",
+          "agent/internal/runtime/core.go",
+          "agent/Dockerfile"
+        ],
+        "tests": [
+          "agent/internal/runtime/migration_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "Nginx/Xray 全套 SysV/Docker 生命周期适配尚未齐。"
+      ],
+      "validation_pending": [
+        "所有 init 实机服务测试未执行。"
+      ]
+    },
+    {
+      "id": "monitor.dashboard",
+      "title": "管理员流量总览",
+      "domain": "监控与流量",
+      "status": "partial",
+      "implementation_summary": "真实账目/用量 API 和管理/成员图表已有接入，来源分开显示。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/probe.go",
+          "frontend/src/lib/pages/Dashboard.svelte",
+          "frontend/src/lib/pages/Traffic.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "今日/周/月、完整 30 日趋势与外部订阅合计所有视图需补齐；部分概览字段仍为空占位。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "monitor.member",
+      "title": "成员用量总览",
+      "domain": "监控与流量",
+      "status": "partial",
+      "implementation_summary": "真实账目/用量 API 和管理/成员图表已有接入，来源分开显示。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/probe.go",
+          "frontend/src/lib/pages/Dashboard.svelte",
+          "frontend/src/lib/pages/Traffic.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "今日/周/月、完整 30 日趋势与外部订阅合计所有视图需补齐；部分概览字段仍为空占位。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "monitor.live",
+      "title": "实时系统与连接状态",
+      "domain": "监控与流量",
+      "status": "tested",
+      "implementation_summary": "gopsutil 原生 CPU/内存/磁盘/负载/uptime/OS/网卡实际采样；嵌入核心连接/IP 追踪，Komari 单独标源。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/runtime.go",
+          "agent/internal/runtime/policy.go",
+          "server/internal/httpapi/integrations.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/runtime_test.go",
+          "agent/internal/runtime/policy_test.go",
+          "server/internal/httpapi/app_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "monitor.probe",
+      "title": "内置公开探针",
+      "domain": "监控与流量",
+      "status": "implemented",
+      "implementation_summary": "自有探针支持系统指标历史、真实显式经纬度3D地球与资产到期时间轴；公开字段受独立开关保护，缺失数据不推算。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/probe.go",
+          "server/internal/httpapi/entry_guard.go",
+          "frontend/src/lib/pages/Probe.svelte",
+          "frontend/src/lib/components/ProbeAssets.svelte",
+          "frontend/src/lib/probe-assets.ts"
+        ],
+        "tests": [
+          "server/internal/httpapi/access_extensions_test.go",
+          "server/internal/httpapi/entry_guard_test.go",
+          "frontend/tests/probe-history.test.mjs",
+          "frontend/tests/probe-assets.test.mjs"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "含实际服务器地理数据的多设备地球交互及完整长周期历史仍待验收。"
+      ]
+    },
+    {
+      "id": "monitor.external_probe",
+      "title": "外置探针",
+      "domain": "监控与流量",
+      "status": "implemented",
+      "implementation_summary": "独立探针构建、Worker 只读 HTTP/WS 代理、独立密钥及一次 code+PKCE 登录回接已实现。",
+      "evidence": {
+        "files": [
+          "frontend/worker/index.mjs",
+          "frontend/src/probe/App.svelte",
+          "server/internal/httpapi/probe.go",
+          "server/internal/httpapi/federation.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/federation_test.go",
+          "frontend/tests/probe-worker.test.mjs",
+          "frontend/tests/callback-login.test.mjs"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "真实 Cloudflare Worker 部署、多域浏览器登录回接待验收。"
+      ]
+    },
+    {
+      "id": "monitor.probe_api",
+      "title": "探针API与历史",
+      "domain": "监控与流量",
+      "status": "partial",
+      "implementation_summary": "白名单只读 API、5 秒 WebSocket 快照与 1h/6h/24h 历史桶；Komari 仅外部源。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/probe.go",
+          "frontend/src/lib/probe-history.ts"
+        ],
+        "tests": [
+          "server/internal/httpapi/access_extensions_test.go",
+          "frontend/tests/probe-history.test.mjs"
+        ]
+      },
+      "missing_behavior": [
+        "WebSocket 当前全量快照而非增量；所有系统/延迟历史类型界面尚未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "monitor.network_quality",
+      "title": "网络质量与回程",
+      "domain": "监控与流量",
+      "status": "partial",
+      "implementation_summary": "原生 TCP/ICMP 受控真实样本、失败类型、延迟/丢包和定时历史记录。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/quality.go",
+          "server/internal/httpapi/network_operations.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/network_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "回程 traceroute/MTR 诊断及地区/运营商线路库联动尚未实现。"
+      ],
+      "validation_pending": [
+        "原始 ICMP 权限失败会返回 unsupported；真实特权 ICMP/IPv6 网络待验证。"
+      ]
+    },
+    {
+      "id": "monitor.accounting",
+      "title": "多维流量对账",
+      "domain": "监控与流量",
+      "status": "partial",
+      "implementation_summary": "网卡、Komari、Xray 原始账目和倍率用户账单分源；generation 变化不伪造增量。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/integrations.go",
+          "server/internal/httpapi/probe.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/httpapi/app_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "服务器四方向/周期校准界面及路由子节点独立归因未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "monitor.ledger",
+      "title": "流量明细台账",
+      "domain": "监控与流量",
+      "status": "partial",
+      "implementation_summary": "原始/加权用户增量、物理计数、缺口原因及连接/IP 当前状态已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/accounting.go",
+          "agent/internal/runtime/policy.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "agent/internal/runtime/policy_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "历史连接 IP、峰值 Top5、管理员自用分类与各节点路由细分报表未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "monitor.ip_database",
+      "title": "IP 地区库",
+      "domain": "监控与流量",
+      "status": "tested",
+      "implementation_summary": "管理员可上传或固定SHA256下载MMDB、保留3版本、切换/回退并查询IPv4/IPv6；无效库拒绝激活、活动版本不能删除。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/records.go",
+          "server/internal/httpapi/probe.go",
+          "server/internal/httpapi/ip_database.go",
+          "frontend/src/lib/components/IPDatabase.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/ip_database_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "实际商用数据库授权、更新任务与大规模查询性能不包含在fixture验证内。"
+      ]
+    },
+    {
+      "id": "limit.speed",
+      "title": "用户与套餐限速",
+      "domain": "限速与接入控制",
+      "status": "implemented",
+      "implementation_summary": "原生与辅助桥接流量使用真实 Xray 物理用户共享下载桶；策略控制路径支持热更新，无策略保留原始 splice，新增策略要求原无限制 raw 会话重连。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/policy.go",
+          "agent/internal/auxiliary/mihomo.go",
+          "server/internal/httpapi/auxiliary.go",
+          "agent/third_party/xray-core/proxy/proxy.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/vless_test.go",
+          "agent/internal/runtime/users_test.go",
+          "agent/internal/speedtest/protocols_test.go",
+          "agent/internal/speedtest/auxiliary_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "Linux REALITY/Vision splice 实机未验证；辅助桥接没有原客户端 IP，启用 IP 限制会明确拒绝。"
+      ]
+    },
+    {
+      "id": "limit.connection",
+      "title": "并发连接数",
+      "domain": "限速与接入控制",
+      "status": "tested",
+      "implementation_summary": "按同物理节点用户跨凭据聚合连接/IP，达限拒绝新连接，disabled 关闭已跟踪连接。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/policy.go",
+          "server/internal/httpapi/accounting.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/policy_test.go",
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "limit.online_ips",
+      "title": "同时在线IP数量",
+      "domain": "限速与接入控制",
+      "status": "tested",
+      "implementation_summary": "按同物理节点用户跨凭据聚合连接/IP，达限拒绝新连接，disabled 关闭已跟踪连接。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/policy.go",
+          "server/internal/httpapi/accounting.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/policy_test.go",
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "limit.auto_rules",
+      "title": "行为自动限速",
+      "domain": "限速与接入控制",
+      "status": "tested",
+      "implementation_summary": "持续/窗口突发、样本世代/边界、优先级与用户覆盖、触发/解除事件和策略下发已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/limit_rules.go",
+          "server/internal/httpapi/notification_events.go",
+          "server/internal/httpapi/accounting.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/limit_rules_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "limit.quota_throttle",
+      "title": "超额度限速与恢复",
+      "domain": "限速与接入控制",
+      "status": "tested",
+      "implementation_summary": "额度超限降速与重置/扩额恢复独立于行为限速；不具备实际 Hook 的后端停止实例。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/limit_rules.go",
+          "server/internal/httpapi/accounting.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/limit_rules_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "notify.events",
+      "title": "Telegram事件通知",
+      "domain": "通知与TG",
+      "status": "tested",
+      "implementation_summary": "事件持久化、类型开关、权限接收者、去重和实际 Webhook/TG/SMTP 发送路径存在。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/notification_events.go",
+          "server/internal/httpapi/integrations.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/entry_guard_test.go",
+          "server/internal/httpapi/app_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "生产 Telegram/SMTP 送达与逐接收者自动失败重试未验收。"
+      ]
+    },
+    {
+      "id": "notify.daily",
+      "title": "日报与文案",
+      "domain": "通知与TG",
+      "status": "partial",
+      "implementation_summary": "登录/任务/订阅变化通知及到期7/3/1日去重事件已实现，成员通知开关参与投递；公告由现有成员界面展示。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/notification_events.go",
+          "server/internal/httpapi/scheduler.go",
+          "server/internal/httpapi/telegram.go",
+          "server/internal/httpapi/telegram_extended.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/telegram_extended_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "续费消息按钮和MiniApp套餐定向公告完整交互仍未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "notify.announcements",
+      "title": "公告中心",
+      "domain": "通知与TG",
+      "status": "partial",
+      "implementation_summary": "登录/任务/订阅变化通知及到期7/3/1日去重事件已实现，成员通知开关参与投递；公告由现有成员界面展示。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/notification_events.go",
+          "server/internal/httpapi/scheduler.go",
+          "server/internal/httpapi/telegram.go",
+          "server/internal/httpapi/telegram_extended.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/telegram_extended_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "续费消息按钮和MiniApp套餐定向公告完整交互仍未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "tg.builtin",
+      "title": "内置TG Bot生命周期",
+      "domain": "通知与TG",
+      "status": "implemented",
+      "implementation_summary": "内置 webhook Bot 的 set/delete/status/commands，Token 加密存储与签名校验。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/telegram.go",
+          "server/internal/httpapi/telegram_lifecycle.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/access_extensions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "Telegram 真实网络 webhook 生命周期与变更 Token 热切换待验收。"
+      ]
+    },
+    {
+      "id": "tg.commands",
+      "title": "成员TG命令",
+      "domain": "通知与TG",
+      "status": "partial",
+      "implementation_summary": "已实现节点查询、通知开关、确认解绑、兑换/续期声明，管理员用户查询、兑换码创建吊销、待续期查询与危险命令一次确认，包含逐聊天限频。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/telegram.go",
+          "server/internal/httpapi/telegram_lifecycle.go",
+          "server/internal/httpapi/telegram_extended.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/access_extensions_test.go",
+          "server/internal/httpapi/telegram_extended_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "完整公开命令全集及所有多步骤管理流程尚未齐。"
+      ],
+      "validation_pending": [
+        "真实Telegram客户端未执行，测试使用本地Bot API fixture。"
+      ]
+    },
+    {
+      "id": "tg.admin",
+      "title": "管理员TG命令",
+      "domain": "通知与TG",
+      "status": "partial",
+      "implementation_summary": "已实现节点查询、通知开关、确认解绑、兑换/续期声明，管理员用户查询、兑换码创建吊销、待续期查询与危险命令一次确认，包含逐聊天限频。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/telegram.go",
+          "server/internal/httpapi/telegram_lifecycle.go",
+          "server/internal/httpapi/telegram_extended.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/access_extensions_test.go",
+          "server/internal/httpapi/telegram_extended_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "完整公开命令全集及所有多步骤管理流程尚未齐。"
+      ],
+      "validation_pending": [
+        "真实Telegram客户端未执行，测试使用本地Bot API fixture。"
+      ]
+    },
+    {
+      "id": "tg.miniapp",
+      "title": "Telegram Mini App",
+      "domain": "通知与TG",
+      "status": "partial",
+      "implementation_summary": "Telegram initData 验证、绑定账户后签发 JWT，角色复用主站。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/telegram.go",
+          "frontend/src/lib/components/AuthGate.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/access_extensions_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "MiniApp 专属完整管理/成员布局与续费确认流程尚未完成实际 Telegram 客户端验收。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "security.limits",
+      "title": "登录与请求防护",
+      "domain": "安全与外观",
+      "status": "partial",
+      "implementation_summary": "API/登录/订阅限流、可信代理解析、基础安全审计存在。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/app.go",
+          "server/internal/httpapi/entry_guard.go",
+          "server/internal/httpapi/subscriptions.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go",
+          "server/internal/httpapi/entry_guard_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "可热更新封禁策略与全部日志筛选/各入口统一限流验收未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "security.turnstile",
+      "title": "Turnstile人机验证",
+      "domain": "安全与外观",
+      "status": "tested",
+      "implementation_summary": "配置完整性、真实服务端校验、已消费 challenge 防重放与前端组件已接入。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/entry_guard.go",
+          "frontend/src/lib/components/TurnstileWidget.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/entry_guard_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "真实 Cloudflare 站点域名与浏览器挑战待验证。"
+      ]
+    },
+    {
+      "id": "security.silent",
+      "title": "静默隐藏与本地监听",
+      "domain": "安全与外观",
+      "status": "partial",
+      "implementation_summary": "静默入口 cookie、隐藏管理入口与私有站点密钥、可信来源规则已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/entry_guard.go",
+          "frontend/src/lib/components/EntryLanding.svelte"
+        ],
+        "tests": [
+          "server/internal/httpapi/entry_guard_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "合法订阅唤醒全部入口及不同监听部署组合尚未完整对齐验收。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "security.encryption",
+      "title": "主控/Agent及客户端加密",
+      "domain": "安全与外观",
+      "status": "tested",
+      "implementation_summary": "JWT、加密敏感数据库记录、Agent 强制加密/固定主控身份与消费者↔Agent E2E 各自独立实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/app.go",
+          "server/internal/auth/auth.go",
+          "server/pkg/agentwire/wire.go",
+          "server/internal/httpapi/federation_agent.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go",
+          "server/internal/httpapi/federation_agent_test.go",
+          "agent/internal/control/transports_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "security.local_reset",
+      "title": "管理员本地恢复",
+      "domain": "安全与外观",
+      "status": "tested",
+      "implementation_summary": "主控本机 CLI 从标准输入重置管理员密码，可显式清 MFA，保留主控身份与数据密钥。",
+      "evidence": {
+        "files": [
+          "server/cmd/aswired-server/cli.go"
+        ],
+        "tests": [
+          "server/cmd/aswired-server/cli_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "appearance.themes",
+      "title": "主题、品牌与菜单",
+      "domain": "安全与外观",
+      "status": "implemented",
+      "implementation_summary": "ASWired 品牌与固定深色、无白天切换，管理/成员/探针共享受控 CSS 变量和自定义 CSS。",
+      "evidence": {
+        "files": [
+          "frontend/src/lib/components/CustomAppearance.svelte",
+          "frontend/src/lib/custom-appearance.ts",
+          "frontend/src/lib/pages/Settings.svelte"
+        ],
+        "tests": [
+          "frontend/tests/custom-appearance.test.mjs"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "各稳定组件钩子、壁纸/透明度完整视觉验收待做。"
+      ]
+    },
+    {
+      "id": "appearance.mobile",
+      "title": "移动端与多语言",
+      "domain": "安全与外观",
+      "status": "partial",
+      "implementation_summary": "响应式 CSS、独立探针和登录回接存在。",
+      "evidence": {
+        "files": [
+          "frontend/src/lib/App.svelte",
+          "frontend/src/lib/components/CallbackLogin.svelte",
+          "frontend/src/app.css"
+        ],
+        "tests": [
+          "frontend/tests/callback-login.test.mjs"
+        ]
+      },
+      "missing_behavior": [
+        "多语言选择/完整翻译资源尚未实现；MiniApp 全设备布局验收待补。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "data.manual_backup",
+      "title": "完整备份与恢复",
+      "domain": "数据维护与集成",
+      "status": "partial",
+      "implementation_summary": "ASWired 逻辑 ZIP 备份包含加密记录及主控身份，校验后恢复；错密钥拒绝。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/backup.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go",
+          "server/internal/httpapi/remote_backup_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "不支持上游旧 zip.enc 原密码恢复及上游初始化恢复格式。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "data.remote_backup",
+      "title": "定时远端备份",
+      "domain": "数据维护与集成",
+      "status": "implemented",
+      "implementation_summary": "WebDAV/S3/Google Drive 实际 HTTP 上传/下载、加密备份及任务记录；AWS 签名固定向量验证。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/remote_backup.go",
+          "server/internal/httpapi/scheduler.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/remote_backup_test.go",
+          "server/internal/httpapi/remote_providers_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "三个真实云服务账号上的连接、保留数删除与恢复测试待完成。"
+      ]
+    },
+    {
+      "id": "data.database",
+      "title": "SQLite/PostgreSQL",
+      "domain": "数据维护与集成",
+      "status": "partial",
+      "implementation_summary": "SQLite/PostgreSQL 同 schema 驱动、逻辑备份可移植；SQLite 事务与 PostgreSQL 16 隔离实例集成测试通过，后者覆盖并发初始化、加密存储、事务回滚、任务和可重复读快照。",
+      "evidence": {
+        "files": [
+          "server/internal/store/store.go",
+          "server/internal/httpapi/backup.go"
+        ],
+        "tests": [
+          "server/internal/store/store_test.go",
+          "server/internal/store/postgres_integration_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "显式双向迁移 CLI、完整 SQLite 完整性检查与 PostgreSQL 专有备份管理流程未齐。"
+      ],
+      "validation_pending": [
+        "完整成员生命周期/资源配额的 PostgreSQL 并发矩阵和跨数据库生产规模迁移仍待验证。"
+      ]
+    },
+    {
+      "id": "data.migration",
+      "title": "外部数据迁移",
+      "domain": "数据维护与集成",
+      "status": "partial",
+      "implementation_summary": "ASWired 自身备份恢复和模板 v2 规范化预览存在。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/backup.go",
+          "server/internal/httpapi/templates.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/app_test.go",
+          "server/internal/httpapi/templates_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "上游合法导出用户/节点/短码/证书的分步映射、原服务认领和旧数据全量迁移未实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "data.logs",
+      "title": "日志中心",
+      "domain": "数据维护与集成",
+      "status": "partial",
+      "implementation_summary": "实际任务结果/审计/Agent 错误和运行日志可持久或查看。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/actions.go",
+          "server/internal/httpapi/records.go",
+          "server/internal/store/store.go",
+          "agent/internal/runtime/core.go"
+        ],
+        "tests": [
+          "server/internal/store/store_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "统一级别/行数筛选、流式 Agent 日志、手动清空和自动保留清理未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "data.scheduler",
+      "title": "任务调度与运行记录",
+      "domain": "数据维护与集成",
+      "status": "partial",
+      "implementation_summary": "持久 source.sync/备份/远程上传/通知日报/Komari 任务，节点采集及网络质量周期维护。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/scheduler.go",
+          "server/internal/httpapi/agent.go",
+          "server/internal/httpapi/network_operations.go"
+        ],
+        "tests": []
+      },
+      "missing_behavior": [
+        "完整孤儿清理/凭据修复/日志清理等任务类型及跨进程调度去重未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "data.updates",
+      "title": "安装、升级与渠道",
+      "domain": "数据维护与集成",
+      "status": "partial",
+      "implementation_summary": "三项目构建/Docker/本地 CLI、Agent/Home 固定版本+SHA256 校验及 Linux 回退存在。",
+      "evidence": {
+        "files": [
+          "agent/.github/workflows/build.yml",
+          "agent/deploy/manage.sh",
+          "server/cmd/aswired-server/cli.go",
+          "server/internal/httpapi/actions.go"
+        ],
+        "tests": [
+          "agent/internal/artifact/artifact_test.go",
+          "server/cmd/aswired-server/cli_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "正式稳定/预发布资产、网页检查更新/远程部署完整链、全部 Guard 参数未齐。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "data.mcp",
+      "title": "MCP自动化接口",
+      "domain": "数据维护与集成",
+      "status": "tested",
+      "implementation_summary": "Streamable HTTP MCP 工具目录、账户作用域继承、危险删除确认。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/mcp.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/access_extensions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "data.license",
+      "title": "许可证与PRO能力",
+      "domain": "数据维护与集成",
+      "status": "implemented",
+      "implementation_summary": "统一发行无 PRO 商业许可证、付费墙或授权额度；按实际 runtime/platform 报技术能力，缺能力明确拒绝。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/records.go",
+          "agent/internal/runtime/runtime.go",
+          "agent/README.md"
+        ],
+        "tests": []
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "技术 capability 不等同于 168 项全部已通过生产验收。"
+      ]
+    },
+    {
+      "id": "pro.runtime.embedded",
+      "title": "增强运行时库集成",
+      "domain": "服务器与Agent",
+      "status": "tested",
+      "implementation_summary": "真正同进程 Xray embedded 与独立 external gRPC 管理边界；核心启动失败诚实回报并保留管理连接。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/core.go",
+          "agent/cmd/aswired-agent/main.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/runtime_test.go",
+          "agent/internal/runtime/migration_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "external Linux 服务适配实际系统验收待做。"
+      ]
+    },
+    {
+      "id": "pro.runtime.dispatcher",
+      "title": "身份感知调度与计量拦截",
+      "domain": "限速与接入控制",
+      "status": "tested",
+      "implementation_summary": "合法 MPL-2.0 Xray fork 的原创 dispatcher reader/writer Hook 集成统计、限速与连接/IP 追踪。",
+      "evidence": {
+        "files": [
+          "agent/third_party/xray-core/app/dispatcher/default.go",
+          "agent/third_party/xray-core/common/aswired/hooks.go",
+          "agent/internal/runtime/policy.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/vless_test.go",
+          "agent/internal/runtime/policy_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "pro.runtime.vision",
+      "title": "Vision快路径限速覆盖",
+      "domain": "限速与接入控制",
+      "status": "implemented",
+      "implementation_summary": "普通与 Vision 策略 Hook 共用桶；无实际策略时通过原子登记使用原始 unbounded ReadFrom 快路径。新策略关闭已登记无限制 raw 会话，重连后执行策略；取消策略在分块边界恢复快路径。",
+      "evidence": {
+        "files": [
+          "agent/third_party/xray-core/common/aswired/hooks.go",
+          "agent/third_party/xray-core/proxy/proxy.go",
+          "agent/internal/runtime/policy.go",
+          "agent/third_party/xray-core/ASWIRED_CHANGES.md"
+        ],
+        "tests": [
+          "agent/internal/runtime/users_test.go",
+          "agent/internal/runtime/vless_test.go",
+          "agent/internal/runtime/policy_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "Linux REALITY/Vision splice 实机仍未验证，Windows 普通流量测试及 Linux 交叉构建不能证明实际零拷贝。"
+      ]
+    },
+    {
+      "id": "pro.runtime.hot_users",
+      "title": "用户与套餐变更执行",
+      "domain": "服务器与Agent",
+      "status": "tested",
+      "implementation_summary": "实际 UserManager/HandlerService 增删及持久配置；停用策略用于关闭已有会话，普通删用户只阻新认证。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/users.go",
+          "agent/internal/runtime/policy.go",
+          "server/internal/httpapi/accounting.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/runtime_test.go",
+          "agent/internal/runtime/policy_test.go",
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "不同协议旧会话关闭策略需随协议矩阵继续实测。"
+      ]
+    },
+    {
+      "id": "pro.runtime.mode_migration",
+      "title": "外置/内嵌配置迁移与回退",
+      "domain": "服务器与Agent",
+      "status": "partial",
+      "implementation_summary": "备份当前配置→目标真实校验→停旧/启新→状态/gRPC 检查→失败恢复，实际模式持久化；活跃限速拒绝降级 external。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/migration.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/migration_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "external confdir 合并、geodata 路径迁移/原服务自动认领未齐。"
+      ],
+      "validation_pending": [
+        "Linux external 服务实机双向切换待验收。"
+      ]
+    },
+    {
+      "id": "pro.limit.effective_policy",
+      "title": "可解释的继承与聚合策略",
+      "domain": "限速与接入控制",
+      "status": "tested",
+      "implementation_summary": "用户节点→用户全局→套餐节点→套餐默认的空继承/0 不限策略解析参与真实 reconcile。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/accounting.go",
+          "server/internal/httpapi/limit_rules.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/subscriptions_test.go",
+          "server/internal/httpapi/limit_rules_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "pro.limit.shared_bucket",
+      "title": "节点与用户共享速率桶",
+      "domain": "限速与接入控制",
+      "status": "partial",
+      "implementation_summary": "同用户同物理节点跨凭据共享桶，普通和 Vision Hook 共用；支持 download/both 方向。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/policy.go",
+          "server/internal/httpapi/accounting.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/policy_test.go",
+          "agent/internal/runtime/vless_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "参考描述的每入站桶和当前物理节点共享用户桶在多入站并行场景需明确期望并对齐；当前按用户原要求采用物理节点聚合。"
+      ],
+      "validation_pending": [
+        "Linux Vision 路径实机未验证。"
+      ]
+    },
+    {
+      "id": "pro.limit.sustained",
+      "title": "持续超速规则",
+      "domain": "限速与接入控制",
+      "status": "tested",
+      "implementation_summary": "持续/窗口突发、样本世代/边界、优先级与用户覆盖、触发/解除事件和策略下发已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/limit_rules.go",
+          "server/internal/httpapi/notification_events.go",
+          "server/internal/httpapi/accounting.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/limit_rules_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "pro.limit.burst",
+      "title": "窗口突发规则",
+      "domain": "限速与接入控制",
+      "status": "tested",
+      "implementation_summary": "持续/窗口突发、样本世代/边界、优先级与用户覆盖、触发/解除事件和策略下发已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/limit_rules.go",
+          "server/internal/httpapi/notification_events.go",
+          "server/internal/httpapi/accounting.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/limit_rules_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "pro.limit.policy_events",
+      "title": "规则覆写与独立事件通知",
+      "domain": "限速与接入控制",
+      "status": "tested",
+      "implementation_summary": "持续/窗口突发、样本世代/边界、优先级与用户覆盖、触发/解除事件和策略下发已实现。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/limit_rules.go",
+          "server/internal/httpapi/notification_events.go",
+          "server/internal/httpapi/accounting.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/limit_rules_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "pro.tracking.connections",
+      "title": "连接登记与来源IP生命周期",
+      "domain": "监控与流量",
+      "status": "tested",
+      "implementation_summary": "按同物理节点用户跨凭据聚合连接/IP，达限拒绝新连接，disabled 关闭已跟踪连接。",
+      "evidence": {
+        "files": [
+          "agent/internal/runtime/policy.go",
+          "server/internal/httpapi/accounting.go"
+        ],
+        "tests": [
+          "agent/internal/runtime/policy_test.go",
+          "server/internal/httpapi/subscriptions_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "pro.speed.queue",
+      "title": "来源独立队列与下载时间窗",
+      "domain": "节点管理",
+      "status": "tested",
+      "implementation_summary": "固定 SHA256/版本 mihomo 在独立循环代理执行真实多次延迟、下载字节、时间窗和可选同路由出口 IP；单来源串行。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/home.go",
+          "agent/internal/speedtest/speedtest.go",
+          "agent/internal/speedtest/fetch.go"
+        ],
+        "tests": [
+          "agent/internal/speedtest/speedtest_test.go",
+          "agent/internal/speedtest/fetch_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "pro.speed.latency",
+      "title": "真连接采样及出口验证",
+      "domain": "节点管理",
+      "status": "tested",
+      "implementation_summary": "固定 SHA256/版本 mihomo 在独立循环代理执行真实多次延迟、下载字节、时间窗和可选同路由出口 IP；单来源串行。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/home.go",
+          "agent/internal/speedtest/speedtest.go",
+          "agent/internal/speedtest/fetch.go"
+        ],
+        "tests": [
+          "agent/internal/speedtest/speedtest_test.go",
+          "agent/internal/speedtest/fetch_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": []
+    },
+    {
+      "id": "pro.home.identity",
+      "title": "家用端配对与权限隔离",
+      "domain": "节点管理",
+      "status": "implemented",
+      "implementation_summary": "主控一次十分钟配对码原子消费，Home CLI HTTPS 配对固定主控来源并保留本机设置；独立 Home 身份仅执行测速/受限抓取及控制层身份轮换。同一加密 WS 上先落盘再使用新 token，旧 token 十五分钟宽限。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/home_identity.go",
+          "server/internal/httpapi/home.go",
+          "agent/internal/config/enrollment.go",
+          "agent/internal/control/identity.go",
+          "agent/cmd/aswired-speedtest/main.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/home_identity_test.go",
+          "agent/internal/config/enrollment_test.go",
+          "agent/internal/control/identity_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "真实公网 Home 跨网络长期运行及实际主控到 Home 轮换全链长时验证待做；本地配置/加密 WS/主控原子配对测试已通过。"
+      ]
+    },
+    {
+      "id": "pro.home.lifecycle",
+      "title": "跨平台家用端更新与回退",
+      "domain": "节点管理",
+      "status": "partial",
+      "implementation_summary": "独立 Home 身份/反向加密通道，跨 Windows/macOS/Linux 可构建，Linux 本地安装/更新/回退脚本与版本校验存在。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/home.go",
+          "agent/cmd/aswired-speedtest/main.go",
+          "agent/deploy/manage.sh",
+          "agent/internal/mihomoapi/ready.go"
+        ],
+        "tests": [
+          "agent/internal/speedtest/speedtest_test.go",
+          "agent/internal/artifact/artifact_test.go",
+          "agent/internal/mihomoapi/ready_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "Windows/macOS 原生安装与自启动、主控远程更新、正式发布资产未完成。"
+      ],
+      "validation_pending": [
+        "Linux init 实机与 macOS 可执行运行验证待做。"
+      ]
+    },
+    {
+      "id": "pro.home.fallback",
+      "title": "离线来源回退可追溯",
+      "domain": "节点管理",
+      "status": "partial",
+      "implementation_summary": "Home 抓取订阅可显式 direct fallback，结果标真实来源；测速失败明确失败。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/source_fetch.go",
+          "server/internal/httpapi/home.go",
+          "agent/internal/speedtest/speedtest.go"
+        ],
+        "tests": [
+          "agent/internal/speedtest/speedtest_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "测速 Home 离线后转主控本机 mihomo 执行的来源/回退调度未实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "pro.federation.namespace",
+      "title": "委托资源命名空间与配额",
+      "domain": "共享与联邦",
+      "status": "partial",
+      "implementation_summary": "双主控到真实 Agent 的不透明加密管理已通过；Owner 唯一直控，消费者仅可管理被分享入站的自身前缀用户/查看自身统计。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/federation_agent.go",
+          "agent/internal/runtime/federation.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/federation_agent_test.go",
+          "agent/internal/runtime/federation_test.go"
+        ]
+      },
+      "missing_behavior": [
+        "消费者自身入站创建/删除和节点全生命周期未齐；完整 Xray 配置显式授权模式及命名空间资源配额未实现。"
+      ],
+      "validation_pending": []
+    },
+    {
+      "id": "pro.federation.envelope",
+      "title": "联邦加密转发与正文隔离",
+      "domain": "共享与联邦",
+      "status": "tested",
+      "implementation_summary": "消费者/Agent 端终止 X25519+AES-GCM；Owner 验令牌/签 ACL 并只路由密文；绑定身份、别名、动作和 namespace。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/federation_agent.go",
+          "agent/internal/runtime/federation.go",
+          "agent/internal/wire/federation.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/federation_agent_test.go",
+          "agent/internal/runtime/federation_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "公网 HTTPS 证书部署与大规模并发/长时续租验证待做；不宣称私有上游线协议兼容。"
+      ]
+    },
+    {
+      "id": "pro.federation.revocation",
+      "title": "分享吊销与残留资源治理",
+      "domain": "共享与联邦",
+      "status": "tested",
+      "implementation_summary": "当前 grant 在执行/重试前核验，撤销立即拒绝后续命令且已建资源保留；离线队列不可恢复无限权限。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/federation_agent.go",
+          "agent/internal/runtime/federation.go"
+        ],
+        "tests": [
+          "server/internal/httpapi/federation_agent_test.go",
+          "agent/internal/runtime/federation_test.go"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "已分派且已开始执行的操作可能完成；撤销不回滚此前成功的操作。"
+      ]
+    },
+    {
+      "id": "pro.appearance.css",
+      "title": "自定义CSS与稳定样式钩子",
+      "domain": "安全与外观",
+      "status": "implemented",
+      "implementation_summary": "ASWired 品牌与固定深色、无白天切换，管理/成员/探针共享受控 CSS 变量和自定义 CSS。",
+      "evidence": {
+        "files": [
+          "frontend/src/lib/components/CustomAppearance.svelte",
+          "frontend/src/lib/custom-appearance.ts",
+          "frontend/src/lib/pages/Settings.svelte"
+        ],
+        "tests": [
+          "frontend/tests/custom-appearance.test.mjs"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "各稳定组件钩子、壁纸/透明度完整视觉验收待做。"
+      ]
+    },
+    {
+      "id": "pro.appearance.css_recovery",
+      "title": "CSS生效与恢复",
+      "domain": "安全与外观",
+      "status": "implemented",
+      "implementation_summary": "自定义 CSS 保存生效与 ?nocss=1 恢复入口，校验和固定深色约束不修改订阅链。",
+      "evidence": {
+        "files": [
+          "frontend/src/lib/custom-appearance.ts",
+          "frontend/src/lib/components/CustomAppearance.svelte"
+        ],
+        "tests": [
+          "frontend/tests/custom-appearance.test.mjs"
+        ]
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "误配 CSS 后真实浏览器恢复入口待验收。"
+      ]
+    },
+    {
+      "id": "pro.distribution.capabilities",
+      "title": "统一发行与真实能力清单",
+      "domain": "数据维护与集成",
+      "status": "implemented",
+      "implementation_summary": "统一发行无 PRO 商业许可证、付费墙或授权额度；按实际 runtime/platform 报技术能力，缺能力明确拒绝。",
+      "evidence": {
+        "files": [
+          "server/internal/httpapi/records.go",
+          "agent/internal/runtime/runtime.go",
+          "agent/README.md"
+        ],
+        "tests": []
+      },
+      "missing_behavior": [],
+      "validation_pending": [
+        "技术 capability 不等同于 168 项全部已通过生产验收。"
+      ]
+    }
+  ]
+}

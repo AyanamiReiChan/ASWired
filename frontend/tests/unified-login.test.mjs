@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import ts from 'typescript';
+const source=fs.readFileSync(new URL('../src/lib/unified-login.ts',import.meta.url),'utf8');
+const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;
+const {probeLoginAction}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
+const response={kind:'komari',action:'https://probe.example.test/auth/aswired/session',ticket:'t'.repeat(48)};
+test('probe handoff uses the exact callback without credentials in the URL',()=>{assert.equal(probeLoginAction(response),response.action);assert.equal(probeLoginAction({...response,action:'http://127.0.0.1:5181/auth/aswired/session'}),'http://127.0.0.1:5181/auth/aswired/session');});
+test('probe handoff rejects unsafe destinations and malformed tickets',()=>{for(const action of ['javascript:alert(1)','http://probe.example.test/auth/aswired/session','https://user:secret@probe.example.test/auth/aswired/session','https://probe.example.test/elsewhere','https://probe.example.test/auth/aswired/session?ticket=x','https://probe.example.test/auth/aswired/session#x'])assert.throws(()=>probeLoginAction({...response,action}));assert.throws(()=>probeLoginAction({...response,ticket:'short'}));});

@@ -1,0 +1,10 @@
+node_modules/
+.svelte-kit/
+build/
+outputs/
+.env
+.sites-runtime/
+
+worker/public/
+worker/wrangler.toml
+worker/.wrangler/

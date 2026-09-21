@@ -1,0 +1,115 @@
+/* Default glass appearance. An explicit browser preference can select the original theme. */
+:root[data-theme='glass']{
+ color-scheme:dark;
+ --background:#111c31;--sidebar:rgba(18,34,59,.52);--card:rgba(57,76,104,.55);--nested:rgba(202,222,245,.11);
+ --foreground:#f3f7ff;--muted:#cbd8e9;--primary:#b5caff;--line:rgba(222,235,255,.18);--border:rgba(225,238,255,.32);
+ --success:#9ed9ca;--warning:#edca90;--danger:#f29eae;--heading:'Inter Variable','PingFang SC','Microsoft YaHei',sans-serif;
+ --glass-shadow:inset 0 1px 0 rgba(232,248,255,.09),0 12px 40px rgba(0,12,37,.13);
+}
+html[data-theme='glass'] body{background:#111c31;isolation:isolate}
+html[data-theme='glass'] body::before{content:none}
+html[data-theme='glass'] .app-shell{background:transparent}
+html[data-theme='glass'] .workspace{background:transparent}
+html[data-theme='glass'] .sidebar{
+ background:linear-gradient(155deg,rgba(53,69,94,.52),rgba(16,32,57,.58));
+ backdrop-filter:blur(32px) saturate(115%);-webkit-backdrop-filter:blur(32px) saturate(115%);
+ border-right-color:rgba(220,236,255,.15);box-shadow:inset -1px 0 0 rgba(255,255,255,.025),10px 0 50px #100b271a;
+}
+html[data-theme='glass'] .brand{border-bottom:1px solid rgba(215,231,255,.045);margin-bottom:.6rem}
+html[data-theme='glass'] .brand strong{letter-spacing:.015em;font-weight:650}
+/* Theme-specific animation with a transparent matte and ice-blue/lilac strokes. */
+html[data-theme='glass'] .brand-mark{
+ content:url('/aswired-logo-glass.webp');
+}
+html[data-theme='glass'] .sidebar a:not(.brand){border:1px solid transparent;transition:background .15s,border-color .15s}
+html[data-theme='glass'] .sidebar a:not(.brand):hover{background:rgba(218,234,255,.055)}
+html[data-theme='glass'] .sidebar a.active{
+ background:linear-gradient(115deg,rgba(194,210,235,.18),rgba(191,207,232,.07));
+ border-color:rgba(206,222,247,.16);box-shadow:inset 0 1px 0 rgba(232,248,255,.06),0 3px 12px #00000008;color:#e5efff;
+}
+html[data-theme='glass'] .nav-label{color:#a5b8d3;font-size:.64rem;letter-spacing:.08em}
+html[data-theme='glass'] .sidebar-footer{background:rgba(11,27,52,.16)}
+html[data-theme='glass'] .topbar{
+ background:rgba(22,38,63,.47);backdrop-filter:blur(28px) saturate(115%);-webkit-backdrop-filter:blur(28px) saturate(115%);
+ border-bottom:1px solid rgba(214,230,255,.12);box-shadow:0 4px 28px #1009230d;
+}
+html[data-theme='glass'] .workspace main{padding-top:2rem}
+html[data-theme='glass'] .page-head h1{font-weight:550;letter-spacing:-.04em;text-shadow:0 3px 20px #28123c40}
+html[data-theme='glass'] .page-head p{color:var(--muted)}
+html[data-theme='glass'] .eyebrow{color:#bad0f3;letter-spacing:.065em}
+html[data-theme='glass'] .card:not(.server-collection),html[data-theme='glass'] .stat-card,
+html[data-theme='glass'] .monitor-card,html[data-theme='glass'] .management-card,html[data-theme='glass'] .server-view-body>.table-scroll{
+ background:linear-gradient(145deg,rgba(181,197,222,.105),rgba(45,61,86,.16)),var(--card);
+ border:1px solid rgba(213,229,254,.16);box-shadow:var(--glass-shadow);
+ backdrop-filter:blur(22px) saturate(115%);-webkit-backdrop-filter:blur(22px) saturate(115%);border-radius:16px;
+}
+html[data-theme='glass'] .monitor-card:hover{border-color:rgba(200,216,241,.34);box-shadow:inset 0 1px 0 #ffe5f91f,0 16px 44px #170b2c26;transform:none}
+html[data-theme='glass'] .monitor-card.offline{opacity:1;background:linear-gradient(145deg,rgba(148,164,189,.065),rgba(29,45,70,.26));color:#bfb3ce;border-color:rgba(208,224,249,.1)}
+html[data-theme='glass'] .monitor-card.offline .server-name{color:#b9abc8}
+html[data-theme='glass'] .monitor-card .resource small{color:#d3c3e5}
+html[data-theme='glass'] .monitor-card .meter{background:rgba(204,220,245,.12)}
+html[data-theme='glass'] .monitor-card .meter i{filter:brightness(1.18)}
+html[data-theme='glass'] .monitor-card :is(.network-box,.quality-box){background:rgba(193,209,234,.065);border:1px solid rgba(222,238,255,.045);box-shadow:inset 0 1px 0 #ffffff04}
+html[data-theme='glass'] .monitor-card .upload{color:#9ed9ca}
+html[data-theme='glass'] .monitor-card .download{color:#c6b8f0}
+html[data-theme='glass'] .monitor-card .empty-history{background:repeating-linear-gradient(90deg,rgba(178,194,219,.28) 0 3px,transparent 3px 5px)}
+html[data-theme='glass'] .monitor-card .runtime{background:rgba(200,216,241,.09);color:#dac2e9}
+html[data-theme='glass'] .monitor-card .provider{border-color:rgba(207,223,248,.17);color:#cbb5dc}
+html[data-theme='glass'] .server-collection{background:transparent;border-color:transparent;box-shadow:none}
+html[data-theme='glass'] :is(.search-input,input,textarea,select,.app-select-trigger){
+ background:rgba(48,67,95,.42);border-color:rgba(211,227,252,.17);box-shadow:inset 0 1px 0 rgba(224,240,255,.04);color:var(--foreground);
+}
+html[data-theme='glass'] .search-input{border:1px solid rgba(211,227,252,.17);border-radius:9px}
+html[data-theme='glass'] .search-input input{background:transparent;border:0;box-shadow:none}
+html[data-theme='glass'] .search-input:focus-within{border-color:rgba(190,206,231,.6)}
+html[data-theme='glass'] input:focus,html[data-theme='glass'] textarea:focus{border-color:rgba(190,206,231,.6)}
+html[data-theme='glass'] :is(.button,.icon-button,.app-select-trigger){transition:background .15s,border-color .15s,box-shadow .15s}
+html[data-theme='glass'] .button{background:rgba(199,215,240,.04);border-color:rgba(216,232,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.045);border-radius:8px}
+html[data-theme='glass'] .button:hover{background:rgba(199,215,240,.12);border-color:rgba(216,232,255,.32)}
+html[data-theme='glass'] .button.primary{background:linear-gradient(125deg,#bfd9f7,#b9baef);border-color:rgba(230,246,255,.45);color:#1c2b48;box-shadow:inset 0 1px 0 #fff0ffb3,0 4px 20px #e8a0d51c}
+html[data-theme='glass'] :is(.segmented,.view-switch){background:rgba(17,33,58,.3);border:1px solid rgba(208,224,249,.1);box-shadow:inset 0 1px 3px #18092512}
+html[data-theme='glass'] .segmented button.active{background:rgba(196,212,237,.14);box-shadow:inset 0 1px 0 #ffeaff12,0 2px 6px #0000000f;color:#fff0fc}
+html[data-theme='glass'] :is(.region-avatar,.soft-icon,.metric-list>div,.tag){background:rgba(196,212,237,.065);border-color:rgba(211,227,252,.12)}
+html[data-theme='glass'] .monitor-card .region-avatar{background:transparent;border:0}
+html[data-theme='glass'] th{background:rgba(19,35,60,.2);color:#cbb6df}
+html[data-theme='glass'] tbody tr:hover{background:rgba(207,223,248,.035)}
+html[data-theme='glass'] .table-footer{border-color:var(--line)}
+html[data-theme='glass'] .workspace>footer{background:rgba(17,33,58,.2);border-color:rgba(202,218,243,.08)}
+html[data-theme='glass'] .modal-overlay{background:rgba(1,17,42,.28);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+html[data-theme='glass'] .modal{
+ background:linear-gradient(135deg,rgba(69,85,110,.89),rgba(29,45,70,.93));border-color:rgba(224,240,255,.25);border-radius:20px;
+ backdrop-filter:blur(36px) saturate(115%);-webkit-backdrop-filter:blur(36px) saturate(115%);box-shadow:inset 0 1px 0 #ffeaff21,0 32px 110px #13071f80;
+}
+html[data-theme='glass'] .app-select-content{background:rgba(38,54,79,.94);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-color:rgba(224,240,255,.2);box-shadow:0 12px 40px #00000030}
+html[data-theme='glass'] .app-select-item[data-highlighted]{background:rgba(190,206,231,.14)}
+html[data-theme='glass'] .status-banner{background:rgba(197,213,238,.08);border-color:var(--line)}
+html[data-theme='glass'] .toast{background:rgba(47,63,88,.92);backdrop-filter:blur(24px);border:1px solid var(--border);color:var(--foreground)}
+html[data-theme='glass'] .settings-nav button.active{background:rgba(197,213,238,.14);color:var(--primary)}
+html[data-theme='glass'] .theme-preview-switch{background:linear-gradient(120deg,rgba(190,206,231,.16),rgba(171,187,212,.12));border-color:rgba(209,225,250,.23);color:#ccdafa}
+@supports not (backdrop-filter:blur(1px)){
+ html[data-theme='glass'] :is(.sidebar,.topbar,.card:not(.server-collection),.stat-card,.monitor-card,.management-card,.server-view-body>.table-scroll){background:#202f45}
+}
+@media(prefers-reduced-transparency:reduce){
+ html[data-theme='glass'] :is(.sidebar,.topbar,.card:not(.server-collection),.stat-card,.monitor-card,.management-card,.server-view-body>.table-scroll,.modal,.app-select-content){background:#202f45;backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+
+/* Static illustrated accents stay behind content and never change layout. */
+html[data-theme='glass'] .brand strong{color:#dbeaff;text-shadow:0 0 24px #eab1e52b}
+html[data-theme='glass'] .page-head h1{color:#edf5ff}
+html[data-theme='glass'] .sidebar a.active{background:linear-gradient(110deg,#9ebef026,#b9b3f01a);border-color:#b9d3ff33;box-shadow:inset 3px 0 0 #b5caff,inset 0 1px 0 #fff0ff0d}
+html[data-theme='glass'] .stat-card{background:linear-gradient(135deg,#aacbed14,#b9b7ef0a),rgba(23,39,64,.64)}
+html[data-theme='glass'] .button.primary:hover{background:linear-gradient(125deg,#d5e6ff,#ced4ff)}
+html[data-theme='glass'] :is(button,a,input,textarea,select):focus-visible{outline:2px solid #b5caff;outline-offset:3px}
+@media(max-width:767px){html[data-theme='glass'] body{background-position:75% center}}
+
+/* The video is portalled to body so topbar blur cannot trap its fixed layer. */
+.anime-backdrop{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;background:#101b30 url('/themes/djgun-spacecube.jpg') center/cover no-repeat}
+.wallpaper-frame{position:absolute;left:50%;top:50%;width:max(100vw,177.7778vh);height:max(100vh,56.25vw);transform:translate(-50%,-50%);container-type:inline-size}
+.wallpaper-clock{position:absolute;left:81.455%;top:76.32%;width:5.74%;height:2.75%;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%) rotate(-5.27deg);background:#b7b3af;color:#414040;font:1.03cqw/1 monospace;letter-spacing:-.05em}
+.anime-backdrop video{width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.95) brightness(1.05)}
+.anime-backdrop::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,17,34,.36),rgba(10,20,40,.16) 45%,rgba(10,20,40,.10)),linear-gradient(0deg,rgba(8,16,33,.18),transparent 70%)}
+html[data-theme='glass'] .sidebar{background:rgba(42,60,86,.64)}
+html[data-theme='glass'] .topbar{background:rgba(53,71,98,.56)}
+html[data-theme='glass'] .card:not(.server-collection),html[data-theme='glass'] .stat-card,html[data-theme='glass'] .monitor-card,html[data-theme='glass'] .management-card,html[data-theme='glass'] .server-view-body>.table-scroll{background:linear-gradient(135deg,rgba(211,230,255,.13),rgba(167,188,226,.06)),rgba(45,64,91,.60);backdrop-filter:blur(16px) saturate(115%);-webkit-backdrop-filter:blur(16px) saturate(115%)}
+html[data-theme='glass'] .modal{background:linear-gradient(135deg,rgba(67,86,116,.92),rgba(43,60,87,.95))}
+@media(prefers-reduced-transparency:reduce){html[data-theme='glass'] :is(.sidebar,.topbar,.card:not(.server-collection),.stat-card,.monitor-card,.management-card,.server-view-body>.table-scroll,.modal){background:#202f45;backdrop-filter:none;-webkit-backdrop-filter:none}}

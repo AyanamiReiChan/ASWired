@@ -1,0 +1,60 @@
+<script lang="ts">
+ import {onMount} from 'svelte';
+ import type {Row} from '../data';
+ import {demo,api,refreshState,errorMessage} from '../store.svelte';
+ import {nodeAddress,nodeProtocol} from '../node-workbench';import {nodeRelay} from '../relay-address';
+ import {isSupportedNode} from '../node-profile';
+ import Modal from './Modal.svelte';import Icon from './Icon.svelte';import CountryBadge from './CountryBadge.svelte';
+ let {open=$bindable(false),initialSelection=[]}=$props<{open?:boolean;initialSelection?:string[]}>();
+ let endpoint=$state(''),parallel=$state(1),size=$state(1),protocol=$state(''),tag=$state(''),selected=$state<string[]>([]),historyNode=$state(''),busy=$state(false),error=$state(''),subscription=$state(''),advanced=$state(false),submitted=$state(0);
+ let downloadURL=$state('https://speed.cloudflare.com/__down'),ipURL=$state('https://api.ipify.org');
+ const rows=$derived(demo.data.nodes??[]),endpoints=$derived(demo.data.endpoints??[]);
+ const sources=$derived([{id:'',name:'主控',online:false,boundedSpeedtest:false},...endpoints].filter((e,i)=>i>0||!endpoints.some(e=>e.sourceMode==='controller')));
+ const current=$derived(endpoints.find(e=>e.id===endpoint));
+ const ready=$derived(!!current?.online&&current?.boundedSpeedtest===true&&current?.status!=='禁用');
+ const tags=(row:Row):string[]=>[...new Set([String(row.source??'手动导入'),...(Array.isArray(row.tags)?row.tags:String(row.tags??'').split(/[,，]/).filter(Boolean))])];
+ const protocols=$derived([...new Set(rows.map(nodeProtocol))]),allTags=$derived([...new Set(rows.flatMap(tags))]);
+ const filtered=$derived(rows.filter(r=>(!protocol||nodeProtocol(r)===protocol)&&(!tag||tags(r).includes(tag))));
+ const records=$derived([...(demo.data.speedtests??[])].filter(r=>r.endpointId===endpoint).sort((a,b)=>new Date(b.testedAt??b.createdAt).getTime()-new Date(a.testedAt??a.createdAt).getTime()));
+ const latest=(id:string)=>records.find(r=>r.nodeId===id);
+ const pending=(row:Row|undefined)=>['queued','running','待下发','执行中'].includes(row?.status??'');
+ const failed=(row:Row|undefined)=>!!row&&['failed','unsupported','unknown','superseded','失败','不支持','结果未明','已撤回'].includes(row.status);
+ const available=(r:Row)=>!['停用','禁用'].includes(r.status)&&isSupportedNode(r)&&!pending(latest(r.id));
+ const chosen=$derived(filtered.filter(r=>selected.includes(r.id)&&available(r)));
+ const history=$derived(records.filter(r=>r.nodeId===historyNode));
+ const latency=(r:Row|undefined)=>r?.latency_samples_ms?.length?`${(r.latency_samples_ms.reduce((a:number,b:number)=>a+b,0)/r.latency_samples_ms.length).toFixed(0)} ms`:'—';
+ onMount(()=>{selected=[...initialSelection];endpoint=endpoints.find(e=>e.online&&e.boundedSpeedtest)?.id??endpoints[0]?.id??'';});
+ function toggle(id:string){selected=selected.includes(id)?selected.filter(x=>x!==id):[...selected,id];}
+ async function run(targets:Row[],latencyOnly=false){
+  if(busy||!ready||!targets.length)return;busy=true;error='';submitted=0;
+  const source=endpoint,threads=parallel,bytes=size*1048576,sub=subscription;
+  try{
+   const url=new URL(downloadURL);if(!['http:','https:'].includes(url.protocol))throw new Error('下载地址须为 HTTP(S)');
+   if(url.hostname==='speed.cloudflare.com')url.searchParams.set('bytes',String(Math.ceil(bytes/threads)));
+   const failures:string[]=[];
+   for(const row of targets){try{await api(`/api/nodes/${encodeURIComponent(row.id)}/speedtest`,{method:'POST',body:JSON.stringify({endpointId:source,subscriptionId:sub,duration:30,parallel:threads,downloadBytes:bytes,latencyOnly,downloadURL:url.toString(),ipCheckURL:ipURL})});submitted++;}catch(e){failures.push(`${row.name}：${errorMessage(e)}`);}}
+   await refreshState(true);if(failures.length)throw new Error(failures.join('；'));
+  }catch(e){error=errorMessage(e);}finally{busy=false;}
+ }
+</script>
+
+<Modal bind:open title="节点测速" description="选择测速来源后手动测试节点。结果保存在主控，关闭后重新打开仍可查看。" wide>
+ <div class="speed-workbench">
+ <button class="button small close" aria-label="关闭节点测速" onclick={()=>open=false}><Icon name="x" size={20}/></button>
+ <div class="speed-toolbar"><div class="choices" aria-label="测速来源">{#each sources as source}<button class:active={endpoint===source.id} disabled={busy||!source.id} title={!source.id?'主控尚未配对测速端':''} onclick={()=>{endpoint=source.id;error='';historyNode='';}}>{source.sourceMode==='controller'?'主控':source.name}{!source.id?'（未配置）':source.online?'':'（离线）'}</button>{/each}</div><div class="choices" aria-label="测速线程"><span>线程：</span>{#each [1,8,16,32,64] as n}<button class:active={parallel===n} aria-pressed={parallel===n} disabled={busy} onclick={()=>parallel=n}>{n===1?'单线程':n}</button>{/each}</div><div class="choices" aria-label="测速数据量"><span>数据量：</span>{#each [1,4,8,16] as n}<button class:active={size===n} aria-pressed={size===n} disabled={busy} onclick={()=>size=n}>{n}M</button>{/each}</div><a class="button small endpoint-link" href="/extensions?tab=测速工作台"><Icon name="sliders"/>管理测速端</a></div>
+ {#if !ready}<p class="hint">{!current?'请先配对测速端。主控测速需在主控机器运行测速端，并设置 source_mode 为 controller。':!current.online?'所选测速端离线，连接后再测试。':!current.boundedSpeedtest?'所选测速端需升级，才能执行限量下载和多线程测试。':'所选测速端已禁用。'}</p>{/if}
+ <div class="choices filters" aria-label="测速协议筛选"><button class:active={!protocol} onclick={()=>protocol=''}>全部（{rows.length}）</button>{#each protocols as p}<button class:active={protocol===p} onclick={()=>protocol=p}>{p.toLowerCase()}（{rows.filter(r=>nodeProtocol(r)===p).length}）</button>{/each}</div>
+ <div class="choices filters" aria-label="测速标签筛选"><button class:active={!tag} onclick={()=>tag=''}>全部来源</button>{#each allTags as t}<button class:active={tag===t} onclick={()=>tag=t}>{t}（{rows.filter(r=>tags(r).includes(t)).length}）</button>{/each}</div>
+ <div class="speed-selection"><span>可见 {filtered.length} 条 · 已选 {chosen.length} 条</span><button class="button small" disabled={busy} onclick={()=>selected=[...new Set([...selected,...filtered.filter(available).map(r=>r.id)])]}>全选可见</button><button class="button small" disabled={busy} onclick={()=>selected=[]}>清空选择</button><button class="button small primary" disabled={busy||!ready||!chosen.length} onclick={()=>run(chosen)}>{busy?'提交中…':`测速所选（${chosen.length}）`}</button><button class="button small" disabled={busy||!ready||!chosen.length} onclick={()=>run(chosen,true)}>仅测延迟</button><button class="button small" onclick={()=>advanced=!advanced}>测试设置</button></div>
+ {#if rows.some(r=>r.managedInbound)}<label class="field subscription">受管节点测试套餐<select bind:value={subscription} disabled={busy}><option value="">选择有效套餐实例</option>{#each demo.data.subscriptions??[] as sub}<option value={sub.id}>{sub.member} · {sub.name}</option>{/each}</select></label>{/if}
+ {#if advanced}<div class="form-grid settings"><label class="field">下载测试 URL<input bind:value={downloadURL} disabled={busy}/></label><label class="field">出口 IP 查询 URL<input bind:value={ipURL} disabled={busy}/></label></div>{/if}
+ <p class="budget">每节点下载总量上限 {size} MiB，{parallel} 个连接共享，最长 30 秒；握手、延迟探测及出口查询另有少量流量。受管节点计入所选套餐。</p>
+ {#if error}<p class="error" role="alert">{error}</p>{/if}{#if submitted}<p class="budget" role="status">已提交 {submitted} 项，测速端按顺序执行。</p>{/if}
+ <div class="speed-table"><table aria-label="节点测速列表"><thead><tr><th>选择</th><th>节点</th><th>服务器地址</th><th>下行速度</th><th>延迟</th><th>出口 IP</th><th>操作</th></tr></thead><tbody>{#each filtered as row (row.id)}{@const result=latest(row.id)}<tr><td><input type="checkbox" aria-label={`测速选择 ${row.name}`} checked={selected.includes(row.id)} disabled={busy||!available(row)} onchange={()=>toggle(row.id)}/></td><td><div class="node-identity"><CountryBadge region={row.region}/><strong>{row.name}</strong></div></td><td class="mono">{nodeRelay(row,demo.data.relays??[])?.relayAddress??nodeAddress(row)}</td><td class:failure={failed(result)} class:success={!failed(result)&&result?.download_mbps!=null} title={result?.error??''}>{pending(result)?(result?.status==='queued'?'排队中':'测试中…'):failed(result)?'失败':result?.download_mbps!=null?`↓ ${Number(result.download_mbps).toFixed(1)} Mbps`:'—'}</td><td><button class="latency" class:failure={failed(result)} disabled={busy||!ready||!available(row)} title={result?.error??'通过代理发送 HTTP HEAD 请求测延迟'} onclick={()=>run([row],true)}><Icon name="zap" size={13}/>{pending(result)?'测试中…':failed(result)?'失败':latency(result)==='—'?'测延迟':latency(result)}</button></td><td class="mono">{result?.exit_ip_verified?result.exit_ip??result.ip:'—'}</td><td><div class="row-buttons"><button class="button small" title="历史记录" aria-label={`测速历史 ${row.name}`} onclick={()=>historyNode=historyNode===row.id?'':row.id}><Icon name="clock"/></button><button class="button small" title="节点测速" aria-label={`测速 ${row.name}`} disabled={busy||!ready||!available(row)} onclick={()=>run([row])}><Icon name="activity"/></button></div></td></tr>{:else}<tr><td colspan="7" class="empty-cell">暂无匹配节点</td></tr>{/each}</tbody></table></div>
+ {#if historyNode}<section class="speed-history"><div class="section-head"><h3>{rows.find(r=>r.id===historyNode)?.name} · 历史记录</h3><button class="button small" onclick={()=>historyNode=''}>收起历史</button></div>{#each history.slice(0,30) as result}<div class="history-row"><span>{new Date(result.testedAt??result.createdAt).toLocaleString()}</span><span>{result.latency_only?'延迟测试':`${result.parallel??1} 线程 · ${Number(result.download_limit_bytes??result.download_bytes??0)/1048576} MiB`}</span><span class:failure={failed(result)}>{pending(result)?'等待执行结果':failed(result)?`失败：${result.error??'请查看任务'}`:`${result.download_mbps!=null?Number(result.download_mbps).toFixed(1)+' Mbps · ':''}${latency(result)}`}</span><a href={`/tasks?detail=${encodeURIComponent(result.id)}`}>任务详情</a></div>{:else}<p class="hint">该测速来源暂无此节点的历史。</p>{/each}</section>{/if}
+ </div>
+</Modal>
+
+<style>
+ :global(.modal:has(.speed-workbench)){width:min(110rem,calc(100vw - 3rem));max-height:94vh}:global(.modal:has(.speed-workbench) .modal-heading){padding-right:2rem}.close{position:absolute;right:1rem;top:1rem;padding:.3rem}.speed-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:1rem}.choices{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;font-size:.75rem}.choices button{border:1px solid var(--line);border-radius:.25rem;background:var(--background);color:var(--muted);padding:.55rem .75rem;max-width:100%;overflow-wrap:anywhere}.choices button.active{background:var(--primary);color:var(--background);border-color:var(--primary)}.endpoint-link{margin-left:auto}.filters{margin-top:.85rem}.filters button{padding:.3rem .6rem;font-size:.7rem}.speed-selection{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem;margin:1rem 0;font-size:.75rem;color:var(--muted)}.subscription{max-width:26rem;margin:.8rem 0}.settings{margin:.8rem 0}.budget{font-size:.7rem;color:var(--muted);margin:.6rem 0;line-height:1.6}.speed-table{border:1px solid var(--line);border-radius:.35rem;overflow:auto;max-height:60vh}.speed-table table{min-width:960px;width:100%;font-size:.76rem}.speed-table th{position:sticky;top:0;background:var(--card);z-index:1}.speed-table td{padding:.75rem}.speed-table td:first-child,.speed-table th:first-child{width:3rem}.speed-table input{width:14px;min-height:14px}.node-identity{display:flex;align-items:center;gap:.55rem;max-width:25rem}.node-identity strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.76rem}.mono{font-family:monospace;font-size:.72rem}.latency{display:flex;align-items:center;gap:.25rem;background:none;border:0;color:var(--warning);font-size:.73rem;white-space:nowrap}.success{color:var(--success)}.failure{color:var(--danger)}.row-buttons{display:flex;gap:.3rem}.empty-cell{text-align:center;color:var(--muted);height:8rem}.speed-history{margin-top:1rem}.history-row{display:flex;flex-wrap:wrap;gap:1rem;padding:.6rem 0;border-bottom:1px solid var(--line);font-size:.75rem}.history-row>a{margin-left:auto}@media(max-width:600px){:global(.modal:has(.speed-workbench)){width:calc(100vw - 1rem);padding:1rem}.speed-toolbar{gap:.6rem}.endpoint-link{margin-left:0}.speed-table{max-height:48vh}.choices button{padding:.45rem .6rem}.history-row{gap:.5rem}}
+</style>

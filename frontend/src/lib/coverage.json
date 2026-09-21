@@ -1,0 +1,4290 @@
+{
+  "metadata": {
+    "product": "参考项目",
+    "audit_date": "2026-09-15",
+    "repository": "/docs/reference/reference-records.md#record-730",
+    "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+    "commit_date": "2026-09-14T23:28:36+08:00",
+    "latest_stable": "v0.5.4",
+    "latest_stable_published_at": "2026-09-08T11:03:18Z",
+    "latest_prerelease": "v0.5.5-beta.6",
+    "latest_prerelease_published_at": "2026-09-14T15:43:30Z",
+    "scope": "public documentation, release notes and public distribution files; no runtime execution",
+    "feature_count": 146,
+    "official_doc_pages": 59,
+    "release_records": 38,
+    "docs_asset_url": "/docs/reference/reference-records.md#record-731",
+    "docs_asset_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54",
+    "reference_document": "/docs/REFERENCES.md",
+    "aswired_current_scope": {
+      "version": "2026-09-16-agent-only",
+      "document": "/docs/CURRENT-SCOPE.md",
+      "server_management": "native-agent-only",
+      "required_creation_fields": [
+        "name",
+        "address"
+      ],
+      "excluded_additional_implementations": [
+        "panel-api-adapter"
+      ],
+      "historical_reference_policy": "历史设计与来源保留追溯；当前服务器接入范围以CURRENT-SCOPE.md为准。",
+      "mapping_count_note": "168项目标不含独立面板适配条目；移除附加实现不改变目标数量或既有核对状态。"
+    }
+  },
+  "status_legend": {
+    "confirmed_documented": "官方文档明确描述，未运行验证",
+    "confirmed_release_notes": "官方版本说明确认，未运行验证",
+    "partly_verified_public_files": "至少有部分行为能在公开模板/安装配置文件静态核对",
+    "historical_removed_in_latest_prerelease": "历史存在，最新预发布明确移除",
+    "design_mapping_not_native_role": "供ASWired设计映射，不是上游原生角色",
+    "documented_but_referenced_script_unavailable": "文档描述但所引用脚本不在当前公开树"
+  },
+  "features": [
+    {
+      "id": "identity.roles",
+      "domain": "身份与权限",
+      "title": "管理员与普通用户",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "公开说明只确认两种登录角色；管理员管全局，普通用户查看自身订阅与资料，并按开关获取额外能力。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-732",
+          "local_path": "docs-extracted/users.txt",
+          "review_topic": "管理员与普通用户",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-733",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "管理员与普通用户",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "identity.create",
+      "domain": "身份与权限",
+      "title": "账户创建与资料",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "用户名、邮箱、昵称、备注、随机或指定初始密码；生成订阅令牌及短码；可按用户名、昵称、套餐搜索筛选。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-734",
+          "local_path": "docs-extracted/users.txt",
+          "review_topic": "账户创建与资料",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "identity.lifecycle",
+      "domain": "身份与权限",
+      "title": "账户启停与删除",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "启停用户；禁用撤销节点访问并退出登录；删除时清理用户凭据与自建路由资源。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-735",
+          "local_path": "docs-extracted/users.txt",
+          "review_topic": "账户启停与删除",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-736",
+          "local_path": "docs-extracted/routed-outbound.txt",
+          "review_topic": "账户启停与删除",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-737",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-738"
+        }
+      ]
+    },
+    {
+      "id": "identity.personal",
+      "domain": "身份与权限",
+      "title": "个人设置",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "编辑个人资料、密码、个人主题、默认模板、两步验证及订阅凭据；个人主题优先于系统默认。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-739",
+          "local_path": "docs-extracted/mcp.txt",
+          "review_topic": "个人设置",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-740",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "个人设置",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-741",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-742"
+        }
+      ]
+    },
+    {
+      "id": "identity.totp",
+      "domain": "身份与权限",
+      "title": "TOTP 两步验证",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "登录安全支持 TOTP；个人设置提供管理入口。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-743",
+          "local_path": "docs-extracted/comparison.txt",
+          "review_topic": "TOTP 两步验证",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-744",
+          "local_path": "docs-extracted/mcp.txt",
+          "review_topic": "TOTP 两步验证",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "identity.passkey",
+      "domain": "身份与权限",
+      "title": "Passkey 登录",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "WebAuthn 登录、个人设置管理、Related Origin Requests 跨域支持、外置探针登录态接回。仅新预发布确认。",
+      "confirmation_status": "confirmed_release_notes",
+      "latest_prerelease_only": true,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-745",
+          "version": "v0.5.5-beta.1",
+          "prerelease": true,
+          "published_at": "2026-09-09T17:12:09Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.1"
+        }
+      ]
+    },
+    {
+      "id": "identity.tokens",
+      "domain": "身份与权限",
+      "title": "API Token 管理",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "个人命名 Token 仅一次展示、可吊销；权限继承账号。另有管理员全局 API Token 生成与轮换。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-746",
+          "local_path": "docs-extracted/mcp.txt",
+          "review_topic": "API Token 管理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-747",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "API Token 管理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "identity.subscription_credentials",
+      "domain": "身份与权限",
+      "title": "订阅凭据与短码轮换",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "用户独立订阅令牌、自定义用户短码与订阅文件短码；令牌重置使旧链接失效；历史发布记录确认全量重置订阅凭据。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-748",
+          "local_path": "docs-extracted/users.txt",
+          "review_topic": "订阅凭据与短码轮换",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-749",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-750"
+        }
+      ]
+    },
+    {
+      "id": "identity.qr_client_login",
+      "domain": "身份与权限",
+      "title": "手机及官方客户端登录",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "桌面展示二维码供手机扫码登录；MeowX 客户端可被按钮唤起并登录。",
+      "confirmation_status": "confirmed_release_notes",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-751",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-752",
+          "version": "v0.5.5-beta.6",
+          "prerelease": true,
+          "published_at": "2026-09-14T15:43:30Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.6"
+        }
+      ]
+    },
+    {
+      "id": "identity.menu_quota",
+      "domain": "身份与权限",
+      "title": "用户菜单与资源配额",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "设置用户可见菜单、自建子节点数量、私有路由出站数量与每日操作次数；关闭创建能力不等于删除既有资源。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-753",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "用户菜单与资源配额",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-754",
+          "local_path": "docs-extracted/routed-outbound.txt",
+          "review_topic": "用户菜单与资源配额",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-755",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "identity.owner_role",
+      "domain": "身份与权限",
+      "title": "车主角色边界",
+      "actors": [
+        "设计映射"
+      ],
+      "scope": "未发现独立于管理员、普通用户之外的车主登录角色；可将管理员的套餐运营能力映射成 ASWired 车主，需自行设计租户边界。联邦 Owner 是主控身份。",
+      "confirmation_status": "design_mapping_not_native_role",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-756",
+          "local_path": "docs-extracted/users.txt",
+          "review_topic": "车主角色边界",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-757",
+          "local_path": "docs-extracted/share-server.txt",
+          "review_topic": "车主角色边界",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "package.templates",
+      "domain": "套餐与拼车",
+      "title": "套餐模板 CRUD",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "名称说明、总配额、周期、计量方式、限速、连接数、关联节点、客户端模板，编辑与删除。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-758",
+          "local_path": "docs-extracted/packages.txt",
+          "review_topic": "套餐模板 CRUD",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "package.instance",
+      "domain": "套餐与拼车",
+      "title": "独立多套餐实例",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "同一用户可绑定多个套餐；相同物理节点使用独立子凭据，分别维护用量、额度、连接数、重置基线及到期时间。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-759",
+          "local_path": "docs-extracted/users.txt",
+          "review_topic": "独立多套餐实例",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-760",
+          "local_path": "docs-extracted/packages.txt",
+          "review_topic": "独立多套餐实例",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "package.assignment",
+      "domain": "套餐与拼车",
+      "title": "绑定、解绑、续期",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "单实例管理；到期日可手填或快捷增加 30/60/90 天；按月 1–31 日重置，支持流量覆写与实例解绑。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-761",
+          "local_path": "docs-extracted/users.txt",
+          "review_topic": "绑定、解绑、续期",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "package.renewal_view",
+      "domain": "套餐与拼车",
+      "title": "续费工作视图",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "完整视图与续费视图切换，快捷续期、重置流量；新预发布支持按套餐、到期时间筛选。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-762",
+          "local_path": "docs-extracted/users.txt",
+          "review_topic": "续费工作视图",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-763",
+          "version": "v0.5.5-beta.5",
+          "prerelease": true,
+          "published_at": "2026-09-14T03:13:05Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.5"
+        }
+      ]
+    },
+    {
+      "id": "package.quota",
+      "domain": "套餐与拼车",
+      "title": "总额度、单节点额度与覆写",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "套餐总额度、套餐内单节点额度、用户额度覆写；明确留空继承和 0 不限；修改总额度即时生效，修改倍率只作用未来增量。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-764",
+          "local_path": "docs-extracted/users.txt",
+          "review_topic": "总额度、单节点额度与覆写",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-765",
+          "local_path": "docs-extracted/packages.txt",
+          "review_topic": "总额度、单节点额度与覆写",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-766",
+          "local_path": "docs-extracted/traffic-accounting.txt",
+          "review_topic": "总额度、单节点额度与覆写",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-767",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-768"
+        }
+      ]
+    },
+    {
+      "id": "package.node_scope",
+      "domain": "套餐与拼车",
+      "title": "套餐节点范围与呈现",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "按标签批选节点、节点排序、套餐专属节点名；旧文档称未选=全部，新预发布纠正该路径有风险，见冲突表。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-769",
+          "local_path": "docs-extracted/packages.txt",
+          "review_topic": "套餐节点范围与呈现",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-770",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-771"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-772",
+          "version": "v0.5.5-beta.1",
+          "prerelease": true,
+          "published_at": "2026-09-09T17:12:09Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.1"
+        }
+      ]
+    },
+    {
+      "id": "package.client_templates",
+      "domain": "套餐与拼车",
+      "title": "按客户端绑定模板",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "套餐可分别选择 Clash、Surge、Loon 模板；未设时使用默认模板。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-773",
+          "local_path": "docs-extracted/packages.txt",
+          "review_topic": "按客户端绑定模板",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-774",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "package.billing",
+      "domain": "套餐与拼车",
+      "title": "用户计费倍率",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "用户计费用 Xray user/email 原始上下行；采集时冻结套餐方向倍率与节点倍率，历史不因日后改倍率重算。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-775",
+          "local_path": "docs-extracted/traffic-accounting.txt",
+          "review_topic": "用户计费倍率",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "package.expiry_enforce",
+      "domain": "套餐与拼车",
+      "title": "到期与超额执行",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "到期撤除用户入站访问；超额可停止下发/限制接入或自动降速；额度恢复后解除限制。v0.5.4 增加临近超额快速执行。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-776",
+          "local_path": "docs-extracted/packages.txt",
+          "review_topic": "到期与超额执行",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-777",
+          "local_path": "docs-extracted/routed-outbound.txt",
+          "review_topic": "到期与超额执行",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-778",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "package.member_self_renew",
+      "domain": "套餐与拼车",
+      "title": "成员自助续费",
+      "actors": [
+        "普通用户"
+      ],
+      "scope": "README 确认用户自主续费、Mini App 续费及“我已续费”通知按钮；支付、审批与记账细则未公开确认。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-779",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-780"
+        }
+      ]
+    },
+    {
+      "id": "package.carpool_flow",
+      "domain": "套餐与拼车",
+      "title": "基础拼车开通流程",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "接入服务器、创建节点、建套餐、为成员建账号并绑定；同端口按用户身份分别计量，订阅注入各自凭据。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-781",
+          "local_path": "docs-extracted/faq-carpool.txt",
+          "review_topic": "基础拼车开通流程",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "package.public_market",
+      "domain": "套餐与拼车",
+      "title": "发布到官方拼车页",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "历史版本可发布/下架套餐到官方拼车页；v0.5.5-beta.1 明确移除发布入口和 /api/admin/carpool 路由。最新预发布已停用。",
+      "confirmation_status": "historical_removed_in_latest_prerelease",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-782",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-783"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-784",
+          "local_path": "docs-extracted/packages.txt",
+          "review_topic": "发布到官方拼车页",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-785",
+          "version": "v0.5.5-beta.1",
+          "prerelease": true,
+          "published_at": "2026-09-09T17:12:09Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.1"
+        }
+      ]
+    },
+    {
+      "id": "package.redeem",
+      "domain": "套餐与拼车",
+      "title": "邀请码与兑换码",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "通过 TG 生成、列出、撤销兑换码，成员兑换注册并绑定套餐；新预发布支持自定义天数、长期有效。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-786",
+          "local_path": "docs-extracted/tool-mmwx-tgbot.txt",
+          "review_topic": "邀请码与兑换码",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-787",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-788"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-789",
+          "version": "v0.5.5-beta.5",
+          "prerelease": true,
+          "published_at": "2026-09-14T03:13:05Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.5"
+        }
+      ]
+    },
+    {
+      "id": "package.merged",
+      "domain": "套餐与拼车",
+      "title": "全部套餐合并订阅",
+      "actors": [
+        "普通用户",
+        "管理员"
+      ],
+      "scope": "新预发布提供全局开关、用户“全部套餐”虚拟订阅卡、合并短码及订阅生成路径。具体冲突取舍算法未公开。",
+      "confirmation_status": "confirmed_release_notes",
+      "latest_prerelease_only": true,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-790",
+          "version": "v0.5.5-beta.6",
+          "prerelease": true,
+          "published_at": "2026-09-14T15:43:30Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.6"
+        }
+      ]
+    },
+    {
+      "id": "server.inventory",
+      "domain": "服务器与Agent",
+      "title": "多服务器清单",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "卡片/列表、在线离线筛选与计数、排序、IP 隐藏、状态/版本/心跳/网速/流量；新预发布增加服务器分组。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-791",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "多服务器清单",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-792",
+          "version": "v0.5.5-beta.5",
+          "prerelease": true,
+          "published_at": "2026-09-14T03:13:05Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.5"
+        }
+      ]
+    },
+    {
+      "id": "server.enrollment",
+      "domain": "服务器与Agent",
+      "title": "Agent 注册与安装",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "服务器名、IP/域名、Agent 端口、认证令牌；生成一键安装命令与 Docker 环境变量。可扫描现有 Xray/Nginx。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-793",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "Agent 注册与安装",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-794",
+          "local_path": "docs-extracted/install-agent.txt",
+          "review_topic": "Agent 注册与安装",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "server.connection",
+      "domain": "服务器与Agent",
+      "title": "三种连接与回退",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "WebSocket、HTTP、Pull/轮询、自动回退与重连；WS 连接时隐藏 Agent 本地管理端口；文档中 Pull 方向描述冲突。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-795",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "三种连接与回退",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-796",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "三种连接与回退",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-797",
+          "local_path": "docs-extracted/faq-server-management.txt",
+          "review_topic": "三种连接与回退",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "server.address",
+      "domain": "服务器与Agent",
+      "title": "IPv4/IPv6、域名、DDNS",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "IPv6 开关、多地址选择、独立 IPv6 域名、DDNS、锁定入口 IP、域名/IP 替换与节点地址同步。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-798",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "IPv4/IPv6、域名、DDNS",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "server.ports",
+      "domain": "服务器与Agent",
+      "title": "端口管理",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "自定义 Agent 端口、节点随机端口范围、端口占用探测、入站自动分配；转发端口可重选。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-799",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "端口管理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-800",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "server.credentials",
+      "domain": "服务器与Agent",
+      "title": "服务器凭据生命周期",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "Server/Agent Token、轮换与在线同步；主控/Agent 加密通信；新预发布测速令牌轮换保留 15 分钟旧令牌宽限。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-801",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "服务器凭据生命周期",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-802",
+          "version": "v0.5.5-beta.6",
+          "prerelease": true,
+          "published_at": "2026-09-14T15:43:30Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.6"
+        }
+      ]
+    },
+    {
+      "id": "server.operations",
+      "domain": "服务器与Agent",
+      "title": "Agent 更新与卸载",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "单台升级、批量/滚动升级、版本提示、卸载与流式进度；支持从主控更新家用测速端。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-803",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "Agent 更新与卸载",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-804",
+          "local_path": "docs-extracted/features.txt",
+          "review_topic": "Agent 更新与卸载",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-805",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-806"
+        }
+      ]
+    },
+    {
+      "id": "server.mode",
+      "domain": "服务器与Agent",
+      "title": "外置/内嵌 Xray 模式",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "外置独立服务或内嵌 xray-core；面板切换并重启；内嵌支持限速、并发控制及在线 IP 跟踪。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-807",
+          "local_path": "docs-extracted/embedded-xray.txt",
+          "review_topic": "外置/内嵌 Xray 模式",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-808",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "外置/内嵌 Xray 模式",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "server.accounting",
+      "domain": "服务器与Agent",
+      "title": "服务器容量与周期",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "系统网卡或 Xray 流量源；上行、下行、总和、最大方向四种统计；配额、周期日、人工校准、重置。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-809",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "服务器容量与周期",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-810",
+          "local_path": "docs-extracted/traffic-accounting.txt",
+          "review_topic": "服务器容量与周期",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "server.assets",
+      "domain": "服务器与Agent",
+      "title": "服务器商务与探针资料",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "地区、城市、提供商名称/网址、续费价格/币种/周期、到期日；公开探针续费时间轴跳转提供商。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-811",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "服务器商务与探针资料",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-812",
+          "local_path": "docs-extracted/probe-api.txt",
+          "review_topic": "服务器商务与探针资料",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-813",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "server.config_history",
+      "domain": "服务器与Agent",
+      "title": "配置历史与回滚",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "记录主控修改及 Agent 上报的配置快照、Hash 与来源；预览、差异检查、验证后重新下发及默认配置修复。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-814",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "配置历史与回滚",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-815",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-816"
+        }
+      ]
+    },
+    {
+      "id": "server.sync",
+      "domain": "服务器与Agent",
+      "title": "节点与地址一致性",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "自动/手动扫描入站同步节点、同步域名地址、检测配置漂移；新版引入地址对账及入口故障降级推送。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-817",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "节点与地址一致性",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-818",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "server.self_site",
+      "domain": "服务器与Agent",
+      "title": "REALITY 本机站点复用",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "服务器向导配置本机网站、Tunnel/回落模式、域名与 443；安装联动 Xray/Nginx，冲突检查。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-819",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "REALITY 本机站点复用",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-820",
+          "local_path": "docs-extracted/website-management.txt",
+          "review_topic": "REALITY 本机站点复用",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "xray.services",
+      "domain": "Xray配置",
+      "title": "Xray/Nginx 服务控制",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "安装、卸载、启动、停止、重启、扫描版本及运行状态；SSE 展示安装过程，完成后部署证书并同步入站。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-821",
+          "local_path": "docs-extracted/xray-service.txt",
+          "review_topic": "Xray/Nginx 服务控制",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "xray.global_config",
+      "domain": "Xray配置",
+      "title": "完整 JSON 配置管理",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "编辑、格式化、保存 Xray 配置及自动重启；日志、DNS、策略、统计、gRPC/API 项，历史快照可回滚。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-822",
+          "local_path": "docs-extracted/xray-system-config.txt",
+          "review_topic": "完整 JSON 配置管理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-823",
+          "local_path": "docs-extracted/xray-service.txt",
+          "review_topic": "完整 JSON 配置管理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "xray.inbounds",
+      "domain": "Xray配置",
+      "title": "入站 CRUD 与节点联动",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "按服务器浏览入站、卡片/列表、协议/端口/用户数、JSON 预览、编辑删除；入站与节点双向联动。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-824",
+          "local_path": "docs-extracted/xray-inbounds.txt",
+          "review_topic": "入站 CRUD 与节点联动",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "xray.wizard",
+      "domain": "Xray配置",
+      "title": "简易与专家向导",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "简易自动分配端口/生成凭据；专家编辑监听、端口、嗅探、中转及协议细项；实时预览 JSON、多用户配置。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-825",
+          "local_path": "docs-extracted/xray-inbounds.txt",
+          "review_topic": "简易与专家向导",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-826",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "简易与专家向导",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "xray.protocols",
+      "domain": "Xray配置",
+      "title": "受管协议与传输",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "公开向导列 VLESS、VMess、Trojan、SS/SS2022、Hysteria2、AnyTLS、Snell、Mieru、SOCKS5、HTTP；TCP/UDP/WS/gRPC/XHTTP 与各安全组合需按客户端核对。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-827",
+          "local_path": "docs-extracted/xray-inbounds.txt",
+          "review_topic": "受管协议与传输",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-828",
+          "local_path": "docs-extracted/protocol-matrix.txt",
+          "review_topic": "受管协议与传输",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "xray.reality",
+      "domain": "Xray配置",
+      "title": "REALITY 域名与保护",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "目标域名自动/手动选择、批量延迟探测、共享域名池、允许域名保护规则；新版共享池要求先贡献一个域名。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-829",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "REALITY 域名与保护",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-830",
+          "local_path": "docs-extracted/xray-routing.txt",
+          "review_topic": "REALITY 域名与保护",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-831",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-832"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-833",
+          "version": "v0.5.5-beta.6",
+          "prerelease": true,
+          "published_at": "2026-09-14T15:43:30Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.6"
+        }
+      ]
+    },
+    {
+      "id": "xray.protocol_options",
+      "domain": "Xray配置",
+      "title": "协议特殊参数",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "Snell v4/v5 独立 PSK 与 v6 clientID、obfs；HY2 salamander 混淆；证书、自签、Vision 与 flow 配置按协议适配。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-834",
+          "local_path": "docs-extracted/protocol-matrix.txt",
+          "review_topic": "协议特殊参数",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-835",
+          "local_path": "docs-extracted/protocol-snell.txt",
+          "review_topic": "协议特殊参数",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-836",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "xray.outbounds",
+      "domain": "Xray配置",
+      "title": "出站 CRUD 与排序",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "直连、阻断、代理、隧道出站，查看编辑删除、隐藏默认项、调整顺序；可从节点自动创建出站。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-837",
+          "local_path": "docs-extracted/xray-outbounds.txt",
+          "review_topic": "出站 CRUD 与排序",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "xray.warp",
+      "domain": "Xray配置",
+      "title": "WARP 出站",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "每台 Agent 独立注册 WARP，IPv4/IPv6 出站、WARP+ 密钥升级、刷新配置与卸载，供路由选择。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-838",
+          "local_path": "docs-extracted/xray-outbounds.txt",
+          "review_topic": "WARP 出站",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "xray.routing",
+      "domain": "Xray配置",
+      "title": "路由规则管理",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "节点专属/服务器全局规则、拖拽顺序、JSON 详情、增删；匹配域名/IP/协议/端口/源地址/用户/入站标签等。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-839",
+          "local_path": "docs-extracted/xray-routing.txt",
+          "review_topic": "路由规则管理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "xray.routing_presets",
+      "domain": "Xray配置",
+      "title": "预设路由与命中提示",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "常用阻断/直连/解锁规则，选择目标出站；显示 catch-all 遮蔽后续规则的影响，默认 API 路由保留。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-840",
+          "local_path": "docs-extracted/xray-routing.txt",
+          "review_topic": "预设路由与命中提示",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "xray.balancers",
+      "domain": "Xray配置",
+      "title": "出站负载均衡",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "按标签前缀选择候选出站；random、roundRobin、leastPing、leastLoad；按需配置观测器。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-841",
+          "local_path": "docs-extracted/xray-routing.txt",
+          "review_topic": "出站负载均衡",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "node.import",
+      "domain": "节点管理",
+      "title": "外部节点导入",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "逐行 URI、Clash/mihomo YAML、Base64 列表、订阅 URL 与 User-Agent、SOCKS5 表单；预览、选节点、打标签再保存。新预发布支持 Surge 节点格式。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-842",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "外部节点导入",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-843",
+          "local_path": "docs-extracted/subscribe-files.txt",
+          "review_topic": "外部节点导入",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-844",
+          "version": "v0.5.5-beta.6",
+          "prerelease": true,
+          "published_at": "2026-09-14T15:43:30Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.6"
+        }
+      ]
+    },
+    {
+      "id": "node.crud",
+      "domain": "节点管理",
+      "title": "节点列表与日常操作",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "节点启停、重命名、排序、协议与多标签筛选、编辑、查看/修改 Clash 配置、复制 URI、批量清理/去重。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-845",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "节点列表与日常操作",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "node.metadata",
+      "domain": "节点管理",
+      "title": "节点显示与地址工具",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "Emoji 匹配、手动地区图标、域名转 IP 与恢复原地址、节点证书验证开关、Snell 批量设置。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-846",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "节点显示与地址工具",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "node.temp_sub",
+      "domain": "节点管理",
+      "title": "临时订阅",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "为单节点生成无访问密码的临时订阅，可指定次数与有效期，次数用尽或到期失效。具体普通用户可见范围需运行验证。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-847",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "临时订阅",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "node.uri_view",
+      "domain": "节点管理",
+      "title": "用户 URI 总览",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "按用户、服务器查看节点协议 URI，使用该用户子账户凭据，可复制全部。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-848",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "用户 URI 总览",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-849",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-850"
+        }
+      ]
+    },
+    {
+      "id": "node.self_import",
+      "domain": "节点管理",
+      "title": "成员自有节点管理",
+      "actors": [
+        "普通用户",
+        "管理员"
+      ],
+      "scope": "用户可导入自己的外部节点；管理员可查看、清空其自导节点，区别于套餐共享池。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-851",
+          "local_path": "docs-extracted/users.txt",
+          "review_topic": "成员自有节点管理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-852",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "成员自有节点管理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "node.latency",
+      "domain": "节点管理",
+      "title": "TCP 延迟与域名探测",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "浏览器/客户端节点行 TCPing；域名批量 TCP 探测（文档描述上限 200、并发 16）。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-853",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "TCP 延迟与域名探测",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-854",
+          "local_path": "docs-extracted/features.txt",
+          "review_topic": "TCP 延迟与域名探测",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "node.speedtest",
+      "domain": "节点管理",
+      "title": "真实测速工作台",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "mihomo 单节点下载速度、真连接延迟、出口 IP、单/多线程、批量异步任务、历史记录及排序。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-855",
+          "local_path": "docs-extracted/node-speedtest.txt",
+          "review_topic": "真实测速工作台",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "node.home_endpoint",
+      "domain": "节点管理",
+      "title": "家用测速端",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "反向 WSS 接入、一次性配对、安装命令、Linux/Windows/macOS；端点管理、在线/离线回退、测速来源选择。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-856",
+          "local_path": "docs-extracted/node-speedtest.txt",
+          "review_topic": "家用测速端",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "node.external_probe",
+      "domain": "节点管理",
+      "title": "外部节点探测与重同步",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "定时 mihomo 探测外部导入节点；选主控或家用端；掉线自动同步外部订阅。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-857",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "外部节点探测与重同步",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-858",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "外部节点探测与重同步",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "subscription.sources",
+      "domain": "订阅源与转换",
+      "title": "外部订阅源管理",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "导入源列表、手动同步/删除、源 URL 与 User-Agent；管理员可管理所有外部源，节点与自建节点合并。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-859",
+          "local_path": "docs-extracted/subscribe-files.txt",
+          "review_topic": "外部订阅源管理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-860",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-861"
+        }
+      ]
+    },
+    {
+      "id": "subscription.sync",
+      "domain": "订阅源与转换",
+      "title": "定时、按需与缓存刷新",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "小时/每日/自定义同步周期；获取订阅时强制刷新或用缓存；静默同步、失效重同步。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-862",
+          "local_path": "docs-extracted/subscribe-files.txt",
+          "review_topic": "定时、按需与缓存刷新",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-863",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "定时、按需与缓存刷新",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-864",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-865"
+        }
+      ]
+    },
+    {
+      "id": "subscription.matching",
+      "domain": "订阅源与转换",
+      "title": "同步匹配与保留策略",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "按名称、地址端口、协议地址端口匹配；仅更新已存节点或同步全部新增；保留当前名称，正则排除信息节点。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-866",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "同步匹配与保留策略",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "subscription.external_traffic",
+      "domain": "订阅源与转换",
+      "title": "外部流量聚合",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "读取 subscription-userinfo 额度、用量、到期；选择统计方向和标签范围；可把剩余额度/天数追加到节点名称。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-867",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "外部流量聚合",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-868",
+          "local_path": "docs-extracted/traffic-accounting.txt",
+          "review_topic": "外部流量聚合",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "subscription.fetch_proxy",
+      "domain": "订阅源与转换",
+      "title": "家用端中转抓取源",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "外部订阅可经家用测速端抓取，解决来源网络访问差异。",
+      "confirmation_status": "confirmed_release_notes",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-869",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "subscription.generate",
+      "domain": "订阅源与转换",
+      "title": "订阅生成工作台",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "选择节点和规则/模板，预览生成配置，自动/手动排序，填写名称文件名说明并保存订阅文件。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-870",
+          "local_path": "docs-extracted/generator.txt",
+          "review_topic": "订阅生成工作台",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "subscription.formats",
+      "domain": "订阅源与转换",
+      "title": "多客户端输出",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "明确列出的格式家族为 Clash/Meta、Surge、Loon、QX、Shadowrocket、SingBox、Stash、Surfboard、V2Ray、Egern；文档称12+，不能等同12种独立引擎。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-871",
+          "local_path": "docs-extracted/generator.txt",
+          "review_topic": "多客户端输出",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-872",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-873"
+        }
+      ]
+    },
+    {
+      "id": "subscription.compatibility",
+      "domain": "订阅源与转换",
+      "title": "自动客户端与兼容处理",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "auto 客户端识别、显式格式选择、不支持协议过滤/报错开关；Clash YAML/JSON；clash-to-loon 与 Egern 块状 YAML。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-874",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "自动客户端与兼容处理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-875",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-876"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-877",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "subscription.files",
+      "domain": "订阅源与转换",
+      "title": "订阅文件维护",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "名称、所属用户、更新时间、短码、V3绑定、流量信息；节点范围/标签配置、编辑内容、限额显示覆写和删除；普通用户仅自己的文件。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-878",
+          "local_path": "docs-extracted/subscribe-files.txt",
+          "review_topic": "订阅文件维护",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "subscription.links",
+      "domain": "订阅源与转换",
+      "title": "分发链接与独立域名",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "用户令牌链接、用户/文件短码、订阅域名与主控域名分开；独立订阅域名供网页/TG/Mini App 分发。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-879",
+          "local_path": "docs-extracted/generator.txt",
+          "review_topic": "分发链接与独立域名",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-880",
+          "local_path": "docs-extracted/cloudflare-tunnel.txt",
+          "review_topic": "分发链接与独立域名",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-881",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "subscription.info",
+      "domain": "订阅源与转换",
+      "title": "订阅元信息展示",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "响应头用量/到期、可选流量与到期信息节点及前缀；最新版本细分兼容输出范围。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-882",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "订阅元信息展示",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-883",
+          "version": "v0.5.5-beta.6",
+          "prerelease": true,
+          "published_at": "2026-09-14T15:43:30Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.6"
+        }
+      ]
+    },
+    {
+      "id": "subscription.providers",
+      "domain": "订阅源与转换",
+      "title": "代理集合",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "开关控制 Proxy Provider；外部源动态加载，能拖入代理组，与本地节点混合。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-884",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "代理集合",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-885",
+          "local_path": "docs-extracted/templates.txt",
+          "review_topic": "代理集合",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "subscription.change_push",
+      "domain": "订阅源与转换",
+      "title": "订阅变化即时通知",
+      "actors": [
+        "普通用户"
+      ],
+      "scope": "subscription_changed 事件提醒客户端重拉；入口故障降级实时推送。客户端接入细节未公开。",
+      "confirmation_status": "confirmed_release_notes",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-886",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "subscription.access",
+      "domain": "订阅源与转换",
+      "title": "订阅访问策略",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "订阅请求限频、禁止浏览器访问订阅、IP 白名单、用户/套餐权限与过期校验。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-887",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "订阅访问策略",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-888",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-889"
+        }
+      ]
+    },
+    {
+      "id": "template.versions",
+      "domain": "模板与规则",
+      "title": "模板版本兼容",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "v1 文件、v2 数据库/subconverter INI、v3 mihomo 风格模板；系统开关选择及旧模板迁移。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-890",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "模板版本兼容",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-891",
+          "local_path": "docs-extracted/templates.txt",
+          "review_topic": "模板版本兼容",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "template.library",
+      "domain": "模板与规则",
+      "title": "模板库 CRUD 与共享",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "Clash、Surge、Loon 类型分类、编辑预览删除、普通用户可见性；系统/个人默认模板与套餐/文件绑定。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-892",
+          "local_path": "docs-extracted/templates.txt",
+          "review_topic": "模板库 CRUD 与共享",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-893",
+          "local_path": "docs-extracted/packages.txt",
+          "review_topic": "模板库 CRUD 与共享",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "template.import",
+      "domain": "模板与规则",
+      "title": "六类模板来源",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "上传、粘贴、空白、URL、V2转换、从现有订阅提取分组，保留常用结构。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-894",
+          "local_path": "docs-extracted/templates.txt",
+          "review_topic": "六类模板来源",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "template.editor",
+      "domain": "模板与规则",
+      "title": "可视化与代码编辑",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "代理组增改排序、引用其他组、图标与隐藏、实时预览；可切换 YAML 与可视化模式。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-895",
+          "local_path": "docs-extracted/templates.txt",
+          "review_topic": "可视化与代码编辑",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "template.selectors",
+      "domain": "模板与规则",
+      "title": "动态匹配节点",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "include-all/proxies/providers/type 与 filter/exclude-filter/exclude-type；YAML 顶层变量复用，生成时清除模板专用字段。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-896",
+          "local_path": "docs-extracted/templates.txt",
+          "review_topic": "动态匹配节点",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "template.regions",
+      "domain": "模板与规则",
+      "title": "区域组与空组处理",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "按节点名称自动分地区、其他地区兜底；未匹配节点的组自动移除。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-897",
+          "local_path": "docs-extracted/templates.txt",
+          "review_topic": "区域组与空组处理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "template.policy_groups",
+      "domain": "模板与规则",
+      "title": "代理组选路",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "select、url-test、fallback、load-balance、链式组；测速 URL/周期/容差与 dialer-proxy-group。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-898",
+          "local_path": "docs-extracted/templates.txt",
+          "review_topic": "代理组选路",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "template.regeneration",
+      "domain": "模板与规则",
+      "title": "订阅自动再生成",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "节点增加、删除、模板修改触发绑定订阅更新；每订阅单模板，模板替代原规则配置。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-899",
+          "local_path": "docs-extracted/templates.txt",
+          "review_topic": "订阅自动再生成",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "rules.overrides",
+      "domain": "模板与规则",
+      "title": "DNS/规则/规则集覆写",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "启停、名称、类型、替换/追加/前置、全局或按模板作用域；YAML 片段、规则优先级与出站策略。具体用户权限需实测。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-900",
+          "local_path": "docs-extracted/custom-rules.txt",
+          "review_topic": "DNS/规则/规则集覆写",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "rules.scripts",
+      "domain": "模板与规则",
+      "title": "JavaScript 覆写脚本",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "开关启用后可在订阅生成链上二次修改节点字段、代理组与配置结构。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-901",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "JavaScript 覆写脚本",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-902",
+          "local_path": "docs-extracted/comparison.txt",
+          "review_topic": "JavaScript 覆写脚本",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "rules.group_catalog",
+      "domain": "模板与规则",
+      "title": "远程代理组配置",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "自定义 HTTP 配置源、同步与规范化缓存；minimal/balanced/comprehensive；域名/IP providers 与格式、地址、路径、刷新周期。下载失败保留现有配置。",
+      "confirmation_status": "partly_verified_public_files",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-903",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-904"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-905",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-906"
+        }
+      ]
+    },
+    {
+      "id": "rules.hosted",
+      "domain": "模板与规则",
+      "title": "规则集托管",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "v0.5.4 新增规则集托管与独立规则集页面；具体上传格式/版本模型待验证。",
+      "confirmation_status": "confirmed_release_notes",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-907",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "rules.bundled",
+      "domain": "模板与规则",
+      "title": "内置模板文件",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "公开分发 fake-ip/redirhost V3 YAML 与 Surge conf；Go embed.Ensure 只在缺失时写入，保留已有自定义文件。",
+      "confirmation_status": "partly_verified_public_files",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-908",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-909"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-910",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-911"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-912",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-913"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-914",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-915"
+        }
+      ]
+    },
+    {
+      "id": "relay.node_outbound",
+      "domain": "中转与转发",
+      "title": "整节点链式出站",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "指定已有落地、另台服务器新建落地或均衡器，将同一入站全部用户流量导向选定出口。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-916",
+          "local_path": "docs-extracted/routed-outbound.txt",
+          "review_topic": "整节点链式出站",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "relay.package_children",
+      "domain": "中转与转发",
+      "title": "套餐路由子节点",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "同一父入站创建多条 routed 子节点；每用户独立凭据/user路由，套餐分配后生效，删除级联清理。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-917",
+          "local_path": "docs-extracted/routed-outbound.txt",
+          "review_topic": "套餐路由子节点",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "relay.private_children",
+      "domain": "中转与转发",
+      "title": "成员私有路由子节点",
+      "actors": [
+        "普通用户",
+        "管理员"
+      ],
+      "scope": "管理员开启后，成员用自己的可见节点创建私有出口；仅本人可见/可删；数量及每日操作上限、启停/超额/到期联动。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-918",
+          "local_path": "docs-extracted/routed-outbound.txt",
+          "review_topic": "成员私有路由子节点",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "relay.client_group",
+      "domain": "中转与转发",
+      "title": "客户端中转组",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "为落地节点选择多个中转组成 url-test 组，生成 dialer-proxy 链；Clash 链式功能继承。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-919",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "客户端中转组",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-920",
+          "local_path": "docs-extracted/templates.txt",
+          "review_topic": "客户端中转组",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "relay.tunnels",
+      "domain": "中转与转发",
+      "title": "Xray Tunnel 与端口转发",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "dokodemo-door 指向已有节点或自定义地址端口；自动配套节点、入口地址替换、TCP/UDP、连通性探测。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-921",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "Xray Tunnel 与端口转发",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-922",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-923"
+        }
+      ]
+    },
+    {
+      "id": "relay.reused_port",
+      "domain": "中转与转发",
+      "title": "复用入站的目标转发",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "现有 Tunnel 按域名/IP 匹配复用监听端口；统一列表维护、显示关联转发及原始落地地址。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-924",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "复用入站的目标转发",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "relay.native_chains",
+      "domain": "中转与转发",
+      "title": "Agent 转发组与链",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "入口/中转/出口分组，多选/拖拽组链，落到节点或自定义目标；支持单入口组链、入口故障降级与 DNS 地址对账。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-925",
+          "local_path": "docs-extracted/nodes.txt",
+          "review_topic": "Agent 转发组与链",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-926",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "relay.member_forward",
+      "domain": "中转与转发",
+      "title": "成员“我的转发”",
+      "actors": [
+        "普通用户",
+        "管理员"
+      ],
+      "scope": "套餐开启转发配额并授权入口链；成员自填裸目标或选套餐节点，显示入口端口并可换端口，支持 UDP。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-927",
+          "local_path": "docs-extracted/packages.txt",
+          "review_topic": "成员“我的转发”",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-928",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "relay.ledger",
+      "domain": "中转与转发",
+      "title": "转发计量与连接",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "转发载体标识、链周期流量、入口实时连接与来源 IP；新版按链/端口/日期、套餐查转发账目。",
+      "confirmation_status": "confirmed_release_notes",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-929",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-930",
+          "version": "v0.5.5-beta.5",
+          "prerelease": true,
+          "published_at": "2026-09-14T03:13:05Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.5"
+        }
+      ]
+    },
+    {
+      "id": "relay.wireguard",
+      "domain": "中转与转发",
+      "title": "WireGuard 中转隧道",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "新版支持 IPv4/双栈地址族选择、25 秒 keepalive与定时探活、正常/失败/延迟展示；具体全参数未公开。",
+      "confirmation_status": "confirmed_release_notes",
+      "latest_prerelease_only": true,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-931",
+          "version": "v0.5.5-beta.6",
+          "prerelease": true,
+          "published_at": "2026-09-14T15:43:30Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.6"
+        }
+      ]
+    },
+    {
+      "id": "federation.share",
+      "domain": "共享与联邦",
+      "title": "跨主控分享与接入",
+      "actors": [
+        "拥有方管理员",
+        "消费方管理员"
+      ],
+      "scope": "拥有方生成令牌；消费方用地址+令牌接入，独立服务器名/入站前缀；所有操作经拥有方转发到 Agent。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-932",
+          "local_path": "docs-extracted/share-server.txt",
+          "review_topic": "跨主控分享与接入",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "federation.acl",
+      "domain": "共享与联邦",
+      "title": "联邦权限边界",
+      "actors": [
+        "拥有方管理员",
+        "消费方管理员"
+      ],
+      "scope": "默认消费方仅管自己入站/节点、看状态；无启停/安装/改服务器/再分享/Agent直连权限；可显式授权完整Xray配置。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-933",
+          "local_path": "docs-extracted/share-server.txt",
+          "review_topic": "联邦权限边界",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "federation.tokens",
+      "domain": "共享与联邦",
+      "title": "分享令牌管理",
+      "actors": [
+        "拥有方管理员"
+      ],
+      "scope": "一机多令牌、仅首次展示明文、SHA256存储、列表与创建时间、即时吊销；文档称吊销不自动删消费方入站。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-934",
+          "local_path": "docs-extracted/share-server.txt",
+          "review_topic": "分享令牌管理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "federation.security",
+      "domain": "共享与联邦",
+      "title": "联邦加密与白名单",
+      "actors": [
+        "拥有方管理员",
+        "消费方管理员"
+      ],
+      "scope": "HTTPS、ECDH、转发路径白名单；旧文档的自动降级说明与新版强制加密须单独验证。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-935",
+          "local_path": "docs-extracted/share-server.txt",
+          "review_topic": "联邦加密与白名单",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-936",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "cert.providers",
+      "domain": "证书与网站",
+      "title": "DNS 供应商管理",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "Cloudflare、阿里云、腾讯 DNSPod、Namesilo 凭据表单，生成并校验配置。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-937",
+          "local_path": "docs-extracted/certificates.txt",
+          "review_topic": "DNS 供应商管理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "cert.issue",
+      "domain": "证书与网站",
+      "title": "证书申请与续期",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "CA选择、邮箱、DNS-01、通配符与根域名 SAN、自动续期、签发日志与状态。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-938",
+          "local_path": "docs-extracted/certificates.txt",
+          "review_topic": "证书申请与续期",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-939",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-940"
+        }
+      ]
+    },
+    {
+      "id": "cert.manual",
+      "domain": "证书与网站",
+      "title": "证书导入与导出",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "PEM证书/私钥上传、证书列表与下载ZIP、手动证书管理、删除。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-941",
+          "local_path": "docs-extracted/certificates.txt",
+          "review_topic": "证书导入与导出",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "cert.deploy",
+      "domain": "证书与网站",
+      "title": "证书部署与更新",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "部署主控HTTPS及远程Xray/Nginx；续期、重签、Webhook更新后下发所有引用处；恢复配置时先补证书。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-942",
+          "local_path": "docs-extracted/certificates.txt",
+          "review_topic": "证书部署与更新",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-943",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-944"
+        }
+      ]
+    },
+    {
+      "id": "cert.webhook",
+      "domain": "证书与网站",
+      "title": "Certimate Webhook",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "POST /api/admin/certificates/upload，管理员API Token鉴权，支持裸PEM/旧Base64；同域更新并触发部署。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-945",
+          "local_path": "docs-extracted/certificates.txt",
+          "review_topic": "Certimate Webhook",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "site.nginx",
+      "domain": "证书与网站",
+      "title": "Nginx 站点管理",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "扫描受管站点、静态目录/反向代理、创建删除、80/443占用检查、重载与证书匹配；保留站点内容。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-946",
+          "local_path": "docs-extracted/website-management.txt",
+          "review_topic": "Nginx 站点管理",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "site.runtime",
+      "domain": "证书与网站",
+      "title": "多种服务管理环境",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "systemd、OpenRC、SysV、直接命令与Docker Nginx管理；可检测并复用已有Nginx。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-947",
+          "local_path": "docs-extracted/website-management.txt",
+          "review_topic": "多种服务管理环境",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "monitor.dashboard",
+      "domain": "监控与流量",
+      "title": "管理员流量总览",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "总额度、用量、剩余、30日趋势、今日/周/月、节点/用户/服务器视图，选择计入统计服务器。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-948",
+          "local_path": "docs-extracted/traffic-accounting.txt",
+          "review_topic": "管理员流量总览",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-949",
+          "local_path": "docs-extracted/features.txt",
+          "review_topic": "管理员流量总览",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "monitor.member",
+      "domain": "监控与流量",
+      "title": "成员用量总览",
+      "actors": [
+        "普通用户"
+      ],
+      "scope": "有效套餐实例额度与已用、趋势、实例卡片；外部订阅按配置合并；列表聚合与实例口径有差别。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-950",
+          "local_path": "docs-extracted/traffic-accounting.txt",
+          "review_topic": "成员用量总览",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-951",
+          "local_path": "docs-extracted/users.txt",
+          "review_topic": "成员用量总览",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "monitor.live",
+      "domain": "监控与流量",
+      "title": "实时系统与连接状态",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "CPU/内存/硬盘/负载/uptime/OS/架构、实时网卡速度、在线用户、节点连接数与来源IP。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-952",
+          "local_path": "docs-extracted/probe-api.txt",
+          "review_topic": "实时系统与连接状态",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-953",
+          "local_path": "docs-extracted/embedded-xray.txt",
+          "review_topic": "实时系统与连接状态",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-954",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "monitor.probe",
+      "domain": "监控与流量",
+      "title": "内置公开探针",
+      "actors": [
+        "管理员",
+        "访客"
+      ],
+      "scope": "启停、展示服务器和指标、标题/Logo/主题、3D地球、隐蔽登录入口、是否屏蔽原登录页。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-955",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "内置公开探针",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-956",
+          "local_path": "docs-extracted/probe-api.txt",
+          "review_topic": "内置公开探针",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "monitor.external_probe",
+      "domain": "监控与流量",
+      "title": "外置探针",
+      "actors": [
+        "管理员",
+        "访客"
+      ],
+      "scope": "Cloudflare Worker静态页、只读API/WS代理、独立访问密钥；主控选择服务器及指标，可与内置探针并存。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-957",
+          "local_path": "docs-extracted/install-external-probe.txt",
+          "review_topic": "外置探针",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-958",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-959"
+        }
+      ]
+    },
+    {
+      "id": "monitor.probe_api",
+      "domain": "监控与流量",
+      "title": "探针API与历史",
+      "actors": [
+        "访客",
+        "外置探针"
+      ],
+      "scope": "状态HTTP、5秒WS推送、1h/6h/24h延迟和系统历史；字段白名单、可选Token保护、无数据可省略。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-960",
+          "local_path": "docs-extracted/probe-api.txt",
+          "review_topic": "探针API与历史",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-961",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-962"
+        }
+      ]
+    },
+    {
+      "id": "monitor.network_quality",
+      "domain": "监控与流量",
+      "title": "网络质量与回程",
+      "actors": [
+        "管理员",
+        "访客"
+      ],
+      "scope": "Ping目标、延迟、丢包、历史桶、三网回程、地区/运营商/线路标识；用户侧接口供官方客户端展示回程。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-963",
+          "local_path": "docs-extracted/probe-api.txt",
+          "review_topic": "网络质量与回程",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-964",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-965"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-966",
+          "version": "v0.5.5-beta.1",
+          "prerelease": true,
+          "published_at": "2026-09-09T17:12:09Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.1"
+        }
+      ]
+    },
+    {
+      "id": "monitor.accounting",
+      "domain": "监控与流量",
+      "title": "多维流量对账",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "区分主机网卡、Xray物理节点、routed子节点、用户/套餐加权用量；日期范围、周期、手工校准与不完整采集标记。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-967",
+          "local_path": "docs-extracted/traffic-accounting.txt",
+          "review_topic": "多维流量对账",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "monitor.ledger",
+      "domain": "监控与流量",
+      "title": "流量明细台账",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "新预发布节点/用户流量、连接IP历史、峰值top5、上下行拆分、可排序；未归属流量原因与管理员自用分类。",
+      "confirmation_status": "confirmed_release_notes",
+      "latest_prerelease_only": true,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-968",
+          "version": "v0.5.5-beta.5",
+          "prerelease": true,
+          "published_at": "2026-09-14T03:13:05Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.5"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-969",
+          "version": "v0.5.5-beta.6",
+          "prerelease": true,
+          "published_at": "2026-09-14T15:43:30Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.6"
+        }
+      ]
+    },
+    {
+      "id": "monitor.ip_database",
+      "domain": "监控与流量",
+      "title": "IP 地区库",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "新预发布按地址族下载、更新、删除地区库；有库时连接IP显示地区和运营商。",
+      "confirmation_status": "confirmed_release_notes",
+      "latest_prerelease_only": true,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-970",
+          "version": "v0.5.5-beta.6",
+          "prerelease": true,
+          "published_at": "2026-09-14T15:43:30Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.6"
+        }
+      ]
+    },
+    {
+      "id": "limit.speed",
+      "domain": "限速与接入控制",
+      "title": "用户与套餐限速",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "Mbps限速、套餐默认、用户全局及单节点覆写；0不限/空继承；内嵌Xray热更新及Vision限速。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-971",
+          "local_path": "docs-extracted/node-ratelimit.txt",
+          "review_topic": "用户与套餐限速",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-972",
+          "local_path": "docs-extracted/users.txt",
+          "review_topic": "用户与套餐限速",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-973",
+          "local_path": "docs-extracted/embedded-xray.txt",
+          "review_topic": "用户与套餐限速",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "limit.connection",
+      "domain": "限速与接入控制",
+      "title": "并发连接数",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "按套餐/用户/节点限制并发连接，新连接达限拒绝；不能把并发连接数当成设备数量。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-974",
+          "local_path": "docs-extracted/node-ratelimit.txt",
+          "review_topic": "并发连接数",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-975",
+          "local_path": "docs-extracted/packages.txt",
+          "review_topic": "并发连接数",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "limit.online_ips",
+      "domain": "限速与接入控制",
+      "title": "同时在线IP数量",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "v0.5.5-beta.5独立新增套餐/用户IP上限配置、覆写与下发；与并发连接数分开。",
+      "confirmation_status": "confirmed_release_notes",
+      "latest_prerelease_only": true,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-976",
+          "version": "v0.5.5-beta.5",
+          "prerelease": true,
+          "published_at": "2026-09-14T03:13:05Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.5"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-977",
+          "version": "v0.5.5-beta.6",
+          "prerelease": true,
+          "published_at": "2026-09-14T15:43:30Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.6"
+        }
+      ]
+    },
+    {
+      "id": "limit.auto_rules",
+      "domain": "限速与接入控制",
+      "title": "行为自动限速",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "持续超速和窗口突发规则，阈值/持续时长/限制速度/解除时间；新预发布全局默认、套餐覆盖、事件和独立通知。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-978",
+          "local_path": "docs-extracted/embedded-xray.txt",
+          "review_topic": "行为自动限速",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-979",
+          "version": "v0.5.5-beta.5",
+          "prerelease": true,
+          "published_at": "2026-09-14T03:13:05Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.5"
+        }
+      ]
+    },
+    {
+      "id": "limit.quota_throttle",
+      "domain": "限速与接入控制",
+      "title": "超额度限速与恢复",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "套餐超额降速策略、重置或扩额后自动解除；与基于速度行为的临时自动限速区分。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-980",
+          "local_path": "docs-extracted/packages.txt",
+          "review_topic": "超额度限速与恢复",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "notify.events",
+      "domain": "通知与TG",
+      "title": "Telegram事件通知",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "登录、获取订阅、IP封禁、静默切换、到期、服务器上下线、流量阈值、延迟/丢包；独立开关与测试消息。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-981",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "Telegram事件通知",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-982",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-983"
+        }
+      ]
+    },
+    {
+      "id": "notify.daily",
+      "domain": "通知与TG",
+      "title": "日报与文案",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "管理员定时流量报表、时间/文本配置；成员可选通知开关，TG到期7/3/1日提醒，续费确认按钮。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-984",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "日报与文案",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-985",
+          "local_path": "docs-extracted/tool-mmwx-tgbot.txt",
+          "review_topic": "日报与文案",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-986",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-987"
+        }
+      ]
+    },
+    {
+      "id": "notify.announcements",
+      "domain": "通知与TG",
+      "title": "公告中心",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "被墙/恢复/维护/订阅更新/通用公告模板、探测源、Bot/Mini App渠道、发布日志；稳定版支持套餐定向发送。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-988",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "公告中心",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-989",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-990"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-991",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "tg.builtin",
+      "domain": "通知与TG",
+      "title": "内置TG Bot生命周期",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "启停、Token/管理员TG ID配置、掩码保留、保存热重启、运行状态；已不需独立部署Bot。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-992",
+          "local_path": "docs-extracted/tool-mmwx-tgbot.txt",
+          "review_topic": "内置TG Bot生命周期",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "tg.commands",
+      "domain": "通知与TG",
+      "title": "成员TG命令",
+      "actors": [
+        "普通用户"
+      ],
+      "scope": "/start注册绑定、/me账户、/sub订阅、/traffic流量、/nodes节点状态、/notify开关、/unbind解绑确认。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-993",
+          "local_path": "docs-extracted/tool-mmwx-tgbot.txt",
+          "review_topic": "成员TG命令",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "tg.admin",
+      "domain": "通知与TG",
+      "title": "管理员TG命令",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "邀请码列表、交互创建、撤销、用户查询；管理员名单与命令限频。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-994",
+          "local_path": "docs-extracted/tool-mmwx-tgbot.txt",
+          "review_topic": "管理员TG命令",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "tg.miniapp",
+      "domain": "通知与TG",
+      "title": "Telegram Mini App",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "/tg-app通过initData免密码登录；管理员看全局、用户/流量/兑换码，成员看套餐/用量/订阅/节点；Xray开关与续费。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-995",
+          "local_path": "docs-extracted/tool-mmwx-tgbot.txt",
+          "review_topic": "Telegram Mini App",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-996",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-997"
+        }
+      ]
+    },
+    {
+      "id": "security.limits",
+      "domain": "安全与外观",
+      "title": "登录与请求防护",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "登录限流、暴力破解封禁、订阅限频、真实来源IP、独立通知、安全日志；配置可热更新。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-998",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "登录与请求防护",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "security.turnstile",
+      "domain": "安全与外观",
+      "title": "Turnstile人机验证",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "Site/Secret Key、完整配置启用、页面内自测；登录验证接入。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-999",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "Turnstile人机验证",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1000",
+          "local_path": "docs-extracted/tool-cloudflare-turnstile.txt",
+          "review_topic": "Turnstile人机验证",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "security.silent",
+      "domain": "安全与外观",
+      "title": "静默隐藏与本地监听",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "静默404、合法订阅唤醒及恢复时长；仅本机监听、公开访问自救环境变量、隐蔽探针入口。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1001",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "静默隐藏与本地监听",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-1002",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-1003"
+        }
+      ]
+    },
+    {
+      "id": "security.encryption",
+      "domain": "安全与外观",
+      "title": "主控/Agent及客户端加密",
+      "actors": [
+        "管理员",
+        "客户端"
+      ],
+      "scope": "主控/Agent密钥协商；稳定版加强强制加密、X25519客户端身份、证书续签与端到端专用端点。实现未公开验证。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1004",
+          "local_path": "docs-extracted/remote-servers.txt",
+          "review_topic": "主控/Agent及客户端加密",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-1005",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "security.local_reset",
+      "domain": "安全与外观",
+      "title": "管理员本地恢复",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "官方文档描述本地SSH脚本重置管理员密码与TOTP；当前公开仓库缺该脚本，无法验证或提供可用脚本保证。",
+      "confirmation_status": "documented_but_referenced_script_unavailable",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1006",
+          "local_path": "docs-extracted/faq-common-ops.txt",
+          "review_topic": "管理员本地恢复",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "appearance.themes",
+      "domain": "安全与外观",
+      "title": "主题、品牌与菜单",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "亮/暗、个人默认、多个视觉主题、标题/Logo/称号、菜单排序显隐、壁纸上传、色调、登录框透明度、PRO CSS。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1007",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "主题、品牌与菜单",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1008",
+          "local_path": "docs-extracted/custom-css.txt",
+          "review_topic": "主题、品牌与菜单",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-1009",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "appearance.mobile",
+      "domain": "安全与外观",
+      "title": "移动端与多语言",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "响应式页面、移动操作入口、国际化；Mini App与探针可配主题及CSS。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-1010",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-1011"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-1012",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "data.manual_backup",
+      "domain": "数据维护与集成",
+      "title": "完整备份与恢复",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "导出ZIP、上传校验恢复、初始化向导恢复；包含数据库、订阅、证书/私钥；旧zip.enc可用原密码恢复。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1013",
+          "local_path": "docs-extracted/backup-restore.txt",
+          "review_topic": "完整备份与恢复",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "data.remote_backup",
+      "domain": "数据维护与集成",
+      "title": "定时远端备份",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "WebDAV、S3兼容、Google Drive；间隔、保留份数、立即执行、写列删连接测试、成功时间与任务记录。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1014",
+          "local_path": "docs-extracted/backup-auto-sync.txt",
+          "review_topic": "定时远端备份",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-1015",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "data.database",
+      "domain": "数据维护与集成",
+      "title": "SQLite/PostgreSQL",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "安装选择或设置页双向迁移；PG dump/restore备份；SQLite完整性检查与有效应急副本恢复。",
+      "confirmation_status": "partly_verified_public_files",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1016",
+          "local_path": "docs-extracted/backup-restore.txt",
+          "review_topic": "SQLite/PostgreSQL",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-1017",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-1018"
+        }
+      ]
+    },
+    {
+      "id": "data.migration",
+      "domain": "数据维护与集成",
+      "title": "外部数据迁移",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "五步向导：备份、导入、服务器接入、旧节点认领/补email、验证；用户/短链/节点/模板/规则/订阅等迁入，支持回滚。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1020",
+          "local_path": "docs-extracted/upgrade-from-mmw.txt",
+          "review_topic": "外部数据迁移",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    },
+    {
+      "id": "data.logs",
+      "domain": "数据维护与集成",
+      "title": "日志中心",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "系统、Agent交互、定时任务、安全日志四类；级别、行数过滤、清空；Agent日志开关与自动清理。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1022",
+          "local_path": "docs-extracted/faq-common-ops.txt",
+          "review_topic": "日志中心",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-1023",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-1024"
+        }
+      ]
+    },
+    {
+      "id": "data.scheduler",
+      "domain": "数据维护与集成",
+      "title": "任务调度与运行记录",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "流量/速度上报、同步、清理、备份等周期配置与执行日志；孤儿子账户清理、配置/凭据修复回填任务。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1025",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "任务调度与运行记录",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-1026",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-1027"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-1028",
+          "version": "v0.5.5-beta.6",
+          "prerelease": true,
+          "published_at": "2026-09-14T15:43:30Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.5-beta.6"
+        }
+      ]
+    },
+    {
+      "id": "data.updates",
+      "domain": "数据维护与集成",
+      "title": "安装、升级与渠道",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "原生/Docker/单二进制；初始化向导、稳定/预发布切换、网页检查更新、CDN下载；签名Guard参数仅能据公开安装器确认。",
+      "confirmation_status": "partly_verified_public_files",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-1029",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-1030"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-1031",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-1032"
+        },
+        {
+          "kind": "public_repository_file",
+          "url": "/docs/reference/reference-records.md#record-1033",
+          "commit": "f16a72407366c888e4c9685afc784e7f666e268f",
+          "local_path": "/docs/reference/reference-records.md#record-1034"
+        }
+      ]
+    },
+    {
+      "id": "data.mcp",
+      "domain": "数据维护与集成",
+      "title": "MCP自动化接口",
+      "actors": [
+        "管理员",
+        "普通用户"
+      ],
+      "scope": "/mcp streamable-HTTP、个人Token继承权限、危险写操作确认参数；稳定版说明扩充至109工具，旧文档26工具已滞后。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1035",
+          "local_path": "docs-extracted/mcp.txt",
+          "review_topic": "MCP自动化接口",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_release_notes",
+          "url": "/docs/reference/reference-records.md#record-1036",
+          "version": "v0.5.4",
+          "prerelease": false,
+          "published_at": "2026-09-08T11:03:18Z",
+          "local_path": "releases.json",
+          "json_locator": "tag_name=v0.5.4"
+        }
+      ]
+    },
+    {
+      "id": "data.license",
+      "domain": "数据维护与集成",
+      "title": "许可证与PRO能力",
+      "actors": [
+        "管理员"
+      ],
+      "scope": "许可证状态/档位/有效期、服务器/节点/用户配额、功能开关、称号展示；测速/内嵌/限速/共享/品牌等有PRO依赖。",
+      "confirmation_status": "confirmed_documented",
+      "latest_prerelease_only": false,
+      "runtime_tested": false,
+      "evidence": [
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1037",
+          "local_path": "docs-extracted/system-settings.txt",
+          "review_topic": "许可证与PRO能力",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1038",
+          "local_path": "docs-extracted/embedded-xray.txt",
+          "review_topic": "许可证与PRO能力",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1039",
+          "local_path": "docs-extracted/share-server.txt",
+          "review_topic": "许可证与PRO能力",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        },
+        {
+          "kind": "official_documentation",
+          "url": "/docs/reference/reference-records.md#record-1040",
+          "local_path": "docs-extracted/node-speedtest.txt",
+          "review_topic": "许可证与PRO能力",
+          "source_snapshot_sha256": "f9b942d9db7b4f7d301c206a560d78d747a3f48eb01e6b68d7f0d587b4fb7f54"
+        }
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "topic": "发布到官方拼车页",
+      "evidence": "README v0.4.8-beta.3、套餐文档仍列发布；v0.5.5-beta.1发布说明明确移除入口和/admin/carpool路由。",
+      "resolution": "稳定版历史功能与最新预发布停用并列；基础套餐拼车、我的转发继续存在。"
+    },
+    {
+      "topic": "套餐不选节点的含义",
+      "evidence": "套餐文档与v0.5.4写留空=全部并二次确认；v0.5.5-beta.1将“未勾节点时订阅发全部、Agent不建client”列为修复。",
+      "resolution": "不能从发布说明判定修复后的精确选择语义。ASWired需显式“全部/指定/无”，实际验收前列待验证。"
+    },
+    {
+      "topic": "MCP工具数量",
+      "evidence": "官方MCP文档26；v0.5.4发布说明63→109。",
+      "resolution": "以v0.5.4声明109为新版本数量；公开源码不可得，无法列全109个签名。"
+    },
+    {
+      "topic": "连接数、设备数、IP数",
+      "evidence": "内嵌/比较文档称设备数，限速/套餐文档明确device_limit实为并发连接数；v0.5.5-beta.5另增同时在线IP数限制。",
+      "resolution": "ASWired分别设计并发连接数与同时在线IP上限；没有证据可把任一项称精确设备数。"
+    },
+    {
+      "topic": "备份是否加密",
+      "evidence": "旧README v0.3.0称增加备份加密；当前备份文档说新导出普通ZIP，仅兼容旧zip.enc恢复。",
+      "resolution": "现状应写普通ZIP+历史加密格式兼容；新增加密备份是ASWired产品决定。"
+    },
+    {
+      "topic": "Pull/HTTP方向",
+      "evidence": "system-settings旧段写Master拉Agent；remote-servers及FAQ写Agent从Master取指令。",
+      "resolution": "承认三模式与回退，但以服务管理文档表述为优先；协议时序需Agent源码或运行验证。"
+    },
+    {
+      "topic": "普通用户自建路由出站",
+      "evidence": "同一路由出站文档前段称仅管理员，后段详细列用户开关、POST /api/user/routed-outbound和配额。",
+      "resolution": "按后段条件能力收录；不把管理员套餐池与成员私有路由混为一类。"
+    },
+    {
+      "topic": "支持客户端数量",
+      "evidence": "README具体列10个格式家族；docs称12+，也包含auto、ClashMeta和clash-to-loon等模式。",
+      "resolution": "逐个列明确名称，不声称已验证12个独立转换器或全部协议跨客户端可用。"
+    },
+    {
+      "topic": "AnyTLS REALITY",
+      "evidence": "协议矩阵标题称全部经mihomo测试，但同表明示该组合没有Clash/Mihomo/sing-box客户端支持。",
+      "resolution": "区分管理后端能配置与常用客户端能连接；不要纳入通用兼容承诺。"
+    },
+    {
+      "topic": "TG管理员数量",
+      "evidence": "旧README提及禁止绑定第二个TG管理员；当前Bot文档允许逗号分隔多个管理员ID。",
+      "resolution": "收录管理员名单机制，账号绑定与Bot授权名单上限需实测。"
+    },
+    {
+      "topic": "联邦加密保证",
+      "evidence": "分享文档称Owner不可窥探操作且不支持加密可降级；最新稳定版强制加密说明、权限模型与转发实现未公开。",
+      "resolution": "只确认官方声称的HTTPS/ECDH/权限边界，不背书密码学安全属性。"
+    },
+    {
+      "topic": "公开仓库许可及源码",
+      "evidence": "README结尾写MIT，旧更新日志写Source Available License；树中无LICENSE与应用源码。",
+      "resolution": "只审查公开资料；不可据此认定应用为MIT开源或可直接复用全部代码。"
+    },
+    {
+      "topic": "文档时间",
+      "evidence": "README日志停8月17；docs changelog快照称8月16最新版；GitHub releases已到9月14。",
+      "resolution": "版本判断以Release元数据；每项注明文档或Release层级，不能将搜索索引时间当应用版本。"
+    },
+    {
+      "topic": "PG备份行为",
+      "evidence": "自动备份页允许数据库勾选；备份恢复页又说PG会拒绝无数据库ZIP。",
+      "resolution": "必须以恢复演练确认；ASWired验收要求PG完整备份明确包含数据库。"
+    }
+  ],
+  "documented_routes": [
+    {
+      "method": "GET",
+      "path": "/api/public/probe-servers",
+      "meaning": "公开探针状态",
+      "evidence": "README.md / docs/probe-api",
+      "runtime_verified": false
+    },
+    {
+      "method": "WS",
+      "path": "/api/public/probe-ws",
+      "meaning": "公开探针实时推送",
+      "evidence": "README.md / docs/probe-api",
+      "runtime_verified": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/public/probe-series",
+      "meaning": "探针历史序列",
+      "evidence": "README.md / docs/probe-api",
+      "runtime_verified": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/clash/subscribe",
+      "meaning": "格式化订阅入口",
+      "evidence": "docs/generator",
+      "runtime_verified": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/user/package-subscribe",
+      "meaning": "套餐订阅",
+      "evidence": "docs/cloudflare-tunnel",
+      "runtime_verified": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/subscribe",
+      "meaning": "兼容订阅入口",
+      "evidence": "docs/cloudflare-tunnel",
+      "runtime_verified": false
+    },
+    {
+      "method": "GET",
+      "path": "/x/…",
+      "meaning": "短链接/套餐链接前缀",
+      "evidence": "docs/generator / docs/cloudflare-tunnel",
+      "runtime_verified": false
+    },
+    {
+      "method": "GET/POST",
+      "path": "/api/admin/remote/routing",
+      "meaning": "远程路由读取修改",
+      "evidence": "docs/xray-routing",
+      "runtime_verified": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/admin/remote/outbounds",
+      "meaning": "远程出站列表",
+      "evidence": "docs/xray-routing",
+      "runtime_verified": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/remote/services/control",
+      "meaning": "远程服务控制",
+      "evidence": "docs/xray-routing",
+      "runtime_verified": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/routed-outbound",
+      "meaning": "管理员路由子节点",
+      "evidence": "docs/routed-outbound",
+      "runtime_verified": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/user/routed-outbound",
+      "meaning": "成员私有路由子节点",
+      "evidence": "docs/routed-outbound",
+      "runtime_verified": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/admin/certificates/upload",
+      "meaning": "证书Webhook",
+      "evidence": "docs/certificates",
+      "runtime_verified": false
+    },
+    {
+      "method": "MCP/HTTP",
+      "path": "/mcp",
+      "meaning": "streamable-HTTP接口",
+      "evidence": "docs/mcp",
+      "runtime_verified": false
+    },
+    {
+      "method": "UI",
+      "path": "/tg-app",
+      "meaning": "内置Telegram Mini App",
+      "evidence": "docs/tool-mmwx-tgbot",
+      "runtime_verified": false
+    },
+    {
+      "method": "UI",
+      "path": "/system-settings",
+      "meaning": "系统设置页",
+      "evidence": "docs/system-settings",
+      "runtime_verified": false
+    },
+    {
+      "method": "UI",
+      "path": "/migrate-from-mmw",
+      "meaning": "迁移向导",
+      "evidence": "docs/upgrade-from-mmw",
+      "runtime_verified": false
+    },
+    {
+      "method": "prefix",
+      "path": "/api/admin/migrate/…",
+      "meaning": "文档声称6个管理员迁移接口，未列完整",
+      "evidence": "docs/upgrade-from-mmw",
+      "runtime_verified": false
+    },
+    {
+      "method": "prefix",
+      "path": "/api/child/…",
+      "meaning": "联邦转发白名单前缀",
+      "evidence": "docs/share-server",
+      "runtime_verified": false
+    },
+    {
+      "method": "unknown",
+      "path": "/api/admin/traffic-ledger/forward",
+      "meaning": "新版转发台账；方法未公开",
+      "evidence": "release v0.5.5-beta.5",
+      "runtime_verified": false
+    },
+    {
+      "method": "removed",
+      "path": "/api/admin/carpool",
+      "meaning": "v0.5.5-beta.1移除",
+      "evidence": "release v0.5.5-beta.1",
+      "runtime_verified": false
+    }
+  ],
+  "unconfirmed": [
+    "应用后端/前端源码、全量API路由、中间件与数据库schema在本次公开仓库树中不可得，无法做到实现级全功能证明。",
+    "原生“车主/车队”多租户角色、细粒度RBAC、独立车库空间未获确认；不能直接等同于联邦Owner。",
+    "支付网关、余额、在线订单、账单/发票、自动收款对账、退款、资金托管或平台抽成未获确认。用户自助续费并不证明支付闭环。",
+    "拼车市场的车位数、候补队列、预约、审核、拼车群、成员AA分摊与费用账本未获确认。",
+    "工单模块未获确认；发布日志的“工单批”是维护描述，不能据此发明产品工单系统。",
+    "邮件/短信/企业微信/Discord/任意Webhook通知渠道未获确认；明确证据为Telegram/Bot/Mini App及证书Webhook。",
+    "OAuth/OIDC/SAML组织登录、密码策略、完整会话设备清单、审计日志不可篡改与租户数据隔离未获确认。",
+    "服务器SSH网页终端、任意远程Shell、Docker全生命周期、操作系统补丁管理未获确认；不要由Agent推断通用运维平台。",
+    "Xray之外sing-box核心的远程完整管理未获确认；SingBox输出与AnyTLS等可配置不能等同于sing-box管理。",
+    "应用自动回滚、数据库迁移向后兼容、多主高可用、横向扩容、离线可用SLA未获确认。",
+    "在线IP历史保留时间、完整流量账本保留策略、删除用户后的隐私清理及导出能力未获确认。",
+    "MCP 109工具的全部签名和权限、最新合并订阅去重/优先级算法、节点空选精确语义仍需实机或上游接口材料。",
+    "文档里的交互演示明确是本地mock，不能视为真实产品功能测试；本次未运行任何目标仓库脚本或二进制。"
+  ],
+  "source_manifest": {
+    "reference_document": "/docs/reference/reference-records.md#record-1041"
+  }
+}

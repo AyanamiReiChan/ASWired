@@ -1,0 +1,4 @@
+export type TurnstileAPI={render:(container:HTMLElement,options:Record<string,unknown>)=>string;remove:(id:string)=>void;reset:(id:string)=>void};
+declare global{interface Window{turnstile?:TurnstileAPI}}
+let loading:Promise<TurnstileAPI>|null=null;
+export function loadTurnstile():Promise<TurnstileAPI>{if(window.turnstile)return Promise.resolve(window.turnstile);if(loading)return loading;loading=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';script.async=true;script.defer=true;script.onload=()=>window.turnstile?resolve(window.turnstile):reject(new Error('人机验证服务加载失败'));script.onerror=()=>{script.remove();loading=null;reject(new Error('无法加载人机验证服务，请检查网络后重试'));};document.head.append(script);});return loading;}

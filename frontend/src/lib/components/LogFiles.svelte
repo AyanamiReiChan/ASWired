@@ -1,0 +1,19 @@
+<script lang="ts">
+ import {onDestroy} from 'svelte';
+ import Icon from './Icon.svelte';import Modal from './Modal.svelte';
+ import {overviewBytes} from '../overview';import {errorMessage,toast} from '../store.svelte';
+ import {removeLogFile,type LogFile,type LogSnapshot,type Inventory,type LogScope} from '../file-logs';
+ let {inventory=null,scope,busy=false,limit=100,onRefresh,onCleared}=$props<{inventory:Inventory|null;scope:LogScope;busy?:boolean;limit?:number;onRefresh:()=>void;onCleared:(result?:LogSnapshot)=>void|Promise<void>}>();
+ let open=$state(false),target=$state<LogFile|null>(null),deleting=$state(false),error=$state(''),reviewScope=$state<LogScope>({stream:'system'});
+ let active=true;
+ onDestroy(()=>{active=false;});
+ function review(file:LogFile|null){target=file;reviewScope={...scope};error='';open=true;}
+ async function remove(){if(deleting)return;deleting=true;error='';try{const result=await removeLogFile(reviewScope,target?.name,limit);if(!active)return;open=false;await onCleared(result);toast('对应文件内容已清理，新日志将继续写入');}catch(e){if(active){error=errorMessage(e);await onCleared();}}finally{deleting=false;}}
+</script>
+<section class="files" aria-label="日志文件">
+ <header><div><Icon name="file" size={16}/><strong>日志文件</strong>{#if inventory}<span>共 {inventory.files.length} 个 · {overviewBytes(inventory.totalSize)}</span><code>{inventory.directory}</code>{/if}</div><div><button class="button small" aria-label={scope.serverId?'同步日志文件':'刷新日志文件'} disabled={busy||deleting} onclick={onRefresh}><Icon name="refresh" size={15}/>{scope.serverId?'同步':''}</button><button class="button small danger" disabled={!inventory?.totalSize||busy||deleting} onclick={()=>review(null)}><Icon name="trash" size={15}/>清空全部</button></div></header>
+ {#each inventory?.files??[] as file(file.name)}<div class="file-row"><code>{file.name}</code>{#if file.active}<span class="writing">写入中</span>{/if}<span>{overviewBytes(file.size)}</span><time>{new Date(file.modifiedAt).toLocaleString('zh-CN',{hour12:false})}</time><button class="icon-button" aria-label={`${file.active?'清空':'删除'} ${file.name}`} title={file.active?'清空当前文件':'删除归档文件'} disabled={busy||deleting} onclick={()=>review(file)}><Icon name="trash" size={15}/></button></div>{:else}<p class="empty-files">{busy?'正在读取文件…':scope.serverId&&!inventory?'尚未同步日志文件':'暂无日志文件'}</p>{/each}
+ <footer>{scope.serverId?'上方内容是手动同步时读取的文件快照；点击同步才会更新，清理后使用本次返回结果。':'上方内容直接读取这些文件。清空或删除后同步更新；'}单文件 {inventory?overviewBytes(inventory.maxSize):'50 MiB'} 自动轮转，最多保留 {inventory?.maxArchives??5} 个归档。</footer>
+</section>
+<Modal bind:open title={target?(target.active?'清空日志文件':'删除日志文件'):'清空全部日志文件'} description="上方对应日志内容也会移除，清理后无法恢复。"><p>{target?.name??'当前选中日志类型的全部文件'}{reviewScope.serverId?' · 所选 Agent':''}</p><p>正在写入的文件会清空后继续记录。运行中的任务、配置和封禁规则不受影响。</p>{#if error}<p class="error" role="alert">{error}</p>{/if}<div class="modal-actions"><button class="button" disabled={deleting} onclick={()=>open=false}>取消</button><button class="button danger" disabled={deleting} onclick={remove}>{deleting?'正在清理…':'确认清理'}</button></div></Modal>
+<style>.files{border:1px solid var(--border);margin-top:14px}.files header,.files header>div,.file-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.files header{padding:12px 14px;justify-content:space-between;border-bottom:1px solid var(--line)}.files strong{font-size:13px}.files span,.files code,.files time{font-size:11px;color:var(--muted)}.files code{overflow-wrap:anywhere}.file-row{padding:13px 14px;border-bottom:1px solid var(--line)}.file-row .icon-button{margin-left:auto}.writing{background:color-mix(in srgb,var(--primary) 12%,transparent);color:var(--primary)!important;padding:2px 6px}.files footer,.empty-files{font-size:11px;color:var(--muted);padding:12px 14px;margin:0;line-height:1.7}@media(max-width:700px){.file-row time{flex-basis:65%}}</style>

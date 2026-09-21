@@ -1,0 +1,217 @@
+openapi: 3.1.0
+info:
+  title: ASWired 核心管理 API 设计草案
+  version: 0.3.1-design-agent-only
+  description: 早期ASWired业务接口参考草案，不是实际路由或生产接口规范，也不是新增角色、审批或账务流程的实施要求。当前范围以docs/CURRENT-SCOPE.md为准，服务器仅支持原生Agent接入。用户JWT采用MM-Authorization，实际格式和有效期以当前主控实现为准。
+servers:
+  - url: https://aswired.example.test
+security:
+  - UserJWT: []
+  - ApiToken: []
+paths:
+  /api/v1/servers:
+    get:
+      operationId: listServers
+      summary: 分页读取本主体有权查看的服务器
+      parameters:
+        - {name: cursor, in: query, schema: {type: string}}
+        - {name: limit, in: query, schema: {type: integer, minimum: 1, maximum: 100, default: 20}}
+      responses:
+        '200':
+          description: 列表不包含密钥
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: {type: array, items: {$ref: '#/components/schemas/Server'}}
+                  nextCursor: {type: [string, 'null']}
+        '403': {$ref: '#/components/responses/Failure'}
+    post:
+      operationId: createServer
+      summary: 创建服务器库存，不自动安装 Agent
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [name, address]
+              properties:
+                name: {type: string, minLength: 1, maxLength: 100}
+                address: {type: string, maxLength: 253}
+                backendKind: {type: string, const: native-agent, default: native-agent}
+      responses:
+        '201':
+          description: 已创建库存
+          content: {application/json: {schema: {$ref: '#/components/schemas/Server'}}}
+        '409': {$ref: '#/components/responses/Failure'}
+  /api/v1/servers/{id}:
+    parameters: [{$ref: '#/components/parameters/ResourceId'}]
+    patch:
+      operationId: updateServerInventory
+      summary: 按版本更新库存字段
+      parameters: [{$ref: '#/components/parameters/IfMatch'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              minProperties: 1
+              properties:
+                name: {type: string, minLength: 1, maxLength: 100}
+                region: {type: string, maxLength: 100}
+                monthlyCostMinor: {$ref: '#/components/schemas/UnsignedDecimal'}
+                currency: {type: string, pattern: '^[A-Z]{3}$'}
+      responses:
+        '200':
+          description: 更新库存成功，不等于运行配置已发布
+          content: {application/json: {schema: {$ref: '#/components/schemas/Server'}}}
+        '412': {$ref: '#/components/responses/Failure'}
+  /api/v1/carpools/{id}/seat-holds:
+    parameters: [{$ref: '#/components/parameters/ResourceId'}]
+    post:
+      operationId: reserveCarpoolSeat
+      summary: 在事务内暂留最后席位，过期时间由后端确定
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [invitationToken]
+              properties:
+                invitationToken: {type: string, minLength: 16, maxLength: 256, writeOnly: true}
+      responses:
+        '201':
+          description: 暂留成功；调用主体来自会话，不能由请求冒充其他成员
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [id, state, expiresAt]
+                properties:
+                  id: {type: string, format: uuid}
+                  state: {const: RESERVED}
+                  expiresAt: {type: string, format: date-time}
+        '409': {$ref: '#/components/responses/Failure'}
+  /api/v1/billing-periods/{id}/allocation-preview:
+    parameters: [{$ref: '#/components/parameters/ResourceId'}]
+    post:
+      operationId: previewCostAllocation
+      summary: 按后端费用项和冻结参与者试算，不写入财务分录
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [policy, participantVersion]
+              properties:
+                policy: {type: string, enum: [all-seats, active-members, weighted]}
+                participantVersion: {$ref: '#/components/schemas/UnsignedDecimal'}
+      responses:
+        '200':
+          description: 报价快照，金额总和等于分摊成本
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  previewId: {type: string, format: uuid}
+                  totalMinor: {$ref: '#/components/schemas/UnsignedDecimal'}
+                  currency: {type: string}
+                  expiresAt: {type: string, format: date-time}
+                  shares:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        subjectId: {type: string, format: uuid}
+                        amountMinor: {$ref: '#/components/schemas/UnsignedDecimal'}
+        '412': {$ref: '#/components/responses/Failure'}
+  /api/v1/subjects/{id}/credential-rotations:
+    parameters: [{$ref: '#/components/parameters/ResourceId'}]
+    post:
+      operationId: rotateSubjectCredentials
+      summary: 创建独立凭据轮换任务，逐节点确认撤销旧凭据
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/IfMatch'}]
+      responses:
+        '202': {$ref: '#/components/responses/Accepted'}
+        '403': {$ref: '#/components/responses/Failure'}
+  /api/v1/operations/{id}:
+    parameters: [{$ref: '#/components/parameters/ResourceId'}]
+    get:
+      operationId: getOperation
+      summary: 查询每个目标的交付结果，不将部分成功显示为全部完成
+      responses:
+        '200':
+          description: 操作投影
+          content: {application/json: {schema: {$ref: '#/components/schemas/Operation'}}}
+        '404': {$ref: '#/components/responses/Failure'}
+components:
+  securitySchemes:
+    UserJWT: {type: apiKey, in: header, name: MM-Authorization, description: 携带签名JWT；apiKey仅用于描述自定义HTTP头，具体前缀、算法和有效期待固定版本验证，不表示采用随机API密钥}
+    ApiToken: {type: http, scheme: bearer, description: 业务API Token示例；与登录JWT和节点Token分离，确切格式与权限按上游固定版本核对}
+  parameters:
+    ResourceId: {name: id, in: path, required: true, schema: {type: string, format: uuid}}
+    IfMatch: {name: If-Match, in: header, required: true, schema: {type: string}, description: 资源读取返回的ETag；缺失返回428，不匹配412}
+    IdempotencyKey: {name: Idempotency-Key, in: header, required: true, schema: {type: string, minLength: 16, maxLength: 128}, description: 同主体同路径同请求重放返回原结果，冲突请求体返回409}
+  schemas:
+    UnsignedDecimal: {type: string, pattern: '^(0|[1-9][0-9]*)$', description: 金额、字节、版本以十进制字符串跨JSON传递}
+    Server:
+      type: object
+      required: [id, name, version, backendKind]
+      properties:
+        id: {type: string, format: uuid}
+        name: {type: string}
+        version: {$ref: '#/components/schemas/UnsignedDecimal'}
+        backendKind: {type: string, const: native-agent}
+        observedAt: {type: [string, 'null'], format: date-time}
+        freshness: {type: string, enum: [FRESH, STALE, UNKNOWN]}
+    Operation:
+      type: object
+      required: [id, state, targets]
+      properties:
+        id: {type: string, format: uuid}
+        state: {type: string, enum: [QUEUED, RUNNING, PARTIAL, SUCCEEDED, FAILED, CANCELLED]}
+        requiredTargetsSatisfied: {type: boolean}
+        targets:
+          type: array
+          items:
+            type: object
+            required: [nodeId, state]
+            properties:
+              nodeId: {type: string, format: uuid}
+              state: {type: string, enum: [QUEUED, NODE_PENDING, PREPARED, APPLIED, VERIFIED, FAILED]}
+              errorCode: {type: [string, 'null']}
+              retryable: {type: boolean}
+    Failure:
+      type: object
+      required: [error, meta]
+      properties:
+        error:
+          type: object
+          required: [code, message, retryable]
+          properties:
+            code: {type: string}
+            message: {type: string}
+            retryable: {type: boolean}
+        meta:
+          type: object
+          properties:
+            requestId: {type: string}
+  responses:
+    Failure:
+      description: 结构化错误，敏感资源信息不泄露
+      content: {application/json: {schema: {$ref: '#/components/schemas/Failure'}}}
+    Accepted:
+      description: 已持久化任务，尚未声明节点生效
+      content: {application/json: {schema: {$ref: '#/components/schemas/Operation'}}}

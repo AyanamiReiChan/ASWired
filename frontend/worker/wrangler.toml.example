@@ -1,0 +1,11 @@
+name = "aswired-probe"
+main = "index.mjs"
+compatibility_date = "2026-09-15"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = true
+
+[vars]
+ASWIRED_MASTER_ORIGIN = "https://panel.example.com"

@@ -1,0 +1,11 @@
+node_modules
+.svelte-kit
+build
+worker/public
+.git
+.env*
+outputs
+.sites-runtime
+local-docs
+static/docs
+*.log
