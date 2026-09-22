@@ -12,12 +12,25 @@ const js = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarg
 const loginSource = fs.readFileSync(new URL('../src/lib/unified-login.ts', import.meta.url), 'utf8');
 const loginJS = ts.transpileModule(loginSource, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
 const loginURL = 'data:text/javascript;base64,' + Buffer.from(loginJS).toString('base64');
+const cacheSource=fs.readFileSync(new URL('../src/lib/snapshot-cache.ts',import.meta.url),'utf8');
+const cacheJS=ts.transpileModule(cacheSource,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;
+const cacheURL='data:text/javascript;base64,'+Buffer.from(cacheJS).toString('base64');
 const compiled = compileModule(js, { filename: 'store.svelte.js', generate: 'client' }).js.code
   .replace(/(['"])svelte\/internal\/client\1/g, JSON.stringify(pathToFileURL(require.resolve('svelte/internal/client')).href))
-  .replace(/(['"])\.\/unified-login\1/g, JSON.stringify(loginURL));
+  .replace(/(['"])\.\/unified-login\1/g, JSON.stringify(loginURL))
+  .replace(/(['"])\.\/snapshot-cache\1/g, JSON.stringify(cacheURL));
 let serial = 0;
 const respond = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 const account = { id: 'user-1', username: 'test-admin', role: 'admin' };
+function probeDocument(t){
+ const previous=globalThis.document,submitted=[];
+ globalThis.document={hidden:false,body:{append(){}},createElement(tag){
+  if(tag==='form')return {style:{},append(input){this.ticket=input.value;},submit(){submitted.push({action:this.action,method:this.method,ticket:this.ticket});},remove(){}};
+  return {};
+ }};
+ t.after(()=>{if(previous===undefined)delete globalThis.document;else globalThis.document=previous;});
+ return submitted;
+}
 const state = (data = {}, user = account) => ({ data, user, settings: { workspace: 'ASWired' }, capabilities: {} });
 function deferred() { let resolve; const promise = new Promise(done => resolve = done); return { promise, resolve }; }
 const minuteTraffic = (id, total = 1, to = Date.parse('2026-09-17T12:34:56Z')) => ({ interval: '1m', bucketSeconds: 60, from: to - 86400000, to, series: id ? [{ id, at: Math.floor(to / 60000) * 60000, total }] : [], incomplete: false });
@@ -25,9 +38,12 @@ async function fresh(t, handler, trafficHandler = () => Promise.resolve(respond(
   const storage = new Map();
   const originalFetch = globalThis.fetch;
   const originalStorage = globalThis.sessionStorage;
-  globalThis.fetch = (path,init) => path === '/api/traffic?range=24h&interval=1m' ? minuteHandler(path,init) : path.startsWith('/api/traffic?') ? trafficHandler(path,init) : handler(path,init);
+  // Existing session/race tests use legacy payload fixtures. Incremental wire
+  // responses and page scheduling have separate tests below.
+  globalThis.fetch = (path,init) => {path=path.replace('/api/state/sync','/api/state').replace('&sync=1','');return path === '/api/traffic?range=24h&interval=1m' ? minuteHandler(path,init) : path.startsWith('/api/traffic?') ? trafficHandler(path,init) : handler(path,init);};
   globalThis.sessionStorage = { getItem: key => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value), removeItem: key => storage.delete(key) };
   const store = await import('data:text/javascript;base64,' + Buffer.from(compiled + `\n// instance ${++serial}`).toString('base64'));
+  store.setWorkspacePage('/traffic');
   t.after(() => { store.stopRefresh(); globalThis.fetch = originalFetch; if (originalStorage === undefined) delete globalThis.sessionStorage; else globalThis.sessionStorage = originalStorage; });
   return { store, storage };
 }
@@ -79,6 +95,42 @@ test('login sends JWT in MM-Authorization and uses server-owned role', async t =
   assert.deepEqual(JSON.parse(calls[0].init.body), { username: 'test-admin', password: 'test-only-password' });
   assert.equal(store.demo.user.id, account.id);
   assert.equal(store.demo.role, '管理员');
+});
+
+test('Komari handoff uses the current administrator and retains the ASWired session',async t=>{
+ const submitted=probeDocument(t);
+ const handoff={kind:'komari',action:'https://probe.example.test/auth/aswired/session',ticket:'t'.repeat(48)};
+ const {store,storage}=await fresh(t,async(path,init)=>{
+  if(path==='/api/komari/login'){assert.equal(init.method,'POST');assert.equal(init.headers.get('MM-Authorization'),'admin.jwt');return respond(handoff);}
+  return respond(state());
+ });
+ await store.acceptSession({token:'admin.jwt',user:account});
+ await store.openKomari();
+ assert.deepEqual(submitted,[{action:handoff.action,method:'POST',ticket:handoff.ticket}]);
+ assert.equal(storage.get('aswired-session'),'admin.jwt');
+ assert.equal(store.demo.user.id,account.id);
+});
+
+test('ordinary members cannot request a Komari administrator handoff',async t=>{
+ const submitted=probeDocument(t),member={...account,role:'user'};
+ const {store}=await fresh(t,async path=>{assert.notEqual(path,'/api/komari/login');return respond(state({},member));});
+ await store.acceptSession({token:'member.jwt',user:member});
+ await assert.rejects(store.openKomari(),/只有 ASWired 管理员/);
+ assert.equal(submitted.length,0);
+});
+
+for(const reason of ['aborted','account switched'])test(`late Komari handoff is discarded when ${reason}`,async t=>{
+ const submitted=probeDocument(t),pending=deferred(),abort=new AbortController();
+ let user=account;
+ const {store,storage}=await fresh(t,async path=>path==='/api/komari/login'?pending.promise:respond(state({},user)));
+ await store.acceptSession({token:'first.jwt',user});
+ const handoff=store.openKomari(abort.signal);
+ if(reason==='aborted')abort.abort();
+ else {user={...account,id:'second-admin'};await store.acceptSession({token:'second.jwt',user});}
+ pending.resolve(respond({kind:'komari',action:'https://probe.example.test/auth/aswired/session',ticket:'t'.repeat(48)}));
+ await handoff;
+ assert.equal(submitted.length,0);
+ assert.equal(storage.get('aswired-session'),reason==='aborted'?'first.jwt':'second.jwt');
 });
 
 test('members keep their own subscription usage without requesting or caching operations data', async t => {
@@ -609,3 +661,31 @@ for (const status of [200, 401, 403]) {
     assert.equal(store.demo.minuteTrafficError, '');
   });
 }
+
+test('page demand and background cadence avoid global history downloads',async t=>{
+ let summaries=0,minutes=0,states=0;
+ const {store}=await fresh(t,async()=>{states++;return respond(state());},async()=>{summaries++;return respond(traffic('fixture'));},async()=>{minutes++;return respond(minuteTraffic('fixture'));});
+ store.setWorkspacePage('/servers');await store.acceptSession({token:'test.jwt',user:account});
+ await store.refreshState(false,true);assert.equal(summaries,0);assert.equal(minutes,0);assert.equal(states,2);
+ store.setWorkspacePage('/');await store.refreshPageData();assert.equal(summaries,1);assert.equal(minutes,0);
+ store.setWorkspacePage('/traffic');await store.refreshPageData();assert.equal(minutes,1);
+ await store.refreshState(false,true);assert.equal(summaries,1);assert.equal(minutes,1);
+ const original=Date.now;const now=original();Date.now=()=>now+31000;t.after(()=>Date.now=original);
+ await store.refreshState(false,true);assert.equal(summaries,1);assert.equal(minutes,2);
+ store.setWorkspacePage('/servers');Date.now=()=>now+120000;await store.refreshState(false,true);assert.equal(summaries,1);assert.equal(minutes,2);
+});
+
+test('incremental workspace applies field changes and removal without losing cached configuration',async t=>{
+ const paths=[];let count=0;
+ const {store}=await fresh(t,async path=>{paths.push(path);if(++count===1)return respond({cursor:'one',reset:true,data:{user:account,data:{servers:{a:{id:'a',name:'static',cpu:1},b:{id:'b'}}},order:{servers:['a','b']},settings:{theme:'glass'},capabilities:{},pendingTasks:2}});return respond({cursor:'two',base:'one',changes:{data:{servers:{a:{cpu:9}}},order:{servers:['a']},pendingTasks:0},removed:[['data','servers','b']]});});
+ store.setWorkspacePage('/servers');await store.acceptSession({token:'test.jwt',user:account});await store.refreshState();
+ assert.deepEqual(store.demo.data.servers,[{id:'a',name:'static',cpu:9}]);assert.equal(store.demo.settings.theme,'glass');assert.equal(store.workspace.pendingTasks,0);assert.equal(paths[1],'/api/state?cursor=one');
+});
+
+test('task lists load only on task and certificate pages while details remain separate',async t=>{
+ let taskReads=0;
+ const {store}=await fresh(t,async path=>{if(path.startsWith('/api/operations/tasks')){taskReads++;return respond({cursor:'t',reset:true,data:{rows:{x:{id:'x',status:'成功'}},order:['x']}});}return respond(state());});
+ store.setWorkspacePage('/servers');await store.acceptSession({token:'test.jwt',user:account});assert.equal(taskReads,0);
+ store.setWorkspacePage('/tasks');await store.refreshPageData();assert.equal(taskReads,1);assert.equal(store.demo.data.tasks[0].id,'x');
+ store.setWorkspacePage('/servers');await store.refreshState(false,true);assert.equal(taskReads,1);
+});

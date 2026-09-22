@@ -4,7 +4,7 @@
  import CountryBadge from '../components/CountryBadge.svelte';
  import DailyTrafficChart from '../components/DailyTrafficChart.svelte';
  import TrafficRanking from '../components/TrafficRanking.svelte';
- import {api, APIError, demo, errorMessage} from '../store.svelte';
+ import {trafficAPI, APIError, demo, errorMessage} from '../store.svelte';
  import {quotaSummary, serverQuota, liveRates, trafficRanking, overviewBytes, nonnegative} from '../overview';
  import {monthlyTrafficReset} from '../server-display';
  import {formatNumber} from '../format';
@@ -35,13 +35,13 @@
    if(busy||controller.signal.aborted)return;
    busy=true;loading=true;
    try{
-    const data=await api(`/api/traffic?range=${period}${period==='24h'?'&interval=1m':''}`,{signal:controller.signal});
+    const data=await trafficAPI(`/api/traffic?range=${period}${period==='24h'?'&interval=1m':''}`,{signal:controller.signal});
     if(controller.signal.aborted||demo.user?.id!==identity||demo.user?.role!=='admin')return;
     result={servers:data.servers??[],members:data.members??[],incomplete:data.incomplete===true};error='';
    }catch(cause){if(!controller.signal.aborted){if(cause instanceof APIError && [401,403].includes(cause.status))result=null;error=errorMessage(cause);}}
    finally{busy=false;if(!controller.signal.aborted)loading=false;}
   }
-  void load();const timer=setInterval(()=>{if(!document.hidden)void load();},15000);
+  void load();const timer=setInterval(()=>{if(!document.hidden)void load();},60000);
   return ()=>{controller.abort();clearInterval(timer);};
  });
 </script>

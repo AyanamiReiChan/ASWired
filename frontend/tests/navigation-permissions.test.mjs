@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import ts from 'typescript';
-const source = fs.readFileSync(new URL('../src/lib/navigation.ts', import.meta.url), 'utf8').replaceAll('import.meta.env.DEV','false');
+const source = fs.readFileSync(new URL('../src/lib/navigation.ts', import.meta.url), 'utf8');
 const js = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } }).outputText;
 const { groups, navigation, canAccessPage } = await import('data:text/javascript;base64,' + Buffer.from(js).toString('base64'));
 
@@ -15,7 +15,7 @@ test('subscription and user pages are consolidated into workspace without duplic
  assert.equal(canAccessPage('user','/account'),true);
 });
 
-test('production navigation and direct access exclude the local design page',()=>{
+test('navigation and direct access exclude the removed design page',()=>{
  for(const route of ['/inbounds','/outbounds','/routing'])assert.equal(navigation.some(([path])=>path===route),false);
  assert.equal(navigation.some(([path])=>path==='/design'),false);
  for(const role of ['admin','user',undefined])assert.equal(canAccessPage(role,'/design'),false);
@@ -38,7 +38,7 @@ test('members retain subscriptions, personal resources and account pages', () =>
   for (const path of ['/', '/portal', '/subscriptions', '/nodes', '/temporary-subscriptions', '/probe', '/account', '/join']) {
     assert.equal(canAccessPage('user', path), true, path);
   }
-  for (const path of ['/servers', '/settings', '/tasks/', '/tasks/detail', '/limits/', '/unknown']) assert.equal(canAccessPage('user', path), false, path);
+  for (const path of ['/servers', '/settings', '/komari', '/tasks/', '/tasks/detail', '/limits/', '/unknown']) assert.equal(canAccessPage('user', path), false, path);
 });
 
 test('removed REALITY pool is absent from navigation and search and remains restricted', () => {

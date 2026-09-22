@@ -26,7 +26,7 @@ pnpm build
 ## 文档与数据同步
 
 - 普通代码说明写入 Markdown；源码只保留必要的构建/工具指令、生成标记、版权和许可声明。参考项目与链接集中在 [参考来源](docs/REFERENCES.md)，不要写入界面文案和可执行代码。
-- 主设计文档位于 `docs/00-*.md` 至 `docs/20-*.md`；修改后同步至 `frontend/static/docs/` 的同名文件。
+- 主设计文档位于 `docs/00-*.md` 至 `docs/20-*.md`，仅保存在源码仓库，不复制到网站公开目录。
 - 参考功能集的研究版本在 `docs/reference/miaomiao-features.json`，页面版本在 `frontend/src/lib/coverage.json`。修改功能时保留稳定 ID 和版本边界；出处原值保存在 `docs/reference/reference-records.md`，并通过 Markdown 链接关联。
 - 设计契约位于 `docs/contracts/openapi.yaml`。未实现的接口和未验证的第三方兼容行为应继续明确标注。
 - 当前实现证据记录在 `docs/reference/implementation-audit.json`，其中 `server/`、`agent/` 路径分别相对独立仓库；同步页面下载副本。Agent 通道合同变更需同时更新主控 `pkg/agentwire`、Agent `internal/wire` 并验证双端兼容。
@@ -37,6 +37,10 @@ pnpm build
 提交源码、配置、锁文件和维护文档。依赖目录、构建产物、预览日志、浏览器导出数据、本地环境文件、服务器凭据和完整第三方资料缓存不应提交；根 `.gitignore` 已覆盖常见本地文件。
 
 复现问题请使用演示数据或脱敏样本，不要在 Issue、Pull Request、截图或日志中包含订阅令牌、服务器密码、支付信息或用户资料。上报潜在安全问题时，只提供足以说明问题的最小脱敏示例。
+
+实际服务器 IP、个人域名、管理员名称、节点 UUID、SSH 主机记录及部署恢复记录也属于私有运维资料，保存在被忽略的 `.deployment/` 或仓库外。文档示例使用 `example.com` / `example.test` 和文档专用地址；公共 DNS、公开协议测试向量及第三方来源链接不属于部署信息。不要使用 `git add -f` 将运行配置或备份加入版本管理。
+
+推送前检查 `git diff --cached` 和 `git ls-files`，并扫描暂存内容及 Git 历史中的凭据。仅添加 `.gitignore` 不会移除已经跟踪的文件；若真实凭据曾被提交，应先撤销或轮换凭据，再另行处理历史记录。
 
 ## Pull Request 建议内容
 

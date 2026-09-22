@@ -1,4 +1,5 @@
 <script lang="ts">
+ import AppSelect from "./Select.svelte";
  let {value=$bindable(''),inherit=true}=$props<{value?:string;inherit?:boolean}>();
  const parsed=$derived.by(()=>{try{const result=value.trim()?JSON.parse(value):null;return result&&(!Array.isArray(result)&&typeof result==='object')?{config:result,error:''}:result===null?{config:null,error:''}:{config:null,error:'规则必须为 JSON 对象'};}catch{return {config:null,error:'现有 JSON 无法解析，请在高级编辑中修正；原文已保留'};}});
  const mode=$derived(parsed.config===null?'inherit':parsed.config.enabled===false?'disabled':'enabled');
@@ -9,11 +10,11 @@
  function add(){write({...parsed.config,enabled:true,maxGapSeconds:parsed.config?.maxGapSeconds??15,rules:[...rules,{id:'rule-'+crypto.randomUUID().slice(0,8),type:'sustained',thresholdMbps:100,durationSeconds:30,windowSeconds:60,hits:3,limitMbps:20,penaltySeconds:300,priority:10,notify:false}]});}
 </script>
 <section class="full space-top"><h3>行为限速</h3><p class="hint">按连续有效的下载采样判断。成员规则覆盖套餐，套餐覆盖全局；数值较小的优先级先执行。</p>
- <label class="field">规则策略<select value={mode} onchange={e=>switchMode(e.currentTarget.value)} disabled={!!parsed.error}><option value="inherit">{inherit?'继承上层规则':'不设置全局规则'}</option><option value="disabled">明确关闭</option><option value="enabled">自定义规则</option></select></label>
+ <label class="field">规则策略<AppSelect aria-label="规则策略" value={mode} onchange={switchMode} disabled={!!parsed.error} options={[{value:'inherit',label:inherit?'继承上层规则':'不设置全局规则'},{value:'disabled',label:'明确关闭'},{value:'enabled',label:'自定义规则'}]}/></label>
  {#if mode==='enabled'}<label class="field space-top">最大采样间隔 / 秒<input type="number" min="1" max="300" value={parsed.config.maxGapSeconds??15} onchange={e=>write({...parsed.config,maxGapSeconds:e.currentTarget.valueAsNumber})}/></label>
   {#each rules as rule,index}<div class="card padded space-top"><div class="form-grid">
    <label class="field">规则标识<input value={rule.id} maxlength="100" onchange={e=>patch(index,'id',e.currentTarget.value)}/></label>
-   <label class="field">触发方式<select value={rule.type} onchange={e=>patch(index,'type',e.currentTarget.value)}><option value="sustained">持续超速</option><option value="burst">窗口内多次超速</option></select></label>
+   <label class="field">触发方式<AppSelect aria-label="触发方式" value={rule.type} onchange={value=>patch(index,'type',value)} options={[{value:'sustained',label:'持续超速'},{value:'burst',label:'窗口内多次超速'}]}/></label>
    <label class="field">超速阈值 / Mbps<input type="number" min="0.001" step="any" value={rule.thresholdMbps} onchange={e=>patch(index,'thresholdMbps',e.currentTarget.valueAsNumber)}/></label>
    {#if rule.type==='sustained'}<label class="field">连续时间 / 秒<input type="number" min="1" value={rule.durationSeconds} onchange={e=>patch(index,'durationSeconds',e.currentTarget.valueAsNumber)}/></label>{:else}<label class="field">统计窗口 / 秒<input type="number" min="1" value={rule.windowSeconds} onchange={e=>patch(index,'windowSeconds',e.currentTarget.valueAsNumber)}/></label><label class="field">触发次数<input type="number" min="1" step="1" value={rule.hits} onchange={e=>patch(index,'hits',e.currentTarget.valueAsNumber)}/></label>{/if}
    <label class="field">处罚下载速度 / Mbps<input type="number" min="0.001" step="any" value={rule.limitMbps} onchange={e=>patch(index,'limitMbps',e.currentTarget.valueAsNumber)}/></label>

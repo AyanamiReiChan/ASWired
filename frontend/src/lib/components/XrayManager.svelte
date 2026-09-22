@@ -7,7 +7,7 @@
  import XrayRouting from './XrayRouting.svelte';
  import {graphError} from '../xray-workbench';
  import type {Row} from '../data';
- import {demo,runAction,getRow,errorMessage,toast,api} from '../store.svelte';
+ import {demo,runAction,getRow,errorMessage,toast,cachedAPI} from '../store.svelte';
  import {parseConfigDraft,mergeConfigDraft,sectionDraft,type ConfigSection} from '../xray-config';
  let {server,onclose,initialSection='config',initialInbound='',routingScope=''}: {server:Row;onclose:()=>void;initialSection?:ConfigSection;initialInbound?:string;routingScope?:string}=$props();
  let open=$state(true),section=$state<ConfigSection>(untrack(()=>initialSection)),draft=$state(''),config=$state<Record<string,any>>({}),baseline=$state('');
@@ -15,7 +15,7 @@
  $effect(()=>{if(!sectionEditing&&error.startsWith('请先采用修改或取消当前条目编辑'))error='';});
  $effect(()=>{if(!inboundEditing&&!inboundWorking&&error.startsWith('请先保存或取消入站编辑'))error='';});
  let busy=$state(false),loaded=$state(false),error=$state(''),taskId=$state(''),core=$state<Record<string,any>|null>(null),statusError=$state('');
- let syncedAt=$state(''),cacheNotice=$state(''),cacheLoading=$state(false),cacheRequest=0;
+ let syncedAt=$state(''),cacheNotice=$state(''),cacheLoading=$state(false),cacheRequest=0,cacheSyncMode=$state('on-change');
  let disposed=false;onDestroy(()=>disposed=true);
  const tabs:[ConfigSection,string][]=[['config','配置管理'],['inbounds','入站管理'],['outbounds','出站管理'],['routing','路由管理']];
  const online=$derived(['在线','告警'].includes((demo.data.servers??[]).find(row=>row.id===server.id)?.status??server.status));
@@ -42,11 +42,12 @@
  }
  async function readStatus(){try{const value=await request('core.status');if(authorized()){core=value;statusError='';}}catch(cause){if(authorized())statusError=errorMessage(cause);}}
  async function loadCache(){
-  if(!authorized()||busy||inboundWorking||cacheLoading)return;
+  if(!authorized()||busy||inboundWorking||cacheLoading||document.hidden)return;
   cacheLoading=true;const generation=cacheRequest;
-  try{const value=await api(`/api/servers/${encodeURIComponent(server.id)}/xray-cache`);
+  try{const value=await cachedAPI(`/api/servers/${encodeURIComponent(server.id)}/xray-cache?sync=1`);
    if(!authorized()||busy||generation!==cacheRequest)return;
    core=value.core??core;statusError='';
+   cacheSyncMode=value.syncMode??'periodic';
    cacheNotice=value.lastError??(value.refreshPending?'配置已变更，后台正在同步最新快照':'');
    if(value.config&&typeof value.config==='object'&&!Array.isArray(value.config)&&!value.refreshPending){
     if(dirty||sectionEditing){if(value.syncedAt!==syncedAt)cacheNotice='后台已有更新；当前未保存的编辑已保留。';return;}
@@ -70,7 +71,7 @@
   catch(cause){if(authorized())error=errorMessage(cause);}finally{busy=false;}
  }
  function close(){if(busy){error='正在等待 Agent 完成操作，请稍后关闭。';return;}if(sectionEditing){error='请先采用修改或取消当前条目编辑，再关闭窗口。';return;}if(inboundWorking||inboundEditing){error='请先保存或取消入站编辑，等待当前操作完成后关闭。';return;}if(dirty){error='存在未保存修改；请保存配置，或点击“放弃修改并关闭”。';return;}open=false;onclose();}
- onMount(()=>{void loadCache();const timer=window.setInterval(()=>void loadCache(),15000);return ()=>window.clearInterval(timer);});
+ onMount(()=>{void loadCache();const resume=()=>{if(!document.hidden)void loadCache();};document.addEventListener('visibilitychange',resume);const timer=window.setInterval(()=>void loadCache(),15000);return ()=>{window.clearInterval(timer);document.removeEventListener('visibilitychange',resume);};});
 </script>
 
 <Dialog.Root {open} onOpenChange={value=>{if(!value)close();}}><Dialog.Portal><Dialog.Overlay class="modal-overlay"/><Dialog.Content class="modal xray-manager">
@@ -78,7 +79,7 @@
  <div class="manager-tabs" role="tablist" aria-label="Xray 管理分类">{#each tabs as [key,label]}<button role="tab" id={`xray-tab-${key}`} aria-selected={section===key} aria-controls="xray-panel" tabindex={section===key?0:-1} class:active={section===key} disabled={busy} onclick={()=>switchSection(key)} onkeydown={event=>{if(['ArrowRight','ArrowLeft','Home','End'].includes(event.key)){event.preventDefault();const index=tabs.findIndex(([id])=>id===section);const next=event.key==='Home'?0:event.key==='End'?tabs.length-1:(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;switchSection(tabs[next][0]);if(section===tabs[next][0])document.getElementById(`xray-tab-${section}`)?.focus();}}}>{label}</button>{/each}</div>
  <div class="service-bar"><span class="muted">服务控制</span><div class="service-actions">{#each [['core.start','play','启动'],['core.stop','pause','停止'],['core.restart','refresh','重启']] as [action,icon,label]}<button class="button small" disabled={busy||sectionEditing||inboundWorking||inboundEditing||!online||(action==='core.start'&&core?.running===true)||(action==='core.stop'&&core?.running===false)} onclick={()=>control(action)}><Icon name={icon} size={14}/>{label}</button>{/each}</div><span class="core-status" class:running={online&&core?.running===true}>{!online?'Agent 离线':core?.running===true?'运行中':core?.running===false?'已停止':'状态待确认'} · Xray {core?.core_version??server.core??'未上报'}</span><div class="config-badges"><span>内嵌控制</span>{#if loaded}<span>流量统计 {current?.stats!=null?'已配置':'未配置'}</span><span>指标统计 {current?.metrics!=null?'已配置':'未配置'}</span>{/if}</div></div>
  {#if statusError}<p class="hint">服务状态读取失败：{statusError}</p>{/if}
- <div class="cache-summary"><span>{syncedAt?`主控缓存 · 最近同步 ${new Date(syncedAt).toLocaleString('zh-CN',{hour12:false})}`:cacheLoading?'正在读取主控缓存…':'暂无缓存，等待 Agent 首次同步'}</span><span>后台每 5 分钟同步</span></div>
+ <div class="cache-summary"><span>{syncedAt?`主控缓存 · 最近同步 ${new Date(syncedAt).toLocaleString('zh-CN',{hour12:false})}`:cacheLoading?'正在读取主控缓存…':'暂无缓存，等待 Agent 首次同步'}</span><span>{cacheSyncMode==='on-change'?'配置变化时自动同步':'未提供配置哈希，每 5 分钟同步'}</span></div>
  {#if cacheNotice}<p class="hint">{cacheNotice}</p>{/if}
  <div id="xray-panel" role="tabpanel" aria-labelledby={`xray-tab-${section}`} tabindex="0">
   {#if section==='inbounds'}

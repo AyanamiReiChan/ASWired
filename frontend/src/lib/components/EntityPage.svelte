@@ -1,4 +1,7 @@
 <script lang="ts">
+ import {untrack} from 'svelte';
+ let taskDeepLink=$state('');
+ $effect(()=>{if(collection!=='tasks')return;const id=page.url.searchParams.get('detail')??'';const row=rows.find(row=>row.id===id);if(row&&id!==taskDeepLink){taskDeepLink=id;untrack(()=>void show(row));}});
  import ServerManagementRow from './ServerManagementRow.svelte';
  import AgentUpdates from './AgentUpdates.svelte';import XrayManager from './XrayManager.svelte';let xrayServer=$state<Row|null>(null);let xrayDeepLink=$state('');
  $effect(()=>{if(collection!=='servers'||demo.user?.role!=='admin')return;const key=page.url.search;if(key===xrayDeepLink)return;const inbound=(demo.data.inbounds??[]).find(row=>row.id===page.url.searchParams.get('inbound'));const id=page.url.searchParams.get('xray')||inbound?.serverId;if(!id)return;const target=(demo.data.servers??[]).find(row=>row.id===id);if(target){xrayDeepLink=key;xrayServer=target;}});

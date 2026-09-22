@@ -1,4 +1,5 @@
 import type { Row } from './data';
+import {createSnapshotCache} from './snapshot-cache';
 import {enterProbe,type ProbeLogin} from './unified-login';
 export type User = { id: string; username: string; role: 'admin' | 'user' };
 const collections = ['servers','inbounds','outbounds','nodes','sources','subscriptions','plans','carpools','members','billing','certificates','dnsProviders','tasks','notifications','audit','settings','policies','extensions','forwards','relays','traffic','trafficMinutes','trafficServers','trafficMembers','tokens'];
@@ -10,6 +11,21 @@ let toastTimer: ReturnType<typeof setTimeout>;
 let refreshTimer: ReturnType<typeof setTimeout> | undefined;
 let generation = 0;
 let pendingRefresh: Promise<void> | null = null;
+const snapshots=createSnapshotCache(api);
+let pagePath='', legacyState=false;
+let summaryAt=0, minutesAt=0;
+export const workspace=$state({pendingTasks:0});
+export function cachedAPI(path:string,init:RequestInit={}){return snapshots.read(path,init);}
+export async function trafficAPI(path:string,init:RequestInit={}){
+ const value=await cachedAPI(path+'&sync=1',init);
+ for(const key of ['series','servers','members'])if(value[key]&&!Array.isArray(value[key]))value[key]=Object.values(value[key]);
+ if(Array.isArray(value.series))value.series.sort((a:Row,b:Row)=>Number(a.at??0)-Number(b.at??0));
+ return value;
+}
+export function setWorkspacePage(path:string){
+ if(pagePath===path)return;pagePath=path;
+ if(demo.loaded&&demo.user)void refreshPageData().catch(()=>{});
+}
 const TOKEN_KEY = 'aswired-session';
 export class APIError extends Error { constructor(message: string, public status: number, public code = '') { super(message); } }
 export function toast(message: string) { demo.toast = message; clearTimeout(toastTimer); toastTimer = setTimeout(() => demo.toast = '', 5000); }
@@ -45,6 +61,7 @@ export async function apiText(path: string): Promise<string> {
   return response.text();
 }
 function clearSession() {
+  snapshots.clear();legacyState=false;summaryAt=0;minutesAt=0;workspace.pendingTasks=0;
   generation++; token = ''; demo.user = null; demo.role = '成员'; demo.data = emptyData(); demo.settings = {}; demo.capabilities = {}; demo.loaded = false; demo.trafficLoaded=false; demo.trafficIncomplete=true; demo.trafficError='';
   resetMinuteTraffic();
   if (typeof sessionStorage !== 'undefined') sessionStorage.removeItem(TOKEN_KEY);
@@ -70,6 +87,13 @@ export async function authenticate(username: string, password: string, setup = f
   const response = await api<{ token: string; user: User } | ProbeLogin>(setup ? '/api/setup' : '/api/login', { method: 'POST', body: JSON.stringify({ username, password, ...options }) });
   await acceptSession(response);
 }
+export async function openKomari(signal?:AbortSignal) {
+  if(demo.user?.role!=='admin')throw new APIError('只有 ASWired 管理员可以管理 Komari',403);
+  const started=generation;
+  const response=await api<ProbeLogin>('/api/komari/login',{method:'POST',signal});
+  if(generation!==started||signal?.aborted)return;
+  enterProbe(response);
+}
 export async function acceptSession(response: {token: string; user: User}|ProbeLogin) {
   if('kind' in response&&response.kind==='komari'){clearSession();enterProbe(response);return;}
   if(!('token' in response)||!response.token||!response.user)throw new APIError('无效的登录响应',502);
@@ -84,62 +108,87 @@ export async function logout() {
   catch (cause) { warning = '已退出本机，但主控未确认撤销登录：' + errorMessage(cause); }
   finally { clearSession(); await initialize(); if(warning&&!demo.hiddenEntry)demo.connectionError = warning; }
 }
-export function refreshState(afterPending = false): Promise<void> {
+export function refreshState(afterPending = false, background = false): Promise<void> {
   if (pendingRefresh) {
     const started = generation;
-    return afterPending ? pendingRefresh.catch(() => {}).then(() => generation === started ? refreshState() : undefined) : pendingRefresh;
+    return afterPending ? pendingRefresh.catch(() => {}).then(() => generation === started ? refreshState(false,background) : undefined) : pendingRefresh;
   }
   const currentGeneration = generation;
   const request = (async () => {
-    const state = await api<{ data: Record<string, Row[]>; user: User; settings: Record<string, any>; capabilities: Record<string, any> }>('/api/state');
+    let state:any;
+    try{state=legacyState?await api('/api/state'):await cachedAPI('/api/state/sync');}
+    catch(cause){if(generation!==currentGeneration&&!(cause instanceof APIError))return;if(!(cause instanceof APIError)||cause.status!==404)throw cause;if(generation!==currentGeneration)return;legacyState=true;state=await api('/api/state');}
     if (generation !== currentGeneration || !token) return;
-    const sameIdentity = demo.user?.id === state.user.id && demo.user.role === state.user.role;
+    if(state.order){for(const [key,order] of Object.entries(state.order)){state.data[key]=(order as string[]).map(id=>state.data[key][id]).filter(Boolean);}}
+    const sameIdentity = demo.user?.id === state.user.id && demo.user?.role === state.user.role;
+    if(demo.user&&!sameIdentity){snapshots.clear();summaryAt=0;minutesAt=0;}
     const trafficData = sameIdentity
       ? { traffic: demo.data.traffic, trafficMinutes: demo.data.trafficMinutes, trafficServers: demo.data.trafficServers, trafficMembers: demo.data.trafficMembers }
       : { traffic: [], trafficMinutes: [], trafficServers: [], trafficMembers: [] };
     if (!sameIdentity) { demo.trafficLoaded = false; demo.trafficIncomplete = true; demo.trafficError = ''; resetMinuteTraffic(); }
-    demo.data = { ...emptyData(), ...state.data, ...trafficData }; demo.user = state.user; demo.role = state.user.role === 'admin' ? '管理员' : '成员';
+    const tasks=sameIdentity?demo.data.tasks:[];
+    demo.data = { ...emptyData(), tasks, ...state.data, ...trafficData }; demo.user = state.user; demo.role = state.user.role === 'admin' ? '管理员' : '成员';
+    workspace.pendingTasks=state.pendingTasks??demo.data.tasks.filter(row=>['待下发','执行中','待处理'].includes(row.status)).length;
     demo.settings = state.settings ?? {}; demo.capabilities = state.capabilities ?? {}; demo.loaded = true; demo.revision++; demo.connectionError = '';
     if (state.user.role !== 'admin') {
+      workspace.pendingTasks=0;
       demo.data.nodes = demo.data.nodes.filter(row => row.subscriptionAuthorized === true);
       for (const collection of ['sources','tasks','audit','certificates','notifications','extensions','traffic','trafficServers','trafficMembers']) demo.data[collection] = [];
       demo.trafficLoaded = false; demo.trafficIncomplete = true; demo.trafficError = ''; resetMinuteTraffic();
       return;
     }
+    await refreshPageData(!background);
+  })();
+  pendingRefresh = request;
+  void request.finally(() => { if (pendingRefresh === request) pendingRefresh = null; }).catch(() => {});
+  return request;
+}
+export async function refreshPageData(force=false){
+    if(!token||demo.user?.role!=='admin'||(typeof document!=='undefined'&&document.hidden))return;
+    const currentGeneration=generation;
     const summary = async () => { try {
-      const traffic = await api('/api/traffic?range=30d');
+      const traffic = await trafficAPI('/api/traffic?range=30d');
       if (generation !== currentGeneration || !token) return;
+      if(demo.user?.role!=='admin')return;
       demo.data.traffic = traffic.series ?? []; demo.data.trafficServers = traffic.servers ?? []; demo.data.trafficMembers = traffic.members ?? [];
       demo.trafficLoaded = true; demo.trafficIncomplete = traffic.incomplete === true; demo.trafficError = '';
+      summaryAt=Date.now();
     } catch (cause) {
-      if (generation !== currentGeneration || !token) return;
+      if (generation !== currentGeneration || !token || demo.user?.role!=='admin') return;
       if (cause instanceof APIError && cause.status === 403) {
         demo.data.traffic = []; demo.data.trafficServers = []; demo.data.trafficMembers = []; demo.trafficLoaded = false;
       }
       demo.trafficIncomplete = true; demo.trafficError = errorMessage(cause);
     } };
     const minutes = async () => { try {
-      const traffic = await api('/api/traffic?range=24h&interval=1m');
+      const traffic = await trafficAPI('/api/traffic?range=24h&interval=1m');
       if (generation !== currentGeneration || !token) return;
+      if(demo.user?.role!=='admin')return;
       if (traffic.interval !== '1m' || traffic.bucketSeconds !== 60 || !Array.isArray(traffic.series) || !Number.isFinite(traffic.from) || !Number.isFinite(traffic.to) || traffic.to <= traffic.from) throw new APIError('主控返回的分钟流量记录无效', 502);
       demo.data.trafficMinutes = traffic.series; demo.minuteTrafficFrom = traffic.from; demo.minuteTrafficTo = traffic.to;
       demo.minuteTrafficLoaded = true; demo.minuteTrafficIncomplete = traffic.incomplete === true; demo.minuteTrafficError = '';
+      minutesAt=Date.now();
     } catch (cause) {
-      if (generation !== currentGeneration || !token) return;
+      if (generation !== currentGeneration || !token || demo.user?.role!=='admin') return;
       if (cause instanceof APIError && cause.status === 403) resetMinuteTraffic();
       demo.minuteTrafficIncomplete = true; demo.minuteTrafficError = errorMessage(cause);
     } };
-    await Promise.all([summary(), minutes()]);
-  })();
-  pendingRefresh = request;
-  void request.finally(() => { if (pendingRefresh === request) pendingRefresh = null; }).catch(() => {});
-  return request;
+    const jobs:Promise<void>[]=[];
+    if(['/', '/traffic'].includes(pagePath)&&(force||Date.now()-summaryAt>=60000))jobs.push(summary());
+    if(pagePath==='/traffic'&&(force||Date.now()-minutesAt>=30000))jobs.push(minutes());
+    if(['/tasks','/certificates'].includes(pagePath)&&!legacyState)jobs.push((async()=>{
+      try{const value=await cachedAPI('/api/operations/tasks?limit=200');
+       if(generation!==currentGeneration||demo.user?.role!=='admin')return;
+       demo.data.tasks=value.order.map((id:string)=>value.rows[id]);
+      }catch(cause){if(generation===currentGeneration&&demo.user?.role==='admin')demo.connectionError=errorMessage(cause);}
+    })());
+    await Promise.all(jobs);
 }
 function scheduleRefresh() {
   if (refreshTimer) clearTimeout(refreshTimer);
   refreshTimer = setTimeout(async () => {
     if (!token || !demo.user) return;
-    if (!document.hidden) { try { await refreshState(); } catch (cause) { demo.connectionError = errorMessage(cause); } }
+    if (!document.hidden) { try { await refreshState(false,true); } catch (cause) { demo.connectionError = errorMessage(cause); } }
     if (token && demo.user) scheduleRefresh();
   }, 5000);
 }
@@ -150,7 +199,7 @@ export async function saveRow(collection: string, row: Row): Promise<Row> {
   const exists = demo.data[collection]?.some(item => item.id === row.id);
   const result = await api<{ row: Row }>(`/api/collections/${encodeURIComponent(collection)}${exists ? '/' + encodeURIComponent(row.id) : ''}`, { method: exists ? 'PUT' : 'POST', body: JSON.stringify({ row }) });
 
-  if (generation === started) { try { await refreshState(); } catch { toast('已保存，但列表刷新失败，请刷新页面'); } }
+  if (generation === started) { try { await refreshState(true); } catch { toast('已保存，但列表刷新失败，请刷新页面'); } }
   return result.row;
 }
 export async function removeRow(collection: string, id: string) {
@@ -158,16 +207,17 @@ export async function removeRow(collection: string, id: string) {
   await api(`/api/collections/${encodeURIComponent(collection)}/${encodeURIComponent(id)}`, { method: 'DELETE' });
   if (generation !== started) return;
   demo.data[collection] = (demo.data[collection] ?? []).filter(row => row.id !== id); demo.revision++;
+  try{await refreshState(true);}catch{toast('已删除，但列表刷新失败，请刷新页面');}
 }
 export async function saveSettings(settings: Record<string, any>) {
   const started = generation;
   const result = await api<{ settings: Record<string, any> }>('/api/settings', { method: 'PUT', body: JSON.stringify({ settings }) });
-  if (generation === started) demo.settings = result.settings; return result.settings;
+  if (generation === started) {demo.settings = result.settings;try{await refreshState(true);}catch{toast('已保存设置，状态稍后重试更新');}} return result.settings;
 }
 export async function runAction(action: string, targetId?: string, collection?: string, params?: Record<string, any>) {
   const started = generation;
   const result = await api('/api/actions', { method: 'POST', body: JSON.stringify({ action, targetId, collection, params }) });
-  if (generation === started) { try { await refreshState(); } catch { toast('请求已受理，但状态刷新失败，请刷新页面'); } }
+  if (generation === started) { try { await refreshState(true); } catch { toast('请求已受理，但状态刷新失败，请刷新页面'); } }
   return result;
 }
 export async function simulateJob(action: string, target: string) {

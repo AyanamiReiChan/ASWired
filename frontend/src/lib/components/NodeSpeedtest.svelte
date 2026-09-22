@@ -1,4 +1,5 @@
 <script lang="ts">
+ import AppSelect from "./Select.svelte";
  import {onMount} from 'svelte';
  import type {Row} from '../data';
  import {demo,api,refreshState,errorMessage} from '../store.svelte';
@@ -46,7 +47,7 @@
  <div class="choices filters" aria-label="测速协议筛选"><button class:active={!protocol} onclick={()=>protocol=''}>全部（{rows.length}）</button>{#each protocols as p}<button class:active={protocol===p} onclick={()=>protocol=p}>{p.toLowerCase()}（{rows.filter(r=>nodeProtocol(r)===p).length}）</button>{/each}</div>
  <div class="choices filters" aria-label="测速标签筛选"><button class:active={!tag} onclick={()=>tag=''}>全部来源</button>{#each allTags as t}<button class:active={tag===t} onclick={()=>tag=t}>{t}（{rows.filter(r=>tags(r).includes(t)).length}）</button>{/each}</div>
  <div class="speed-selection"><span>可见 {filtered.length} 条 · 已选 {chosen.length} 条</span><button class="button small" disabled={busy} onclick={()=>selected=[...new Set([...selected,...filtered.filter(available).map(r=>r.id)])]}>全选可见</button><button class="button small" disabled={busy} onclick={()=>selected=[]}>清空选择</button><button class="button small primary" disabled={busy||!ready||!chosen.length} onclick={()=>run(chosen)}>{busy?'提交中…':`测速所选（${chosen.length}）`}</button><button class="button small" disabled={busy||!ready||!chosen.length} onclick={()=>run(chosen,true)}>仅测延迟</button><button class="button small" onclick={()=>advanced=!advanced}>测试设置</button></div>
- {#if rows.some(r=>r.managedInbound)}<label class="field subscription">受管节点测试套餐<select bind:value={subscription} disabled={busy}><option value="">选择有效套餐实例</option>{#each demo.data.subscriptions??[] as sub}<option value={sub.id}>{sub.member} · {sub.name}</option>{/each}</select></label>{/if}
+ {#if rows.some(r=>r.managedInbound)}<label class="field subscription">受管节点测试套餐<AppSelect aria-label="受管节点测试套餐" bind:value={subscription} disabled={busy} options={[{value:'',label:'选择有效套餐实例'},...(demo.data.subscriptions??[]).map(sub=>({value:sub.id,label:sub.member+' · '+sub.name}))]}/></label>{/if}
  {#if advanced}<div class="form-grid settings"><label class="field">下载测试 URL<input bind:value={downloadURL} disabled={busy}/></label><label class="field">出口 IP 查询 URL<input bind:value={ipURL} disabled={busy}/></label></div>{/if}
  <p class="budget">每节点下载总量上限 {size} MiB，{parallel} 个连接共享，最长 30 秒；握手、延迟探测及出口查询另有少量流量。受管节点计入所选套餐。</p>
  {#if error}<p class="error" role="alert">{error}</p>{/if}{#if submitted}<p class="budget" role="status">已提交 {submitted} 项，测速端按顺序执行。</p>{/if}

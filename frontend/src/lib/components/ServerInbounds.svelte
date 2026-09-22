@@ -1,4 +1,5 @@
 <script lang="ts">
+ import AppSelect from "./Select.svelte";
  import {onDestroy} from 'svelte';
  import type {Row} from '../data';
  import {demo,getRow,saveRow,runAction,api,refreshState,errorMessage,toast} from '../store.svelte';
@@ -56,8 +57,8 @@
   <div class="mode-switch" aria-label="入站配置模式"><button class:active={mode==='simple'} onclick={()=>mode='simple'}>简易模式</button><button class:active={mode==='expert'} onclick={()=>mode='expert'}>专家模式</button></div>
   <form onsubmit={event=>{event.preventDefault();void save();}}>
    <div class="wizard-grid"><fieldset disabled={blocked}>
-    <div class="form-grid"><label class="field">入站名称 *<input bind:value={form.name} required placeholder="例如：香港 · 主入口"/></label><label class="field">端口 *<input type="number" min="1" max="65535" step="1" bind:value={form.port} required/></label><label class="field">状态<select bind:value={form.status}><option>启用</option><option>停用</option></select></label>
-    {#if mode==='expert'}<label class="field">入站标签 *<input bind:value={form.tag} required/></label><label class="field">监听地址<input bind:value={form.listen} placeholder="0.0.0.0"/></label><label class="field">流量嗅探<select bind:value={form.sniffing}><option>关闭</option><option>仅路由</option><option>启用</option></select></label>{/if}</div>
+    <div class="form-grid"><label class="field">入站名称 *<input bind:value={form.name} required placeholder="例如：香港 · 主入口"/></label><label class="field">端口 *<input type="number" min="1" max="65535" step="1" bind:value={form.port} required/></label><label class="field">状态<AppSelect aria-label="入站状态" bind:value={form.status} options={['启用','停用']}/></label>
+    {#if mode==='expert'}<label class="field">入站标签 *<input bind:value={form.tag} required/></label><label class="field">监听地址<input bind:value={form.listen} placeholder="0.0.0.0"/></label><label class="field">流量嗅探<AppSelect aria-label="流量嗅探" bind:value={form.sniffing} options={['关闭','仅路由','启用']}/></label>{/if}</div>
     <ManagedProtocolFields bind:form {server} bind:busy={keyBusy}/>
    </fieldset><aside class="preview"><h4>JSON 预览</h4><p>入站结构预览，私钥已隐藏。clients 在发布时按有效订阅生成，此处不包含用户凭据。</p><pre aria-label="入站 JSON 预览">{preview}</pre></aside></div>
    <div class="wizard-actions"><button type="button" class="button" disabled={blocked} onclick={()=>{editing=false;error='';}}>取消</button><button class="button primary" disabled={blocked} type="submit">{working?'保存中…':'保存入站'}</button></div>

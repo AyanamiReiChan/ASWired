@@ -7,5 +7,3 @@
 - Converted to silent H.264 1920×1080 / 30 fps with fast-start; poster captured from the video.
 - Recreated the scene's system-clock overlay in HTML/CSS. Wallpaper Engine scene scripts and music are not executed.
 - Retained in the public release at the project owner's express request. Upstream authorship is unchanged.
-
-`sakura-night.svg`: original code-native decorative illustration for the earlier local theme preview.
