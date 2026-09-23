@@ -2,7 +2,7 @@ import type { Row } from './data';
 import {createSnapshotCache} from './snapshot-cache';
 import {enterProbe,type ProbeLogin} from './unified-login';
 export type User = { id: string; username: string; role: 'admin' | 'user' };
-const collections = ['servers','inbounds','outbounds','nodes','sources','subscriptions','plans','carpools','members','billing','certificates','dnsProviders','tasks','notifications','audit','settings','policies','extensions','forwards','relays','traffic','trafficMinutes','trafficServers','trafficMembers','tokens'];
+const collections = ['servers','inbounds','outbounds','nodes','sources','subscriptions','plans','carpools','members','billing','certificates','dnsProviders','tasks','notifications','audit','settings','policies','extensions','forwards','relays','traffic','trafficMinutes','trafficServers','trafficMembers','trafficInternal','trafficUnassigned','tokens'];
 const emptyData = (): Record<string, Row[]> => Object.fromEntries(collections.map(key => [key, []]));
 
 export const demo = $state({ data: emptyData(), loaded: false, role: '成员', toast: '', sidebar: true, revision: 0, user: null as User | null, initialized: true, connecting: true, connectionError: '', settings: {} as Record<string, any>, capabilities: {} as Record<string, any>, version: '', mode: 'live', hiddenEntry:false, trafficLoaded: false, trafficIncomplete: true, trafficError: '', minuteTrafficLoaded: false, minuteTrafficIncomplete: true, minuteTrafficError: '', minuteTrafficFrom: null as number | null, minuteTrafficTo: null as number | null });
@@ -18,7 +18,7 @@ export const workspace=$state({pendingTasks:0});
 export function cachedAPI(path:string,init:RequestInit={}){return snapshots.read(path,init);}
 export async function trafficAPI(path:string,init:RequestInit={}){
  const value=await cachedAPI(path+'&sync=1',init);
- for(const key of ['series','servers','members'])if(value[key]&&!Array.isArray(value[key]))value[key]=Object.values(value[key]);
+ for(const key of ['series','servers','members','internal','unassigned'])if(value[key]&&!Array.isArray(value[key]))value[key]=Object.values(value[key]);
  if(Array.isArray(value.series))value.series.sort((a:Row,b:Row)=>Number(a.at??0)-Number(b.at??0));
  return value;
 }
@@ -123,8 +123,8 @@ export function refreshState(afterPending = false, background = false): Promise<
     const sameIdentity = demo.user?.id === state.user.id && demo.user?.role === state.user.role;
     if(demo.user&&!sameIdentity){snapshots.clear();summaryAt=0;minutesAt=0;}
     const trafficData = sameIdentity
-      ? { traffic: demo.data.traffic, trafficMinutes: demo.data.trafficMinutes, trafficServers: demo.data.trafficServers, trafficMembers: demo.data.trafficMembers }
-      : { traffic: [], trafficMinutes: [], trafficServers: [], trafficMembers: [] };
+      ? { traffic: demo.data.traffic, trafficMinutes: demo.data.trafficMinutes, trafficServers: demo.data.trafficServers, trafficMembers: demo.data.trafficMembers, trafficInternal: demo.data.trafficInternal, trafficUnassigned: demo.data.trafficUnassigned }
+      : { traffic: [], trafficMinutes: [], trafficServers: [], trafficMembers: [], trafficInternal: [], trafficUnassigned: [] };
     if (!sameIdentity) { demo.trafficLoaded = false; demo.trafficIncomplete = true; demo.trafficError = ''; resetMinuteTraffic(); }
     const tasks=sameIdentity?demo.data.tasks:[];
     demo.data = { ...emptyData(), tasks, ...state.data, ...trafficData }; demo.user = state.user; demo.role = state.user.role === 'admin' ? '管理员' : '成员';
@@ -133,7 +133,7 @@ export function refreshState(afterPending = false, background = false): Promise<
     if (state.user.role !== 'admin') {
       workspace.pendingTasks=0;
       demo.data.nodes = demo.data.nodes.filter(row => row.subscriptionAuthorized === true);
-      for (const collection of ['sources','tasks','audit','certificates','notifications','extensions','traffic','trafficServers','trafficMembers']) demo.data[collection] = [];
+      for (const collection of ['sources','tasks','audit','certificates','notifications','extensions','traffic','trafficServers','trafficMembers','trafficInternal','trafficUnassigned']) demo.data[collection] = [];
       demo.trafficLoaded = false; demo.trafficIncomplete = true; demo.trafficError = ''; resetMinuteTraffic();
       return;
     }
@@ -151,12 +151,13 @@ export async function refreshPageData(force=false){
       if (generation !== currentGeneration || !token) return;
       if(demo.user?.role!=='admin')return;
       demo.data.traffic = traffic.series ?? []; demo.data.trafficServers = traffic.servers ?? []; demo.data.trafficMembers = traffic.members ?? [];
+      demo.data.trafficInternal = traffic.internal ?? []; demo.data.trafficUnassigned = traffic.unassigned ?? [];
       demo.trafficLoaded = true; demo.trafficIncomplete = traffic.incomplete === true; demo.trafficError = '';
       summaryAt=Date.now();
     } catch (cause) {
       if (generation !== currentGeneration || !token || demo.user?.role!=='admin') return;
       if (cause instanceof APIError && cause.status === 403) {
-        demo.data.traffic = []; demo.data.trafficServers = []; demo.data.trafficMembers = []; demo.trafficLoaded = false;
+        demo.data.traffic = []; demo.data.trafficServers = []; demo.data.trafficMembers = []; demo.data.trafficInternal = []; demo.data.trafficUnassigned = []; demo.trafficLoaded = false;
       }
       demo.trafficIncomplete = true; demo.trafficError = errorMessage(cause);
     } };
@@ -193,6 +194,29 @@ function scheduleRefresh() {
   }, 5000);
 }
 export function stopRefresh() { if (refreshTimer) clearTimeout(refreshTimer); }
+export type InternalTransfer = { id: string; serverId: string; email: string; name: string; sourceServerId?: string };
+export async function listInternalTransfers(): Promise<InternalTransfer[]> {
+  if (demo.user?.role !== 'admin') throw new APIError('只有管理员可以管理内部中转分类', 403);
+  const started = generation;
+  const result = await api<{items: InternalTransfer[]}>('/api/traffic/internal-transfers');
+  return generation === started && demo.user?.role === 'admin' ? result.items ?? [] : [];
+}
+export async function saveInternalTransfer(input: Omit<InternalTransfer, 'id'>) {
+  if (demo.user?.role !== 'admin') throw new APIError('只有管理员可以管理内部中转分类', 403);
+  const started = generation;
+  await api('/api/traffic/internal-transfers', {method: 'POST', body: JSON.stringify(input)});
+  if (generation !== started || demo.user?.role !== 'admin') return false;
+  await refreshState(true);
+  return generation === started && demo.user?.role === 'admin';
+}
+export async function removeInternalTransfer(id: string) {
+  if (demo.user?.role !== 'admin') throw new APIError('只有管理员可以管理内部中转分类', 403);
+  const started = generation;
+  await api(`/api/traffic/internal-transfers/${encodeURIComponent(id)}`, {method: 'DELETE'});
+  if (generation !== started || demo.user?.role !== 'admin') return false;
+  await refreshState(true);
+  return generation === started && demo.user?.role === 'admin';
+}
 export async function getRow(collection: string, id: string): Promise<Row> { return (await api<{ row: Row }>(`/api/collections/${encodeURIComponent(collection)}/${encodeURIComponent(id)}`)).row; }
 export async function saveRow(collection: string, row: Row): Promise<Row> {
   const started = generation;

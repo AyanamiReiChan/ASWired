@@ -137,7 +137,7 @@ test('members keep their own subscription usage without requesting or caching op
   const member = { id: 'member-1', username: 'member', role: 'user' };
   const subscription = { id: 'subscription-1', used: 2.5, limit: 100 };
   let trafficRequests = 0;
-  const deniedCollections = ['sources', 'tasks', 'audit', 'certificates', 'notifications', 'extensions', 'traffic', 'trafficServers', 'trafficMembers', 'trafficMinutes'];
+  const deniedCollections = ['sources', 'tasks', 'audit', 'certificates', 'notifications', 'extensions', 'traffic', 'trafficServers', 'trafficMembers', 'trafficInternal', 'trafficUnassigned', 'trafficMinutes'];
   const payload = Object.fromEntries(deniedCollections.map(collection => [collection, [{ id: 'private' }]]));
   const { store } = await fresh(t, async () => respond(state({ ...payload, subscriptions: [subscription], members: [{ ...member, used: 2.5 }] }, member)), async () => { trafficRequests++; return respond({}); }, async () => { trafficRequests++; return respond({}); });
   await store.acceptSession({ token: 'member.jwt', user: member });
@@ -159,7 +159,7 @@ test('downgrading an administrator clears operational state and stops traffic po
   assert.equal(store.demo.data.sources.length, 1);
   role = 'user'; await store.refreshState();
   assert.equal(trafficRequests, 2);
-  for (const collection of ['sources', 'tasks', 'traffic', 'trafficServers', 'trafficMembers', 'trafficMinutes']) assert.deepEqual(store.demo.data[collection], []);
+  for (const collection of ['sources', 'tasks', 'traffic', 'trafficServers', 'trafficMembers', 'trafficInternal', 'trafficUnassigned', 'trafficMinutes']) assert.deepEqual(store.demo.data[collection], []);
   assert.equal(store.demo.data.subscriptions[0].used, 3);
   assert.equal(store.demo.trafficLoaded, false);
   assert.equal(store.demo.minuteTrafficLoaded, false);
@@ -345,12 +345,16 @@ const traffic = (id, total = 1) => ({
   series: [{ id: '2026-09-16', date: '2026-09-16', total }],
   servers: [{ id: `server-${id}`, name: id, used: total }],
   members: [{ id: `member-${id}`, name: id, used: total }],
+  internal: [{ id: `internal-${id}`, name: id, serverId: `server-${id}`, email: 'transfer-fixture', up: total * 1024 ** 3, down: 0, used: total, classificationId: `classification-${id}` }],
+  unassigned: [{ id: `unassigned-${id}`, name: id, serverId: `server-${id}`, email: 'unknown-fixture', up: 0, down: total * 1024 ** 3, used: total }],
   incomplete: false,
 });
 function assertTraffic(store, expected) {
   assert.deepEqual(store.demo.data.traffic, expected.series);
   assert.deepEqual(store.demo.data.trafficServers, expected.servers);
   assert.deepEqual(store.demo.data.trafficMembers, expected.members);
+  assert.deepEqual(store.demo.data.trafficInternal, expected.internal ?? []);
+  assert.deepEqual(store.demo.data.trafficUnassigned, expected.unassigned ?? []);
 }
 
 test('a state refresh keeps all previous traffic until its delayed traffic request finishes', async t => {
@@ -688,4 +692,85 @@ test('task lists load only on task and certificate pages while details remain se
  store.setWorkspacePage('/servers');await store.acceptSession({token:'test.jwt',user:account});assert.equal(taskReads,0);
  store.setWorkspacePage('/tasks');await store.refreshPageData();assert.equal(taskReads,1);assert.equal(store.demo.data.tasks[0].id,'x');
  store.setWorkspacePage('/servers');await store.refreshState(false,true);assert.equal(taskReads,1);
+});
+
+test('traffic classification arrays support old controllers and incremental map removal',async t=>{
+ const original=traffic('transfer');
+ const internal=original.internal[0],unassigned=original.unassigned[0];
+ let reads=0;
+ const {store}=await fresh(t,async()=>respond(state()),async path=>{
+  if(++reads===1)return respond({cursor:'initial',reset:true,data:{series:{day:original.series[0]},servers:{server:original.servers[0]},members:{member:original.members[0]},internal:{},unassigned:{[unassigned.id]:unassigned},incomplete:false}});
+  if(reads===2){assert.match(path,/cursor=initial/);return respond({cursor:'classified',base:'initial',changes:{internal:{[internal.id]:internal}},removed:[['unassigned',unassigned.id]]});}
+  // Controllers predating classification fields still return valid totals.
+  return respond({series:original.series,servers:original.servers,members:original.members,incomplete:false});
+ });
+ await store.acceptSession({token:'test.jwt',user:account});
+ assertTraffic(store,{...original,internal:[]});
+ await store.refreshState();
+ assertTraffic(store,{...original,unassigned:[]});
+ await store.refreshState();
+ assertTraffic(store,{...original,internal:[],unassigned:[]});
+});
+
+test('administrator classification changes refresh usage and keep zero-traffic rules manageable',async t=>{
+ const input={serverId:'landing',email:'relay-account',name:'Entry → Landing',sourceServerId:'entry'};
+ const rule={id:'classification/one',...input};
+ let classified=false,mutations=0,reads=0;
+ const {store}=await fresh(t,async(path,init)=>{
+  if(path==='/api/traffic/internal-transfers'){
+   if(init.method==='POST'){assert.deepEqual(JSON.parse(init.body),input);classified=true;mutations++;return respond(rule);}
+   return respond({items:classified?[rule]:[]});
+  }
+  if(path==='/api/traffic/internal-transfers/classification%2Fone'){
+   assert.equal(init.method,'DELETE');classified=false;mutations++;return respond({success:true});
+  }
+  return respond(state());
+ },async()=>{reads++;return respond({series:[],servers:[],members:[],internal:[],unassigned:[],incomplete:false});});
+ await store.acceptSession({token:'test.jwt',user:account});
+ assert.equal(await store.saveInternalTransfer(input),true);
+ assert.equal(reads,2);
+ assert.deepEqual(await store.listInternalTransfers(),[rule]);
+ assert.deepEqual(store.demo.data.trafficInternal,[]);
+ assert.equal(await store.removeInternalTransfer(rule.id),true);
+ assert.equal(reads,3);
+ assert.deepEqual(await store.listInternalTransfers(),[]);
+ assert.equal(mutations,2);
+});
+
+test('members cannot read or change internal transfer classifications',async t=>{
+ const member={...account,role:'user'};
+ const {store}=await fresh(t,async path=>{assert.equal(path,'/api/state');return respond(state({},member));});
+ await store.acceptSession({token:'member.jwt',user:member});
+ await assert.rejects(store.listInternalTransfers(),/只有管理员/);
+ await assert.rejects(store.saveInternalTransfer({serverId:'landing',email:'private',name:'private'}),/只有管理员/);
+ await assert.rejects(store.removeInternalTransfer('private'),/只有管理员/);
+});
+
+test('a rejected classification mutation retains the previous usage without a refresh',async t=>{
+ let reads=0;
+ const previous=traffic('private');
+ const {store}=await fresh(t,async path=>path==='/api/traffic/internal-transfers'?respond({error:{message:'This account belongs to a subscription'}},409):respond(state()),async()=>{reads++;return respond(previous);});
+ await store.acceptSession({token:'test.jwt',user:account});
+ await assert.rejects(store.saveInternalTransfer({serverId:'landing',email:'member-account',name:'Wrong classification'}),/belongs to a subscription/);
+ assert.equal(reads,1);
+ assertTraffic(store,previous);
+});
+
+for(const action of ['list','save','remove'])test(`late classification ${action} result cannot change a newer session`,async t=>{
+ const pending=deferred(),started=deferred();
+ let current=account,trafficReads=0;
+ const {store}=await fresh(t,async path=>{
+  if(path.startsWith('/api/traffic/internal-transfers')){started.resolve();return pending.promise;}
+  return respond(state({},current));
+ },async()=>{trafficReads++;return respond(traffic(current.id));});
+ await store.acceptSession({token:'old.jwt',user:account});
+ const input={serverId:'landing',email:'old-account',name:'Old private line'};
+ const request=action==='list'?store.listInternalTransfers():action==='save'?store.saveInternalTransfer(input):store.removeInternalTransfer('old-private');
+ await started.promise;
+ current={...account,id:'new-admin'};
+ await store.acceptSession({token:'new.jwt',user:current});
+ pending.resolve(respond(action==='list'?{items:[{id:'old-private',...input}]}:{success:true}));
+ assert.deepEqual(await request,action==='list'?[]:false);
+ assert.equal(trafficReads,2);
+ assertTraffic(store,traffic('new-admin'));
 });
