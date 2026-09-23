@@ -1,6 +1,7 @@
 <script lang="ts">
  import {onMount} from 'svelte';
  import {api, demo, errorMessage, runAction} from '../store.svelte';
+ import {systemUpdateLabel} from '../systemUpdates';
  let {channel = '稳定版'} = $props<{channel?: string}>();
  type UpdateStatus = {supported:boolean; reason?:string; phase:string; version?:string; message?:string; backup?:string};
  type Release = {version:string; url:string; available:boolean; channel:string; updateStatus:UpdateStatus};
@@ -8,7 +9,6 @@
  const pending = $derived(status?.phase === 'queued' || status?.phase === 'updating');
  const selectedChannel = $derived(channel === '预发布' ? 'prerelease' : 'stable');
  const applicable = $derived(release?.available && release.channel === selectedChannel);
- const labels:Record<string,string> = {idle:'尚无升级任务',queued:'等待更新服务',updating:'升级进行中',completed:'升级完成',failed:'升级失败'};
  let disposed = false, timer: ReturnType<typeof setTimeout>|undefined;
  async function refresh() {
   try {
@@ -36,7 +36,7 @@
 <p class="hint">主控版本：{current}</p>
 <div class="actions space-top"><button class="button" disabled={busy||pending} onclick={check}>检查可用版本</button><button class="button" disabled={busy} onclick={refresh}>刷新升级状态</button></div>
 {#if status}
- <p class="hint" role="status">{labels[status.phase]??status.phase}{status.version?` · ${status.version}`:''}{status.message?` · ${status.message}`:''}</p>
+ <p class="hint" role="status">{systemUpdateLabel(status.phase,status.version,current)}{status.version?` · ${status.version}`:''}{status.message?` · ${status.message}`:''}</p>
  {#if !status.supported}<p class="hint">{status.reason}</p>{/if}
  {#if status.backup}<p class="hint">升级备份：{status.backup}</p>{/if}
 {/if}
