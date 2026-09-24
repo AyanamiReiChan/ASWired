@@ -2,6 +2,7 @@
  import {onMount} from 'svelte';
  import {api, demo, errorMessage, runAction} from '../store.svelte';
  import {systemUpdateLabel} from '../systemUpdates';
+ import UpgradeBackups from './UpgradeBackups.svelte';
  let {channel = '稳定版'} = $props<{channel?: string}>();
  type UpdateStatus = {supported:boolean; reason?:string; phase:string; version?:string; message?:string; backup?:string};
  type Release = {version:string; url:string; available:boolean; channel:string; updateStatus:UpdateStatus};
@@ -49,3 +50,4 @@
  {:else if !release.available}<p class="hint">当前已是最新版本。</p>{/if}
 {/if}
 {#if error}<p class="error" role="alert">{error}</p>{/if}
+<UpgradeBackups updating={pending||reconnecting||!status}/>
