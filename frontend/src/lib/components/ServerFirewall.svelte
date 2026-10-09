@@ -49,7 +49,7 @@
     {#if !snapshot.capable}<p class="hint">此 Agent 尚未提供端口访问控制能力。请先升级 Agent，并确认节点运行 Linux 且已安装 nftables；已有策略不会因本页打开而自动生效。</p>{:else if snapshot.observed?.supported===false}<p class="hint">Agent 当前无法应用防火墙。请检查 Linux、nftables 和运行权限，再读取实际状态。</p>{/if}
     {#if snapshot.observed&&snapshot.observed.applied&&snapshot.observed.revision!==snapshot.revision}<p class="hint">节点仍在使用另一版本的策略，当前保存的规则尚未确认生效。</p>{/if}
    </section>
-   <div class="firewall-notes"><p>只限制下面选中的代理端口，未添加规则的端口保持原有访问策略。当前可选择受管的原生 TCP REALITY 入站。</p><p>链式代理请填写<strong>连接此服务器的上一跳公网出口 IP</strong>。IPv4 与 IPv6 均按白名单放行；未列出的来源会被拒绝。</p><p>策略独立于 Xray 用户凭据。更换或删除受保护的监听端口前，须先在这里解除该端口限制。</p></div>
+   <div class="firewall-notes"><p>只限制下面选中的代理端口，未添加规则的端口保持原有访问策略。当前可选择受管的原生 TCP REALITY 入站。</p><p>同一端口的所有用户共用这份白名单。为客户使用专用入站端口，可以避免影响现有订阅用户。</p><p>链式代理请填写<strong>连接此服务器的上一跳公网出口 IP</strong>。IPv4 与 IPv6 均按白名单放行；未列出的来源会被拒绝。</p><p>策略独立于 Xray 用户凭据。更换或删除受保护的监听端口前，须先在这里解除该端口限制。</p></div>
    <div class="rule-heading"><h3>允许连接的来源</h3><button class="button small" disabled={busy||!nextTarget||drafts.length>=64} onclick={add}><Icon name="plus" size={14}/>添加端口规则</button></div>
    {#each drafts as rule,index (rule.id)}
     <section class="firewall-rule" aria-label={`访问规则 ${index+1}`}>
