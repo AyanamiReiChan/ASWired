@@ -40,6 +40,36 @@ export function trafficRanking(rows: RecordLike[]): RecordLike[] {
   .map((row): RecordLike => ({...row, bytes: row.up + row.down}))
   .sort((a, b) => b.bytes - a.bytes || String(a.name).localeCompare(String(b.name)));
 }
+export function serverPeriodRanking(servers: RecordLike[]): RecordLike[] {
+ const stamp = (value: unknown): string => typeof value === 'string' ? value : '';
+ const milliseconds = (value: unknown): number | null => {
+  const parsed = typeof value === 'string' && value ? Date.parse(value) : NaN;
+  return Number.isFinite(parsed) ? parsed : null;
+ };
+ return servers.map((server): RecordLike => {
+  const bill = server.merchantTraffic;
+  const used = nonnegative(bill?.usedBytes);
+  const adjustment = typeof bill?.adjustmentBytes === 'number' && Number.isFinite(bill.adjustmentBytes) ? bill.adjustmentBytes : null;
+  const start = milliseconds(bill?.start), sample = milliseconds(bill?.sampleAt), coverage = milliseconds(bill?.coverageStart);
+  let unknownReason = '';
+  if (bill?.configured !== true) unknownReason = '未配置整机账期统计';
+  else if (bill.source === 'xray') unknownReason = '账期使用代理流量，未计入整机排行';
+  else if (bill.source !== 'system') unknownReason = '未配置整机流量来源';
+  else if (used === null) unknownReason = '暂无有效账期用量';
+  // The backend can synthesize an empty current cycle before its first sample.
+  // A previous cycle's cursor does not make that zero a measured current usage.
+  else if (start !== null && (sample === null || sample < start) && (coverage === null || coverage < start) && !adjustment) unknownReason = '本期尚无有效样本';
+  return {...server, bytes: unknownReason ? null : used,
+   up: unknownReason ? null : nonnegative(bill?.uploadBytes), down: unknownReason ? null : nonnegative(bill?.downloadBytes),
+   periodStart: stamp(bill?.start), periodEnd: stamp(bill?.end), sampleAt: stamp(bill?.sampleAt), coverageStart: stamp(bill?.coverageStart),
+   gap: bill?.gap === true, gapReason: stamp(bill?.gapReason), direction: stamp(bill?.direction) || 'sum',
+   adjustmentBytes: adjustment, unknownReason};
+ }).sort((a, b) => {
+  if (a.bytes === null && b.bytes !== null) return 1;
+  if (a.bytes !== null && b.bytes === null) return -1;
+  return (a.bytes === null ? 0 : b.bytes - a.bytes) || String(a.name).localeCompare(String(b.name)) || String(a.id).localeCompare(String(b.id));
+ });
+}
 export function dailyTraffic(rows: RecordLike[]) {
  const samples = rows.filter(row => /^\d{4}-\d{2}-\d{2}$/.test(row.date) && Number.isFinite(row.at) && row.at >= 0 && row.at < 8.64e15 && nonnegative(row.total) !== null)
   .map(row => ({at: row.at as number, date: row.date as string, bytes: row.total * 1024 ** 3, gap: row.gap === true}))
